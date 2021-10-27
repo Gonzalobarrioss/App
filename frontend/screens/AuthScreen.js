@@ -32,7 +32,7 @@ const AuthScreen = ({navigation}) => {
             try {
 
                 const jsonRes = await res.json();
-                console.log(jsonRes.id)
+                //console.log(jsonRes.id)
                 if (res.status === 200) {
 
                     setMessage(jsonRes.message);

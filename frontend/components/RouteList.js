@@ -5,7 +5,7 @@ import RouteItem from './RouteItem'
 
 
 const RouteList = ({routes}) => {
-    const renderItem = ({item}) => {
+     const renderItem = ({item}) => {
         return (
             <RouteItem route={item}/>
         )

@@ -4,14 +4,14 @@ import { getRutasLecturista } from '../api'
 import RouteList from '../components/RouteList'
 import Layout from '../components/Layout'
 
-const HomeScreen = ({id}) => {
-    const params = this.params.id
-    console.log("params", params)
+const HomeScreen = ({route, navigation}) => {
+    const params = route.params.id
+    //console.log("params", params)
     
     const [routes, setRoutes] = useState([])
 
     const loadRoutes = async () => {
-        const data = await getRutasLecturista();
+        const data = await getRutasLecturista(params);
         setRoutes(data)
     }
 

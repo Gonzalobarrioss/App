@@ -77,8 +77,7 @@ export const login = (req, res, next) => {
 export const isAuth = (req, res, next) => {
     const authHeader = req.get("Authorization");
     const id = req.get("email")
-    //console.log(id)
-    //const id = req.params.User
+    
     if (!authHeader) {
         return res.status(401).json({ message: 'not authenticated' });
     };
@@ -100,13 +99,15 @@ export const isAuth = (req, res, next) => {
 
     const connection = await connect();
     const [rows] = await connection.query("SELECT * FROM rutas");
+    console.log(res.json(rows))
     res.json(rows[0]);
 }*/
-export const getRutasLecturista = async (req , res) => {
 
+export const getRutasLecturista = async (req , res) => {
+    
     const connection = await connect();
     const [rows] = await connection.query("SELECT * FROM rutas where user_email = ?", [
-        ,
+        req.params.id,
     ]);
-    res.json(rows[0]);
+    res.json(rows);
 }
