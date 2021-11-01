@@ -1,7 +1,8 @@
-const API = "http://192.168.1.122:3000/routes"
 
-export const getRutasLecturista = async (lecturistaEmail) => {
-    const res = await fetch(`${API}/${lecturistaEmail}`);
+const API = "http://192.168.0.13:3000"
+
+export const getMesaExamen = async () => {
+    const res = await fetch(`${API}/mesa_examenes`);
     return await res.json();
 }/*
 export const getRutasLecturista = async (lecturistaId) => {

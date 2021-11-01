@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Platform } from 'react-native';
 import  Layout  from '../components/Layout'
 
-const API_URL = Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://192.168.1.122:3000';
+const API_URL = Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://192.168.0.13:3000';
 
-const AuthScreen = ({navigation}) => {
+const AuthScreen = ({route, navigation}) => {
+    
+    const rol = route.params.rol
 
-    const [email, setEmail] = useState('');
-    const [name, setName] = useState('');
+    const [id, setId] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    //const [rol, setRol] = useState(params);
 
     const [isError, setIsError] = useState(false);
     const [message, setMessage] = useState('');
@@ -25,19 +28,22 @@ const AuthScreen = ({navigation}) => {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
-                'email': email
+                'username': username,
+                'rol': rol
             },
         })
         .then(async res => { 
             try {
-
                 const jsonRes = await res.json();
                 //console.log(jsonRes.id)
                 if (res.status === 200) {
-
                     setMessage(jsonRes.message);
-
-                    navigation.navigate("HomeScreen", {id: jsonRes.id} )
+                    if (rol == 'Alumno'){
+                        navigation.navigate("HomeScreenAlumno", {id: jsonRes.id, rol:rol} )
+                    }
+                    else{
+                        navigation.navigate("HomeScreenDocente", {id: jsonRes.id, rol:rol} )
+                    }
                 }
             } catch (err) {
                 console.log(err);
@@ -51,9 +57,10 @@ const AuthScreen = ({navigation}) => {
     const onSubmitHandler = () => {
         
         const datos = {
-            email,
-            name,
+            id,
+            username,
             password,
+            rol,
         };
         fetch(`${API_URL}/${isLogin ? 'login' : 'signup'}`, {
             method: 'POST',
@@ -90,11 +97,15 @@ const AuthScreen = ({navigation}) => {
     return (
             <Layout>
             <View style={styles.card}>
-                <Text style={styles.heading}>{isLogin ? 'Login' : 'Signup'}</Text>
+                <Text style={styles.heading}>{isLogin ? 'Login' : 'Signup'} {rol}</Text>
                 <View style={styles.form}>
                     <View style={styles.inputs}>
-                        <TextInput style={styles.input} placeholder="Email" autoCapitalize="none" onChangeText={setEmail}></TextInput>
-                        {!isLogin && <TextInput style={styles.input} placeholder="Name" onChangeText={setName}></TextInput>}
+                        <TextInput style={styles.input} placeholder="Username" onChangeText={setUsername}></TextInput>
+                        {
+                            !isLogin && 
+                            <TextInput style={styles.input} placeholder="ID" autoCapitalize="none" onChangeText={setId}></TextInput>
+                        }
+                        
                         <TextInput secureTextEntry={true} style={styles.input} placeholder="Password" onChangeText={setPassword}></TextInput>
                         <Text style={[styles.message, {color: isError ? 'red' : 'green'}]}>{message ? getMessage() : null}</Text>
                         <TouchableOpacity style={styles.button} onPress={onSubmitHandler}>

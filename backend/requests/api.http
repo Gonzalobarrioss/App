@@ -1,0 +1,45 @@
+@API = http://localhost:3000
+
+
+
+//GET MESA EXAMENES
+GET {{API}}/mesa_examenes
+
+//GET ALL CURSOS
+###
+GET {{API}}/cursos
+
+//GET ALUMNOS X CURSO
+###
+GET {{API}}/alu_cursos/4
+
+//SANCIONAR ALUMNO
+###
+POST {{API}}/sancion
+Content-Type: application/json
+
+{
+    "alumnoID": "2",
+    "docenteID": "4",
+    "tipoSancion": "Leve",
+    "descripcion": "duerme en clases",
+    "fecha": "2021-10-31"
+}
+
+//INSCRIBIRSE EN MESA DE EXAMEN
+###
+POST {{API}}/inscripcion_mesa
+Content-Type: application/json
+
+{
+    "alumnoID": "2",
+    "mesaID": "1"
+}
+
+//GET ALL MATERIAS
+###
+GET {{API}}/materias
+
+//GET CLASES X MATERIA
+###
+GET {{API}}/clase_materia/1

@@ -1,3 +1,5 @@
 import AuthScreen from './AuthScreen';
+import StartScreen from './StartScreen';
 
-export { AuthScreen };
+export { StartScreen };
+//export { AuthScreen };

@@ -3,23 +3,25 @@ import  {Sequelize}  from 'sequelize';
 import sequelize from '../database.js';
 
 const User = sequelize.define('users', {
-   id_user: {
+   id: {
       type: Sequelize.INTEGER,
-      autoIncrement: true,
+      autoIncrement: false,
       allowNull: false,
       primaryKey: true,
    },
-   email: {
+   username: {
       type: Sequelize.STRING,
       allowNull: false,
-   },
-   name: {
-      type: Sequelize.STRING,
+      unique: true,
    },
    password: {
       type: Sequelize.STRING,
       allowNull: false,
    },
+   rol: {
+      type: Sequelize.STRING,
+      allowNull: true,
+   }, 
 }, {
    createdAt: false,
    updatedAt:false

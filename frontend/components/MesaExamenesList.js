@@ -1,13 +1,13 @@
 import React from 'react'
-import { View, Text, FlatList } from 'react-native'
+import { FlatList } from 'react-native'
 
-import RouteItem from './RouteItem'
+import MesaExamenItem from './MesaExamenItem'
 
 
-const RouteList = ({routes}) => {
+const MesaExamenes = ({mesaExamen}) => {
      const renderItem = ({item}) => {
         return (
-            <RouteItem route={item}/>
+            <MesaExamenItem mesa={item}/>
         )
     }
 
@@ -15,7 +15,7 @@ const RouteList = ({routes}) => {
         
             <FlatList
                 style={{width: "100%"}} 
-                data={routes}
+                data={mesaExamen}
                 keyExtractor = {(item) => item.id + ''}
                 renderItem={renderItem}
             />
@@ -23,4 +23,4 @@ const RouteList = ({routes}) => {
     )
 }
 
-export default RouteList
+export default MesaExamenes
