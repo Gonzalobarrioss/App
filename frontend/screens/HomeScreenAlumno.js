@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react'
-import { View, Text } from 'react-native'
-import { getMesaExamen } from '../api'
+import { StyleSheet } from 'react-native'
+import { getMesaExamen} from '../api'
 import MesaExamenesList from '../components/MesaExamenesList'
 import Layout from '../components/Layout'
 
 const HomeScreenAlumno = ({route, navigation}) => {
-    const nombre = route.params.id
+    const nombre = route.params.nombre
     const rol = route.params.rol
-    //console.log("params", params)
+    //console.log(route.params)
     
     const [mesaExamen, setMesaExamen] = useState([])
 
@@ -23,10 +23,23 @@ const HomeScreenAlumno = ({route, navigation}) => {
     return (
         
         <Layout>
-            <MesaExamenesList mesaExamen={mesaExamen}/>
+            <MesaExamenesList mesaExamen={mesaExamen} alumno={nombre}/>
         </Layout>
         
     )
 }
+
+const styles = StyleSheet.create({
+    btnInscribirse :{
+        padding: 7,
+        borderRadius: 5,
+        width: "90%",
+        backgroundColor: "black"
+    },
+    txtInscribirse: {
+        color: "#ffffff",
+        textAlign: 'center'
+    }
+})
 
 export default HomeScreenAlumno

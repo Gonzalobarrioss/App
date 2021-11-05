@@ -4,19 +4,50 @@ const API = "http://192.168.0.13:3000"
 export const getMesaExamen = async () => {
     const res = await fetch(`${API}/mesa_examenes`);
     return await res.json();
-}/*
-export const getRutasLecturista = async (lecturistaId) => {
-    const res = await fetch(API);
+}
+export const getIdAlumno = async (nombreAlumno) => {
+    const res = await fetch(`${API}/id_alumno/${nombreAlumno}`);
     return await res.json();
 }
-/*
-export const saveTask = async (newTask) => {
-    const res = await fetch(API, { 
+
+export const saveNota = async (newNota) => {
+    const res = await fetch(`${API}/guardar_nota`, { 
         method: 'POST', 
         headers: {
             Accept: 'application/json', 'Content-Type':'application/json'
         },
-        body: JSON.stringify(newTask)
+        body: JSON.stringify(newNota)
     })
     return await res.json();
-}*/
+}
+
+export const getAllMaterias = async () => {
+    const res = await fetch(`${API}/materias`);
+    return await res.json();
+}
+
+export const getAllCursos = async () => {
+    const res = await fetch(`${API}/cursos`);
+    return await res.json();
+}
+
+export const inscripcionMesaExamen = async (newAlumno) => {
+    const res = await fetch(`${API}/inscripcion_mesa`, { 
+        method: 'POST', 
+        headers: {
+            Accept: 'application/json', 'Content-Type':'application/json'
+        },
+        body: JSON.stringify(newAlumno)
+    })
+    return await res.json();
+}
+
+export const getAlumnosXCurso = async (curso) => {
+    const res = await fetch(`${API}/alu_cursos/${curso}`);
+    return await res.json();
+}
+
+export const getClaseXMateria = async (materia) => {
+    const res = await fetch(`${API}/clase_materia/${materia}`);
+    return await res.json();
+}

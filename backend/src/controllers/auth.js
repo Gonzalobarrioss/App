@@ -49,7 +49,6 @@ export const signup = (req, res, next) => {
 }; 
 
 export const login = (req, res, next) => {
-    //console.log("rol", req.body.rol)
     if ( req.body.rol == 'Alumno'){
         User.findOne({ where : {
             username: req.body.username,
@@ -103,7 +102,8 @@ export const login = (req, res, next) => {
 
 export const isAuth = (req, res, next) => {
     const authHeader = req.get("Authorization");
-    const id = req.get("username")
+    const nombre = req.get("username")
+
     
     if (!authHeader) {
         return res.status(401).json({ message: 'not authenticated' });
@@ -118,7 +118,7 @@ export const isAuth = (req, res, next) => {
     if (!decodedToken) {
         res.status(401).json({ message: 'unauthorized' });
     } else {
-        res.status(200).json({ message: 'here is your resource', id: id });
+        res.status(200).json({ message: 'here is your resource', nombre: nombre });
     };
 };
 
@@ -180,8 +180,8 @@ export const getAllMaterias = async (req , res) => {
 
     const connection = await connect();
     const [rows] = await connection.query("SELECT descripcion,regimen,plan_estudio FROM materias");
-    console.log(res.json(rows))
-    res.json(rows[0]);
+    //console.log(res.json(rows))
+    res.json(rows);
 }
 
 export const getClasesXMateria = async (req , res) => {
@@ -190,6 +190,33 @@ export const getClasesXMateria = async (req , res) => {
     const [rows] = await connection.query("SELECT d.nombre,d.apellido,p.descripcion, a.descripcion,cur.nivel,cur.turno,cur.grado_ano,cur.division, c.dias, c.horario_inicio, c.horario_fin FROM clases c INNER JOIN cursos cur ON c.curso_id = cur.id INNER JOIN aulas a ON a.id = cur.aula_id INNER JOIN docente doc ON c.docente_id = doc.id INNER JOIN datos_personales d ON doc.id = d.documento INNER JOIN periodos p ON c.periodo_id = p.id WHERE materia_id = ?",[
         req.params.id
     ])
-    console.log(res.json(rows))
+    //console.log(res.json(rows))
     res.json(rows[0]);
+}
+
+export const getIdAlumno = async (req , res) => {
+
+    const connection = await connect();
+    const [rows] = await connection.query("SELECT id FROM users WHERE username = ?",[
+        req.params.nombre
+    ])
+    //console.log(res.json(rows))
+    res.json(rows[0]);
+}
+
+export const saveNota = async (req , res) => {
+    const connection = await connect()
+    const [result] = await connection.query("INSERT INTO calificaciones(alumno_id,docente_id,materia_id,regimen,etapa,nota,descripcion) VALUES(?,?,?,?,?,?,?)",[
+        req.body.alumnoID,
+        req.body.docenteID,
+        req.body.materiaID,
+        req.body.regimen,
+        req.body.etapa,
+        req.body.nota,
+        req.body.descripcion
+    ]);
+    res.json({
+        ...req.body,
+        id: result.insertId
+    })
 }

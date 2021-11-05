@@ -5,7 +5,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import Layout from '../components/Layout'
 
 const HomeScreenDocente = ({route, navigation}) => {
-    const nombre = route.params.id
+    const nombre = route.params.nombre
     const rol = route.params.rol
     //console.log("params", params)
     /*
@@ -25,19 +25,19 @@ const HomeScreenDocente = ({route, navigation}) => {
             <Text style={{color:"#ffffff"}}>Welcome {nombre}, eres un {rol}</Text>
             <TouchableOpacity
                 style = { styles.btn }
-                onPress = { () => console.log("TOMAR ASISTENCIA SCREEN")}
+                onPress = { () => navigation.navigate("TomarAsistenciaScreen")}
             >
                 <Text style = { styles.txt }>Tomar Asistencia</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style = { styles.btn }
-                onPress = { () => console.log("CALIFICAR SCREEN")}
+                onPress = { () => navigation.navigate("CalificarScreen")}
             >
                 <Text style = { styles.txt }>Calificar</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style = { styles.btn }
-                onPress = { () => console.log("SANCIONAR SCREEN")}
+                onPress = { () => navigation.navigate("SancionarScreen")}
             >
                 <Text style = { styles.txt }>Sancionar</Text>
             </TouchableOpacity>

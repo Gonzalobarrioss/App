@@ -37,12 +37,13 @@ const AuthScreen = ({route, navigation}) => {
                 const jsonRes = await res.json();
                 //console.log(jsonRes.id)
                 if (res.status === 200) {
+                   // console.log(jsonRes)
                     setMessage(jsonRes.message);
                     if (rol == 'Alumno'){
-                        navigation.navigate("HomeScreenAlumno", {id: jsonRes.id, rol:rol} )
+                        navigation.navigate("HomeScreenAlumno", {nombre: jsonRes.nombre, rol:rol} )
                     }
                     else{
-                        navigation.navigate("HomeScreenDocente", {id: jsonRes.id, rol:rol} )
+                        navigation.navigate("HomeScreenDocente", {nombre: jsonRes.id, rol:rol} )
                     }
                 }
             } catch (err) {

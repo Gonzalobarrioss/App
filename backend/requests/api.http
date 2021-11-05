@@ -5,6 +5,10 @@
 //GET MESA EXAMENES
 GET {{API}}/mesa_examenes
 
+//GET ID ALUMNO POR NOMBRE
+###
+GET {{API}}/id_alumno/ponja
+
 //GET ALL CURSOS
 ###
 GET {{API}}/cursos

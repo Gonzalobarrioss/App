@@ -26,13 +26,22 @@ const StartScreen = ({navigation}) => {
                                 }}>
                             <Text style={styles.buttonAltText}>Docente</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity 
-                            style={styles.button} 
-                            onPress={  () => {
-                                navigation.navigate('AuthScreen', { rol: rol })
-                                }}>
-                            <Text style={styles.buttonText}>Aceptar</Text>
-                        </TouchableOpacity>
+                        
+                        {
+                            rol !== '' 
+                            ?   (<TouchableOpacity 
+                                    style={styles.button} 
+                                    onPress={  () => {
+                                        navigation.navigate('AuthScreen', { rol: rol })
+                                        }}>
+                                    <Text style={styles.buttonText}>Aceptar</Text>
+                                </TouchableOpacity> )
+                            : (<Text></Text>)
+                            
+                            
+                        }
+
+                        
                     </View>    
                 </View>
             </View>

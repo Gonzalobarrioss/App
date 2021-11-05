@@ -1,6 +1,19 @@
 import express from 'express';
 
-import { signup, login, isAuth, getAllMesaDeExamenes, getAllCursos, getAllAlumnosXCurso, sancionarAlumno, inscripcionMesaExamen, getAllMaterias, getClasesXMateria } from '../controllers/auth.js';
+import {    
+    signup, 
+    login, 
+    isAuth, 
+    getAllMesaDeExamenes, 
+    getAllCursos, 
+    getAllAlumnosXCurso, 
+    sancionarAlumno, 
+    inscripcionMesaExamen, 
+    getAllMaterias, 
+    getClasesXMateria, 
+    saveNota, 
+    getIdAlumno
+} from '../controllers/auth.js';
 //import { getRutasLecturista } from '../controllers/auth.js'; 
 
 const router = express.Router();
@@ -24,6 +37,10 @@ router.post('/inscripcion_mesa', inscripcionMesaExamen)
 router.get('/materias', getAllMaterias)
 
 router.get('/clase_materia/:id', getClasesXMateria)
+
+router.post('/guardar_nota', saveNota)
+
+router.get('/id_alumno/:nombre', getIdAlumno)
 
 
 

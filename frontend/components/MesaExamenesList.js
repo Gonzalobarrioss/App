@@ -1,13 +1,14 @@
 import React from 'react'
-import { FlatList } from 'react-native'
+import { FlatList, TouchableOpacity } from 'react-native'
 
 import MesaExamenItem from './MesaExamenItem'
 
 
-const MesaExamenes = ({mesaExamen}) => {
+const MesaExamenes = ({alumno, mesaExamen}) => {
+    //console.log(mesaExamen)
      const renderItem = ({item}) => {
         return (
-            <MesaExamenItem mesa={item}/>
+            <MesaExamenItem mesa={item} alumno={alumno}/>
         )
     }
 
@@ -19,6 +20,8 @@ const MesaExamenes = ({mesaExamen}) => {
                 keyExtractor = {(item) => item.id + ''}
                 renderItem={renderItem}
             />
+
+    
         
     )
 }

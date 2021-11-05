@@ -7,7 +7,9 @@ import { StartScreen } from './screens';
 import AuthScreen  from './screens/AuthScreen'
 import HomeScreenAlumno from './screens/HomeScreenAlumno'
 import HomeScreenDocente from './screens/HomeScreenDocente';
-//import TaskFormScreen from './screens/TaskFormScreen'
+import TomarAsistenciaScreen from './screens/TomarAsistenciaScreen';
+import CalificarScreen from './screens/CalificarScreen';
+import SancionarScreen from './screens/SancionarScreen';
 
 const Stack = createNativeStackNavigator()
 
@@ -64,6 +66,34 @@ const App = () => {
                 <Text style={{color: "#ffffff", marginRight:20, fontSize: 15}}>New</Text>
               </TouchableOpacity>
             ),
+          })}  
+        />
+        <Stack.Screen 
+          name="TomarAsistenciaScreen" 
+          component ={TomarAsistenciaScreen}
+          options = {({navigation})=>({
+            title: "ASISTENCIA",
+            headerStyle: { backgroundColor: "#222f3e" },
+            headerTitleStyle: { color: "#ffffff" }
+          })}  
+        />
+        <Stack.Screen 
+          name="CalificarScreen" 
+          component ={CalificarScreen}
+          options = {({navigation})=>({
+            title: "CALIFICAR",
+            headerStyle: { backgroundColor: "#222f3e" },
+            headerTitleStyle: { color: "#ffffff" },
+            headerTintColor: "#ffffff"
+          })}  
+        />
+        <Stack.Screen 
+          name="SancionarScreen" 
+          component ={SancionarScreen}
+          options = {({navigation})=>({
+            title: "SANCIONES",
+            headerStyle: { backgroundColor: "#222f3e" },
+            headerTitleStyle: { color: "#ffffff" }
           })}  
         />
       </Stack.Navigator>

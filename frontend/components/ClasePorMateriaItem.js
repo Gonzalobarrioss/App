@@ -1,23 +1,24 @@
 import React, {useState, useEffect} from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
-import { getIdAlumno, inscripcionMesaExamen } from '../api'
+import { getClaseXMateria } from '../api'
 import { useIsFocused } from '@react-navigation/core'
 
 
-const MesaExamen = ({mesa, alumno}) => {
+const ClasePorMateriaItem = ({materia}) => {
 
     const focus = useIsFocused()
-    const [alumnoID, setAlumnoID] = useState("")
+    const [clase, setClase] = useState([])
 
-    const handleIdAlumno = async() => {
-        const data = await getIdAlumno(alumno)
-        return setAlumnoID(data.id)
+    const handleClasePorMateria = async() => {
+        const data = await getClaseXMateria(materia)
+        console.log(data)
+        //return data
     }
 
     useEffect(() => {
-        handleIdAlumno();         
+        handleClasePorMateria(materia)   
     }, [focus])
-    
+    /*
     const finalizarInscripcion = (mesaID) => {
         const inscripcion = {mesaID: mesaID, alumnoID: alumnoID}
         Alert.alert(
@@ -29,7 +30,7 @@ const MesaExamen = ({mesa, alumno}) => {
                     onPress: async () => {
                         //console.log(inscripcion)
                         try {
-                            const result = await inscripcionMesaExamen(inscripcion)
+                            const result = await inscripcionClasePorMateria(inscripcion)
                             Alert.alert("Inscripcion exitosa")
                             console.log(result) 
                         } catch (error) {
@@ -47,21 +48,15 @@ const MesaExamen = ({mesa, alumno}) => {
         )
     }
  
-
+*/
     return (
         <View style={styles.itemContainer}>
             <TouchableOpacity
                 onPress = { 
-                    () => finalizarInscripcion(mesa.id)
+                    () => console.log(materia)
                 }
             >
-                <Text style={styles.itemDescripcion}>MESA: {mesa.id}</Text>
-                <Text style={styles.itemDescripcion}>MATERIA: {mesa.descripcion}</Text>
-                <Text style={styles.itemDescripcion}>REGIMEN: {mesa.regimen}</Text>
-                <Text style={styles.itemDescripcion}>LLAMADO: {mesa.llamado}</Text>
-                <Text style={styles.itemDescripcion}>EXAMINADOR 1: {mesa.examinador1}</Text>
-                <Text style={styles.itemDescripcion}>EXAMINADOR 2: {mesa.examinador2}</Text>
-                <Text style={styles.itemDescripcion}>EXAMINADOR 3: {mesa.examinador3}</Text>
+                <Text></Text>
             </TouchableOpacity>
             
         </View>
@@ -81,4 +76,5 @@ const styles = StyleSheet.create({
     }
 })
 
-export default MesaExamen
+export default ClasePorMateriaItem
+
