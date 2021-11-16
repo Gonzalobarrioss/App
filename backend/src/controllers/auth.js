@@ -48,6 +48,8 @@ export const signup = (req, res, next) => {
     });
 }; 
 
+let user
+
 export const login = (req, res, next) => {
     if ( req.body.rol == 'Alumno'){
         User.findOne({ where : {
@@ -55,6 +57,13 @@ export const login = (req, res, next) => {
             rol: 'Alumno'
         }})
         .then(dbUser => {
+            try {
+                user = dbUser.dataValues.id
+                //console.log("user", user)
+                //console.log("user", dbUser.dataValues.id)
+            } catch (error) {
+                console.log(error)
+            } 
             if (!dbUser) {
                 return res.status(404).json({message: "user not found"});
             } else {
@@ -80,6 +89,14 @@ export const login = (req, res, next) => {
             rol: 'Docente'
         }})
         .then(dbUser => {
+            try {
+                user = dbUser.dataValues.id
+                //console.log("user", user)
+                //console.log("user", dbUser.dataValues.id)
+            } catch (error) {
+                console.log(error)
+            } 
+
             if (!dbUser) {
                 return res.status(404).json({message: "user not found"});
             } else {
@@ -100,11 +117,18 @@ export const login = (req, res, next) => {
     }    
 };
 
+
 export const isAuth = (req, res, next) => {
     const authHeader = req.get("Authorization");
     const nombre = req.get("username")
-
-    
+    /*try {
+        const id = req.get("id")
+        console.log("id",id)
+    } catch (error) {
+        console.log("error", error)
+    }
+    */
+    //HACER GET CURSO POR CLASE DESDE 0
     if (!authHeader) {
         return res.status(401).json({ message: 'not authenticated' });
     };
@@ -118,7 +142,7 @@ export const isAuth = (req, res, next) => {
     if (!decodedToken) {
         res.status(401).json({ message: 'unauthorized' });
     } else {
-        res.status(200).json({ message: 'here is your resource', nombre: nombre });
+        res.status(200).json({ message: 'here is your resource', nombre: nombre, id: user });
     };
 };
 
@@ -126,21 +150,21 @@ export const getAllMesaDeExamenes = async (req , res) => {
 
     const connection = await connect();
     const [rows] = await connection.query("SELECT exa.id,mat.descripcion,mat.regimen,exa.llamado,exa.examinador1,exa.examinador2,exa.examinador3 FROM mesa_examen_novedad exa INNER JOIN materias mat ON exa.materia_id = mat.id");
-    console.log(res.json(rows))
-    res.json(rows[0]);
+    //console.log(res.json(rows))
+    res.json(rows);
 }
 
 export const getAllCursos = async (req , res) => {
 
     const connection = await connect();
-    const [rows] = await connection.query("SELECT a.descripcion,c.nivel,c.turno,c.grado_ano,c.division FROM cursos c INNER JOIN aulas a ON c.id = a.id");
-    console.log(res.json(rows))
-    res.json(rows[0]);
+    const [rows] = await connection.query("SELECT c.id,a.descripcion,c.nivel,c.turno,c.grado_ano,c.division FROM cursos c INNER JOIN aulas a ON c.id = a.id");
+    //console.log(res.json(rows))
+    res.json(rows);
 }
 
 
 export const getAllAlumnosXCurso = async (req , res) => {
-    
+    //console.log("banckend recibe", req.params.id)
     const connection = await connect();
     const [rows] = await connection.query("SELECT a.id,d.nombre,d.apellido, a.curso_id FROM alumnos a INNER JOIN datos_personales d ON a.id = d.documento where a.curso_id = ?", [
         req.params.id,
@@ -179,19 +203,20 @@ export const inscripcionMesaExamen = async (req , res) => {
 export const getAllMaterias = async (req , res) => {
 
     const connection = await connect();
-    const [rows] = await connection.query("SELECT descripcion,regimen,plan_estudio FROM materias");
+    const [rows] = await connection.query("SELECT id,descripcion,regimen,plan_estudio FROM materias");
     //console.log(res.json(rows))
     res.json(rows);
 }
 
 export const getClasesXMateria = async (req , res) => {
-
+    //console.log("req.params", req.params.id)
     const connection = await connect();
-    const [rows] = await connection.query("SELECT d.nombre,d.apellido,p.descripcion, a.descripcion,cur.nivel,cur.turno,cur.grado_ano,cur.division, c.dias, c.horario_inicio, c.horario_fin FROM clases c INNER JOIN cursos cur ON c.curso_id = cur.id INNER JOIN aulas a ON a.id = cur.aula_id INNER JOIN docente doc ON c.docente_id = doc.id INNER JOIN datos_personales d ON doc.id = d.documento INNER JOIN periodos p ON c.periodo_id = p.id WHERE materia_id = ?",[
+    const [rows] = await connection.query("SELECT c.id,d.nombre,d.apellido,p.descripcion, a.descripcion,cur.nivel,cur.turno,cur.grado_ano,cur.division, c.dias, c.horario_inicio, c.horario_fin,c.curso_id FROM clases c INNER JOIN cursos cur ON c.curso_id = cur.id INNER JOIN aulas a ON a.id = cur.aula_id INNER JOIN docente doc ON c.docente_id = doc.id INNER JOIN datos_personales d ON doc.id = d.documento INNER JOIN periodos p ON c.periodo_id = p.id WHERE materia_id = ?",[
         req.params.id
     ])
-    //console.log(res.json(rows))
-    res.json(rows[0]);
+    //
+    //console.log("asd",res.json(rows))
+    res.json(rows);
 }
 
 export const getIdAlumno = async (req , res) => {
@@ -219,4 +244,13 @@ export const saveNota = async (req , res) => {
         ...req.body,
         id: result.insertId
     })
+}
+
+export const CursoPorClase = async (req , res) => {
+    
+    const connection = await connect();
+    const [rows] = await connection.query("SELECT cur.id 'id curso',cur.grado_ano,cur.division,cur.turno,cur.nivel,a.descripcion FROM cursos cur INNER JOIN clases c ON cur.id =  c.curso_id INNER JOIN aulas a ON a.id = cur.aula_id WHERE cur.id = ?", [
+        req.params.id,
+    ]);
+    await res.json(rows);
 }

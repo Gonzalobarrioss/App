@@ -56,8 +56,6 @@ const CalificarScreen = () => {
 
     return (
         <Layout>
-            
-           
             <MateriasList />
             <CursosList />
             <TextInput 

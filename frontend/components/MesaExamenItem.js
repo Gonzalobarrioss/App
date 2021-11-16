@@ -31,7 +31,7 @@ const MesaExamen = ({mesa, alumno}) => {
                         try {
                             const result = await inscripcionMesaExamen(inscripcion)
                             Alert.alert("Inscripcion exitosa")
-                            console.log(result) 
+                            //console.log(result) 
                         } catch (error) {
                             console.log(error)
                             Alert.alert("No se pudo realizar la inscripcion")

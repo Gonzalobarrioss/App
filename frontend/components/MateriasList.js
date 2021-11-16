@@ -1,16 +1,16 @@
 import React, {useState, useEffect} from 'react'
-import { Text, RefreshControl, Picker, View } from 'react-native'
+import { Picker, View } from 'react-native'
 import { useIsFocused } from '@react-navigation/native'
 
 import { getAllMaterias } from '../api'
-//import MateriasItem from './MateriasItem'
+
+import { store } from '../redux/store'
+import { addIdMateria } from '../redux/actions/MateriaAction'
 
 const MateriasList = () => {
 
     const [materia, setMateria] = useState([])
-    const [refreshing, setRefreshing] = useState(false)
     const [selectedValue, setSelectedValue] = useState("");
-
 
     const focus = useIsFocused()
 
@@ -21,40 +21,16 @@ const MateriasList = () => {
 
     useEffect(() => {
         loadMaterias();
-       // mapMaterias({materia})
     }, [])
 
-         
-       /*
-
-    const onRefresh = React.useCallback(async () => {
-        setRefreshing(true)
-        await loadMaterias();
-        setRefreshing(false)
-    })
-
-    const handleSelect =  (id) => {
-        
-        selectMateria(id);
-        loadMaterias();
-    }*/
-
-    /*
-    <FlatList
-                style={{width: "100%"}} 
-                data={materia}
-                keyExtractor = {(item) => item.id + ''}
-               // renderItem={renderItem}
-                refreshControl = {
-                    <RefreshControl 
-                        progressBackgroundColor = "#0a3d62"
-                        colors={["#78e08f"]}
-                        refreshing = { refreshing }
-                        onRefresh = { onRefresh }
-                    />
-                }
-            />
-    */
+   const handleMateria = (value) => {
+        try {
+            setSelectedValue(value)
+            store.dispatch(addIdMateria(value))
+        } catch (error) {
+            console.log("handleMateria",error)
+        }
+   }
    
     return (
         <View style={{ width: "90%"}}>
@@ -63,13 +39,12 @@ const MateriasList = () => {
             <Picker
                 style={{color: "#ffffff"}}
                 selectedValue={selectedValue}
-                onValueChange={(itemValue, itemIndex) => 
-                        setSelectedValue(itemValue)}
+                onValueChange={(itemValue, itemIndex) => handleMateria(itemValue)}
             >
                 {
                     materia.map((item, key)=> {
                         return(
-                            <Picker.Item label={item.descripcion} value={item.descripcion} key={key}/>
+                            <Picker.Item label={item.descripcion} value={item.id} key={key}/>
                         )
                     })
                 }

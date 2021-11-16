@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Platform } from 'react-native';
 import  Layout  from '../components/Layout'
+import { store } from '../redux/store';
+import { addRol } from '../redux/actions/PersonaAction';
 
-const API_URL = Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://192.168.0.13:3000';
+const API_URL = Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://192.168.0.127:3000';
 
 const AuthScreen = ({route, navigation}) => {
     
     const rol = route.params.rol
+
+    try {
+        store.dispatch(addRol(rol))
+    } catch (error) {
+        console.log("No se pudo registrar el rol.", error)
+    }
 
     const [id, setId] = useState('');
     const [username, setUsername] = useState('');
@@ -37,13 +45,13 @@ const AuthScreen = ({route, navigation}) => {
                 const jsonRes = await res.json();
                 //console.log(jsonRes.id)
                 if (res.status === 200) {
-                   // console.log(jsonRes)
+                   //console.log("res",jsonRes)
                     setMessage(jsonRes.message);
                     if (rol == 'Alumno'){
-                        navigation.navigate("HomeScreenAlumno", {nombre: jsonRes.nombre, rol:rol} )
+                        navigation.navigate("HomeScreenAlumno", {id: jsonRes.id,nombre: jsonRes.nombre, rol:rol} )
                     }
                     else{
-                        navigation.navigate("HomeScreenDocente", {nombre: jsonRes.id, rol:rol} )
+                        navigation.navigate("HomeScreenDocente", {id: jsonRes.id,nombre: jsonRes.nombre, rol:rol} )
                     }
                 }
             } catch (err) {

@@ -1,37 +1,94 @@
-import React, {useState} from 'react'
-import { View, Text, TextInput, Picker, StyleSheet, TouchableOpacity, Touchable } from 'react-native'
+import React, {useState, useEffect} from 'react'
+import { Text, TextInput, Picker, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import CursosList from '../components/CursosList'
 import AlumnosPorCursoList from '../components/AlumnosPorCursoList'
 import Layout from '../components/Layout'
+import { store } from '../redux/store'
+import { useSelector } from 'react-redux';
 
-const SancionarScreen = () => {
-    const [selectedValue, setSelectedValue] = useState("");
+import { useIsFocused } from '@react-navigation/core'
+
+import { sancionarAlumno } from '../api'
+
+import moment from 'moment'
+
+const SancionarScreen = ({navigation}) => {
+    //console.log(store.getState().PersonaReducer)
+
+    const idDocente = useSelector(state => state.PersonaReducer.DocenteReducer.id)
+    const nombreDocente = useSelector(state => state.PersonaReducer.DocenteReducer.nombre)
+    const rol = useSelector(state => state.PersonaReducer.DocenteReducer.rol)
+    const idAlumno = useSelector(state => state.PersonaReducer.AlumnoReducer.id)
+
 
     const [ sancion, setSancion ] =  useState ({
         descripcion: '',
-        alumnoID: '',
-        docenteID: '',
-        tipoSancion: '',
-        fecha: ''
+        alumnoID: idAlumno,
+        docenteID: idDocente,
+        tipoSancion: 'Leve',
+        fecha: moment().utcOffset('-03:00').format('YYYY-MM-DD')
+
     })
+
+    const focus = useIsFocused()
+
+    useEffect(() => {
+    }, [focus])
+
+    useEffect(() => {
+        handleChange("alumnoID", idAlumno)
+    }, [idAlumno])
 
     const handleChange = (name, value) => setSancion({ ...sancion, [name]: value})
 
+    const handleSancionar = () => {
+        //console.log(sancion)
+        Alert.alert(
+            `Atencion`,
+            `Si continua sancionara un alumno. Por favor asegúresee de que los datos sean correctos.`,
+            [
+                {
+                    text: "Sancionar",
+                    onPress: async () => {
+                        //console.log(inscripcion)
+                        try {
+                            //console.log(sancion)
+                            const result = await sancionarAlumno(sancion)
+                            Alert.alert("Sancion exitosa")
+                            try {
+                                navigation.navigate("HomeScreenDocente", {id: idDocente, nombre: nombreDocente, rol: rol })
+                            } catch (error) {
+                                console.log(error)
+                            }
+                            //console.log(result) 
+                        } catch (error) {
+                            console.log(error)
+                            Alert.alert("No se pudo realizar la sancion")
+                        }
+                        
+                    }
+                },
+                {
+                    text: "Cancelar",
+                    style: "cancel"
+                }
+            ]
+        )
+    }
 
-    //OBTENER FECHA DEL SISTEMA,
     return (
         <Layout>
-            <Text>FORMULARIO SANCION</Text>
+            <Text style={{color:"#ffffff", fontSize:18}}>FORMULARIO SANCION</Text>
             <Picker
                 style={{color: "#ffffff", width: "90%"}}
-                selectedValue={selectedValue}
-                onValueChange={(itemValue, itemIndex) => 
-                        setSelectedValue(itemValue)}
+                selectedValue={ sancion.tipoSancion }
+                onValueChange={(itemValue, itemIndex) => handleChange("tipoSancion",itemValue)}
+                        
             >
                 
-                <Picker.Item label="Leve" value="L"/>
-                <Picker.Item label="Grave" value="G"/>
-                <Picker.Item label="Otro" value="O"/>
+                <Picker.Item label="Leve" value="Leve"/>
+                <Picker.Item label="Moderada" value="Moderada"/>
+                <Picker.Item label="Grave" value="Grave"/>
                      
                 
             </Picker>
@@ -41,9 +98,14 @@ const SancionarScreen = () => {
                 style = {styles.input} 
                 onChangeText = { (text) => handleChange('descripcion', text)}
             />
+
             <CursosList />
             <AlumnosPorCursoList/>
-            <TouchableOpacity style={styles.buttonSave}>
+            
+            <TouchableOpacity
+                style={styles.buttonSave}
+                onPress = { handleSancionar }
+            >
                 <Text style={styles.buttonText}>
                     SANCIONAR
                 </Text>

@@ -11,44 +11,14 @@ const ClasePorMateriaItem = ({materia}) => {
 
     const handleClasePorMateria = async() => {
         const data = await getClaseXMateria(materia)
-        console.log(data)
+        //console.log(data)
         //return data
     }
 
     useEffect(() => {
         handleClasePorMateria(materia)   
     }, [focus])
-    /*
-    const finalizarInscripcion = (mesaID) => {
-        const inscripcion = {mesaID: mesaID, alumnoID: alumnoID}
-        Alert.alert(
-            `Atencion`,
-            `Si continua se inscribirá en la mesa.`,
-            [
-                {
-                    text: "Inscribirse",
-                    onPress: async () => {
-                        //console.log(inscripcion)
-                        try {
-                            const result = await inscripcionClasePorMateria(inscripcion)
-                            Alert.alert("Inscripcion exitosa")
-                            console.log(result) 
-                        } catch (error) {
-                            console.log(error)
-                            Alert.alert("No se pudo realizar la inscripcion")
-                        }
-                        
-                    }
-                },
-                {
-                    text: "Cancelar",
-                    style: "cancel"
-                }
-            ]
-        )
-    }
- 
-*/
+    
     return (
         <View style={styles.itemContainer}>
             <TouchableOpacity
@@ -56,7 +26,7 @@ const ClasePorMateriaItem = ({materia}) => {
                     () => console.log(materia)
                 }
             >
-                <Text></Text>
+                <Text>clase por materia</Text>
             </TouchableOpacity>
             
         </View>

@@ -1,5 +1,5 @@
 
-const API = "http://192.168.0.13:3000"
+const API = "http://192.168.0.127:3000"
 
 export const getMesaExamen = async () => {
     const res = await fetch(`${API}/mesa_examenes`);
@@ -49,5 +49,23 @@ export const getAlumnosXCurso = async (curso) => {
 
 export const getClaseXMateria = async (materia) => {
     const res = await fetch(`${API}/clase_materia/${materia}`);
+    //console.log(res.json())
+    return await res.json();
+}
+
+export const sancionarAlumno = async (newSancion) => {
+    const res = await fetch(`${API}/sancion`, { 
+        method: 'POST', 
+        headers: {
+            Accept: 'application/json', 'Content-Type':'application/json'
+        },
+        body: JSON.stringify(newSancion)
+    })
+    return await res.json();
+}
+
+export const getCursoPorClase = async (clase) => {
+    const res = await fetch(`${API}/curso_clase/${clase}`);
+    //console.log(res.json())
     return await res.json();
 }

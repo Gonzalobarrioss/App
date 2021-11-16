@@ -1,82 +1,72 @@
 import React, {useState, useEffect} from 'react'
-import { Text, RefreshControl, Picker, View } from 'react-native'
+import { Picker, View } from 'react-native'
 import { useIsFocused } from '@react-navigation/native'
 
-import { getAlumnosXCurso } from '../api'
+import { getAlumnosPorCurso } from '../redux/actions/AlumnoCursoAction'
+import { useSelector } from 'react-redux';
+import { store } from '../redux/store'
+import { addIdAlumno } from '../redux/actions/PersonaAction';
 
 const AlumnosPorCursoList = () => {
 
     const [alumno, setAlumno] = useState([])
-    const [refreshing, setRefreshing] = useState(false)
     const [selectedValue, setSelectedValue] = useState("");
 
+    const curso = useSelector(state => state.alumnosCursoReducer.curso)
+    const alumnosPorCurso = useSelector(state => state.alumnosCursoReducer.alumnos) 
 
     const focus = useIsFocused()
 
-    const loadAlumnos = async () => {
-        const data = await getAlumnosXCurso(4);
-        setAlumno(data)
+    const loadAlumnos = (alu) => {
+        //console.log("alumnos", alu.length)
+        setAlumno(alu)
+        //console.log("seteo alu", alu, "con cursoID", curso)
     }
 
+    useEffect( () => {
+        //console.log("useEffect Curso")
+        try{
+            //console.log("curso desde store",store.getState().alumnosCursoReducer.curso)
+            //console.log("cambio el curso, se obtiene alumnos, curso:", curso)
+            store.dispatch(getAlumnosPorCurso(curso))
+        } catch (error) {
+            console.log("error",error)
+        }
+    }, [curso])
+
     useEffect(() => {
-        loadAlumnos();
-       // mapcursos({curso})
-    }, [])
+        //console.log("useEffect alumnos")
+        loadAlumnos(alumnosPorCurso);
+        //store.dispatch()
+        //
+    }, [alumnosPorCurso])
 
-         
-       /*
+    useEffect(() => {
+        //store.dispatch(addIdAlumno(selectedValue))
+    }, [selectedValue])
 
-    const onRefresh = React.useCallback(async () => {
-        setRefreshing(true)
-        await loadCursos();
-        setRefreshing(false)
-    })
-
-    const handleSelect =  (id) => {
-        
-        selectcurso(id);
-        loadCursos();
-    }*/
-
-    /*
-    <FlatList
-                style={{width: "100%"}} 
-                data={curso}
-                keyExtractor = {(item) => item.id + ''}
-               // renderItem={renderItem}
-                refreshControl = {
-                    <RefreshControl 
-                        progressBackgroundColor = "#0a3d62"
-                        colors={["#78e08f"]}
-                        refreshing = { refreshing }
-                        onRefresh = { onRefresh }
-                    />
-                }
-            />
-    */
-   
     return (
         <View style={{ width: "90%"}}>
-            
-
             <Picker
                 style={{color: "#ffffff"}}
                 selectedValue={selectedValue}
                 onValueChange={(itemValue, itemIndex) => 
-                        setSelectedValue(itemValue)}
+                        setSelectedValue(itemValue)
+                }
             >
                 {
-                    alumno.map((item, key)=> {
-                       // console.log(item)
-                        return(
-                            <Picker.Item label={item.nombre} value={item.id} key={key}/>
-                        )
-                    })
+                    //console.log("desde reder",alumno)
+
+                     alumno.length > 0 
+                     ?  (alumno.map((item,key)=>{
+                            return ( <Picker.Item label={item.nombre} value={item.id} key={key} />)
+                        }))
+                    : ( <Picker.Item label={"SIN ALUMNOS"}  /> )
+
+                    
                 }
             </Picker>
-        </View>
-
-       
+        </View>     
     )
 }
 
