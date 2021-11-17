@@ -157,7 +157,7 @@ export const getAllMesaDeExamenes = async (req , res) => {
 export const getAllCursos = async (req , res) => {
 
     const connection = await connect();
-    const [rows] = await connection.query("SELECT c.id,a.descripcion,c.nivel,c.turno,c.grado_ano,c.division FROM cursos c INNER JOIN aulas a ON c.id = a.id");
+    const [rows] = await connection.query("SELECT c.id,a.descripcion,c.nivel,c.turno,c.grado_ano,c.division FROM cursos c INNER JOIN aulas a ON c.aula_id = a.id");
     //console.log(res.json(rows))
     res.json(rows);
 }

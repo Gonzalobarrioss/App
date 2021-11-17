@@ -1,6 +1,6 @@
-export const SET_ESTADO = 'SET_ESTADO';
-export const SET_ID_ALUMNO = 'SET_ID_ALUMNO'
-export const SET_LISTA_ALUMNOS = 'SET_LISTA_ALUMNO'
+export const RESET_ASISTENCIA = 'RESET_ASISTENCIA';
+
+export const SET_ASISTENCIA_ALUMNO = 'SET_ASISTENCIA_ALUMNO'
 
 
 export const addIdAlumno = alumno => dispatch => {
@@ -10,17 +10,17 @@ export const addIdAlumno = alumno => dispatch => {
     });
 };
 
-export const addEstado = estado => dispatch => {
+export const resetAsistencia = () => dispatch => {
+  console.log("ASISTENCIA")
   dispatch({
-    type: SET_ESTADO,
-    payload: estado
+    type: RESET_ASISTENCIA
   });
 };
 
 export const addListaAlumnos = (id,nombre,estado) => dispatch => {
   //console.log("desde action asitencia", id, nombre, estado)
     dispatch({
-    type: SET_LISTA_ALUMNOS,
+    type: SET_ASISTENCIA_ALUMNO,
     payload: {id: id, nombre: nombre, estado: estado}
   
   })

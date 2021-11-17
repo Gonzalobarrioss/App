@@ -5,7 +5,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { getAlumnosPorCurso } from '../redux/actions/AlumnoCursoAction'
 import { useSelector } from 'react-redux';
 import { store } from '../redux/store'
-import { addIdAlumno, addEstado, addListaAlumnos } from '../redux/actions/AsistenciaAction';
+import { addListaAlumnos, resetAsistencia } from '../redux/actions/AsistenciaAction';
 
 import { DataTable } from 'react-native-paper';
 
@@ -24,21 +24,10 @@ const AlumnosPorCursoTable = () => {
       setPage(0);
     }, [itemsPerPage]);
 
-    const curso = useSelector(state => state.alumnosCursoReducer.curso)
-    const alumnosPorCurso = useSelector(state => state.alumnosCursoReducer.alumnos)
-    const asistencia = useSelector ( state => state.AsistenciaReducer)
-
     const focus = useIsFocused()
+    
 
-    const loadAlumnos = (alu) => {
-        
-       /* alu.map((item)=>{
-            setAlumno({...alumno, ['nombre']: item.nombre, ['id']: item.id, ['estado']: false})
-        })*/
-        setAlumno(alu)
-       
-    }
-
+    const curso = useSelector(state => state.alumnosCursoReducer.curso)
     useEffect( () => {
         try{
             store.dispatch(getAlumnosPorCurso(curso))
@@ -47,15 +36,16 @@ const AlumnosPorCursoTable = () => {
         }
     }, [curso])
 
+    const alumnosPorCurso = useSelector(state => state.alumnosCursoReducer.alumnos)
     useEffect(() => {
-        try {
-        } catch (error) {
-            console.log(error)
+        const loadAlumnos = (alu) => {
+             setAlumno(alu)          
         }
         loadAlumnos(alumnosPorCurso)
-        
+       // console.log("alumnos", alumnosPorCurso)     
     }, [alumnosPorCurso])
 
+    const asistencia = useSelector ( state => state.AsistenciaReducer)
     useEffect(() => {
         console.log("asistencia", asistencia)
     }, [asistencia])
@@ -104,7 +94,7 @@ const AlumnosPorCursoTable = () => {
             <DataTable style={{backgroundColor:"#ffffff"}}>
                 <DataTable.Header >
                     <DataTable.Title>Alumno</DataTable.Title>
-                    <DataTable.Title style={{ backgroundColor: "blue", colSpan: 2}}>Estado</DataTable.Title>
+                    <DataTable.Title style={{ colSpan: 2}}>Estado</DataTable.Title>
                 </DataTable.Header>
                     {
                         alumno.length > 0 ?
@@ -115,7 +105,9 @@ const AlumnosPorCursoTable = () => {
                                 <DataTable.Cell>{row.estado}</DataTable.Cell>
                             </DataTable.Row>
                         )))
-                        : (console.log("sin asistencia", alumno))
+                        : (<DataTable.Row  >
+                                <DataTable.Cell>SIN ALUMNOS</DataTable.Cell>
+                            </DataTable.Row>)
                     }  
             </DataTable>
             <DataTable.Pagination
