@@ -3,8 +3,8 @@ import { Text, TextInput, StyleSheet, TouchableOpacity, Picker } from 'react-nat
 import Layout from '../components/Layout'
 import MateriasList from '../components/MateriasList'
 import CursosList from '../components/CursosList'
-import AlumnosPorCursoList from '../components/AlumnosPorCursoList'
 import { saveNota, getNota, updateNota } from '../api'
+import AlumnosPorCursoTableCalificacion from '../components/AlumnosPorCursoTableCalificacion'
 
 const CalificarScreen = () => {
 
@@ -20,51 +20,37 @@ const CalificarScreen = () => {
         nota:'',
         descripcion: ''
     })
-    /*
-    useEffect(() => {
-        if(route.params && route.params.id){
-            setEditing(true)
-            navigation.setOptions({
-                headerTitle: 'Updating a nota'
-            });
-            (async () => {
-                const nota = await getNota(route.params.id)
-                setNota({title: nota.title, description:nota.description})
-            })();
-        }
-    }, [])
-    */
+    
     const handleChange = (name, value) => setNota({ ...nota, [name]: value})
 
     const handleSubmit = async () => {
         try {
-            if (!editing){
-                await saveNota(nota)
-            }
-            else {
-                //console.log(route.params.id, nota)
-                //await updateNota(route.params.id, nota)
-            }
-            navigation.navigate("HomeScreenDocente")
-        } catch (error) {
-            console.log("error", error)
+            //await saveNota(nota)
+            //navigation.navigate("HomeScreenDocente")
+            console.log("nota: ", nota)
+        }
+        catch (error) {
+            console.log("error en nota", error)
         }  
     }
 
 
-
-
     return (
         <Layout>
-            <MateriasList />
-            <CursosList />
             <TextInput 
-                placeholder="Ingrese nota"
+                placeholder="Descripcion"
                 placeholderTextColor= "#546574"
                 style = {styles.input} 
                 onChangeText = { (text) => handleChange('descripcion', text)}
-                keyboardType = "numeric"
             />
+            <MateriasList />
+            
+            <CursosList />
+
+            
+
+            <AlumnosPorCursoTableCalificacion/>
+            
             <TouchableOpacity style = {styles.buttonSave} onPress={handleSubmit}>
                 <Text style= {styles.buttonText}>Guardar Nota</Text>
             </TouchableOpacity>
