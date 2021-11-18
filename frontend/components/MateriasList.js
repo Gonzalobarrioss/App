@@ -5,7 +5,7 @@ import { useIsFocused } from '@react-navigation/native'
 import { getAllMaterias } from '../api'
 
 import { store } from '../redux/store'
-import { addIdMateria } from '../redux/actions/MateriaAction'
+import { addIdMateria, addRegimenMateria } from '../redux/actions/MateriaAction'
 
 const MateriasList = () => {
 
@@ -14,19 +14,22 @@ const MateriasList = () => {
 
     const focus = useIsFocused()
 
-    const loadMaterias = async () => {
-        const data = await getAllMaterias();
-        setMateria(data)
-    }
+    
 
     useEffect(() => {
+        const loadMaterias = async () => {
+            const data = await getAllMaterias();
+            setMateria(data)
+        }
         loadMaterias();
+
     }, [])
 
    const handleMateria = (value) => {
         try {
             setSelectedValue(value)
             store.dispatch(addIdMateria(value))
+            store.dispatch(addRegimenMateria(value))
         } catch (error) {
             console.log("handleMateria",error)
         }

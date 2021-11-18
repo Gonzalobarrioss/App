@@ -219,6 +219,17 @@ export const getClasesXMateria = async (req , res) => {
     res.json(rows);
 }
 
+export const getRegimenXMateria = async (req , res) => {
+    //console.log("req.params", req.params.id)
+    const connection = await connect();
+    const [rows] = await connection.query("SELECT regimen FROM materias WHERE id = ?",[
+        req.params.id
+    ])
+    //
+    //console.log("asd",res.json(rows))
+    res.json(rows);
+}
+
 export const getIdAlumno = async (req , res) => {
 
     const connection = await connect();

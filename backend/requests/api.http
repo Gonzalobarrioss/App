@@ -47,3 +47,7 @@ GET {{API}}/materias
 //GET CLASES X MATERIA
 ###
 GET {{API}}/clase_materia/1
+
+//GET REGIMEN X MATERIA
+###
+GET {{API}}/regimen_materia/1

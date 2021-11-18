@@ -4,7 +4,7 @@ import  Layout  from '../components/Layout'
 import { store } from '../redux/store';
 import { addRol } from '../redux/actions/PersonaAction';
 
-const API_URL = Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://192.168.0.127:3000';
+const API_URL = Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://192.168.1.18:3000';
 
 const AuthScreen = ({route, navigation}) => {
     

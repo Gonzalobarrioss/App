@@ -1,5 +1,5 @@
 
-const API = "http://192.168.0.127:3000"
+const API = "http://192.168.1.18:3000"
 
 export const getMesaExamen = async () => {
     const res = await fetch(`${API}/mesa_examenes`);

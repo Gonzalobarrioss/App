@@ -13,7 +13,8 @@ import {
     getClasesXMateria, 
     saveNota, 
     getIdAlumno,
-    CursoPorClase
+    CursoPorClase,
+    getRegimenXMateria
 } from '../controllers/auth.js';
 
 const router = express.Router();
@@ -43,6 +44,9 @@ router.post('/guardar_nota', saveNota)
 router.get('/id_alumno/:nombre', getIdAlumno)
 
 router.get('/curso_clase/:id', CursoPorClase)
+
+router.get('/regimen_materia/:id', getRegimenXMateria)
+
 
 router.get('/public', (req, res, next) => {
     res.status(200).json({ message: "here is your public resource" });

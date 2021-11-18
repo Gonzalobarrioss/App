@@ -21,19 +21,35 @@ const AlumnosPorCursoTableCalificacion = () => {
         setPage(0);
     }, [itemsPerPage]);
 */
+    const docente = useSelector(state => state.PersonaReducer.DocenteReducer.id)
+    const regimen = useSelector(state => state.MateriasReducer.regimen)
+    const materia = useSelector(state => state.MateriasReducer.id)
+
     const [alumno, setAlumno] = useState({
         alumnos:[],
-        nota:[]
+        nota:[],
+        lastDeletedAlumno: [],
+        docente: docente,
+        materia: "materia",
+        regimen: regimen
+
     })
+    /*
+    useEffect(() => {
+        //console.log("docente", store.getState().)
+        console.log("regimen", regimen)
+        console.log("materia", materia)
+    }, [regimen])
+    */
+
 
     const curso = useSelector(state => state.alumnosCursoReducer.curso)
-
     useEffect( () => {
         try{
             store.dispatch(getAlumnosPorCurso(curso))
             //console.log("Dispatch nuevos alumnos con el curso id", curso)
         } catch (error) {
-            console.log("error",error)
+            console.log("error dispatch getAlumnosPorCurso",error)
         }
     }, [curso])
 
@@ -42,34 +58,48 @@ const AlumnosPorCursoTableCalificacion = () => {
         const loadAlumnos = (alu) => {
 
             setAlumno({...alumno, alumnos:alu })
+            //console.log("seteo alu")
             
         }
         loadAlumnos(alumnosPorCurso)
-        console.log("alu x curso")
+        //console.log("alu x curso")
     }, [alumnosPorCurso])
 
      const handleGuardarAllNotas = () =>  {
-       // console.log("alumno",alumno)
-       /* alumno.alumnos.map((item,index) => {
-            console.log("index", index, "Alumno" , item.nombre, "NOTA:", alumno.nota[index])
-        })*/
-        //console.log("nota 2 ( 6 ) ", alumno.nota[1])
+        console.log("alumno",alumno)
     }
 
-    const handleSetNota = (value, key, id) => {
-       // console.log("key", key)
-        //setAlumno({ ...alumno, nota: [alumno.nota.splice(0,key,value) ]})
-        setAlumno({...alumno, [alumno.nota]: ([alumno.nota[key]] = value ), ...alumno.nota  })
-        //console.log("key", key, "alumno: ", alumno.alumnos[key].nombre, "nota", alumno.nota[key])
+    const handleSetNota = (value, key) => {
+        alumno.nota.splice(key,1)
+        alumno.nota.splice(key,0,value)
     }
 
-    const handleRemoveRow = (key) => {
-        console.log("se removera alumno en posicion", key)
-        store.dispatch(removeAlumno(key))
+    const handleRemoveRow = (key,id) => {
+        Alert.alert(
+            `Atencion`,
+            `Si continua eliminara al alumno`,
+            [
+                {
+                    text: "Continuar",
+                    onPress: () => {
+                        alumno.alumnos.splice(key,1)
+                        alumno.nota.splice(key,1)
+                        setAlumno({...alumno, lastDeletedAlumno: id})
+                        //console.log("handle")
+                    }
+                },
+                {
+                    text: "Cancelar",
+                    style: "cancel"
+                }
+            ]
+        )
+
+        
     }
 
     return (
-        <View style={{ width: "90%", marginTop: "10%"}}>
+        <View style={{ width: "90%", marginTop: "10%", marginBottom: "10%"}}>
             <TouchableOpacity
                 style={{backgroundColor: "#10ac84", padding: 7, borderRadius: 5, marginVertical: "5%" }}
                 onPress= { () => handleGuardarAllNotas()}
@@ -86,7 +116,7 @@ const AlumnosPorCursoTableCalificacion = () => {
                         alumno.alumnos.length > 0 ?
                         (alumno.alumnos.map((row, key)=>(
                             //console.log("filas", row),
-                            <DataTable.Row key={key} onPress={ () => DataTable.Row.style = {display: "none"} } >
+                            <DataTable.Row key={key} onPress={ () => console.log("press") } >
                                 <DataTable.Cell>{row.nombre}</DataTable.Cell>
                                 <DataTable.Cell>
                                     <View>
@@ -94,7 +124,7 @@ const AlumnosPorCursoTableCalificacion = () => {
                                             placeholder="INGRESE NOTA"
                                             placeholderTextColor= "black"
                                             style= {{backgroundColor: "#fff"}}
-                                            onChangeText = { (text) => handleSetNota(text, key, row.id)}
+                                            onChangeText = { (value) => handleSetNota(value, key)}
                                             keyboardType = "numeric"
                                            // value = {alumno.nota[key]}
                                         />
@@ -104,7 +134,7 @@ const AlumnosPorCursoTableCalificacion = () => {
                                     <View>
                                         <TouchableOpacity
                                             style = {{ backgroundColor: "red", padding: 7, borderRadius: 5, alignItems: 'center', justifyContent: 'center', flex: 1}}
-                                            onPress = { () =>  console.log()}
+                                            onPress = { () => handleRemoveRow(key,row.id)}
                                         >
                                             <Text style = {{color: "#fff", fontSize: 14, textAlign:'center'}}> Eliminar </Text>
                                         </TouchableOpacity>
