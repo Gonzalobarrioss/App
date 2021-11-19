@@ -1,12 +1,13 @@
 
 const API = "http://192.168.1.115:3000"
 
-export const getMesaExamen = async () => {
-    const res = await fetch(`${API}/mesa_examenes`);
+export const getMesaExamen = async (id) => {
+    const res = await fetch(`${API}/mesa_examenes/${id}`);
     return await res.json();
 }
-export const getIdAlumno = async (nombreAlumno) => {
-    const res = await fetch(`${API}/id_alumno/${nombreAlumno}`);
+
+export const getMesaExamenInscriptas = async (id) => {
+    const res = await fetch(`${API}/mesa_examenes_inscriptas/${id}`);
     return await res.json();
 }
 

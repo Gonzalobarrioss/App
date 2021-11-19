@@ -10,6 +10,7 @@ import ClasesReducer from './reducers/ClaseReducer';
 import CursosReducer from './reducers/CursoReducer';
 import AsistenciaReducer from './reducers/AsistenciaReducer';
 import GuardarCalificacionReducer from './reducers/GuardarCalificacionReducer';
+import RenderReducer from './reducers/RenderReducer';
 
 
 const persistConfig = {
@@ -25,7 +26,8 @@ const rootReducer = combineReducers({
     ClasesReducer,
     CursosReducer,
     AsistenciaReducer,
-    GuardarCalificacionReducer
+    GuardarCalificacionReducer,
+    RenderReducer
 });
 
 export const store = createStore(rootReducer, applyMiddleware(thunk));

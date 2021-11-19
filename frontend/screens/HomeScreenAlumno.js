@@ -1,44 +1,23 @@
-import React, {useEffect, useState} from 'react'
-import { StyleSheet } from 'react-native'
-import { getMesaExamen} from '../api'
+import React from 'react'
+import { StyleSheet, Text } from 'react-native'
 import MesaExamenesList from '../components/MesaExamenesList'
 import Layout from '../components/Layout'
 
-const HomeScreenAlumno = ({route, navigation}) => {
-    const nombre = route.params.nombre
-    const rol = route.params.rol
-    //console.log(route.params)
-    
-    const [mesaExamen, setMesaExamen] = useState([])
+const HomeScreenAlumno = () => {  
 
-    const loadMesaExamen = async () => {
-        const data = await getMesaExamen();
-        setMesaExamen(data)
-    }
-
-    useEffect(() => {
-        loadMesaExamen();
-    }, [])
-
-    return (
-        
+    return ( 
         <Layout>
-            <MesaExamenesList mesaExamen={mesaExamen} alumno={nombre}/>
+            <Text style={styles.txtHeader}>MESA DE EXAMENES</Text>
+            <MesaExamenesList />
         </Layout>
-        
     )
 }
 
 const styles = StyleSheet.create({
-    btnInscribirse :{
-        padding: 7,
-        borderRadius: 5,
-        width: "90%",
-        backgroundColor: "black"
-    },
-    txtInscribirse: {
+    txtHeader: {
         color: "#ffffff",
-        textAlign: 'center'
+        textAlign: 'center',
+        fontSize: 18
     }
 })
 

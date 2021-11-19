@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Platform } from 'react-native';
 import  Layout  from '../components/Layout'
 import { store } from '../redux/store';
-import { addRol } from '../redux/actions/PersonaAction';
+import { addIdAlumno, addIdDocente, addNombreAlumno, addNombreDocente, addRol } from '../redux/actions/PersonaAction';
 
 const API_URL = Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://192.168.1.115:3000';
 
@@ -43,15 +43,19 @@ const AuthScreen = ({route, navigation}) => {
         .then(async res => { 
             try {
                 const jsonRes = await res.json();
-                //console.log(jsonRes.id)
                 if (res.status === 200) {
-                   //console.log("res",jsonRes)
                     setMessage(jsonRes.message);
+                    const id = jsonRes.id
+                    const nombre = jsonRes.nombre
                     if (rol == 'Alumno'){
-                        navigation.navigate("HomeScreenAlumno", {id: jsonRes.id,nombre: jsonRes.nombre, rol:rol} )
+                        store.dispatch(addIdAlumno(id))
+                        store.dispatch(addNombreAlumno(nombre))
+                        navigation.navigate("HomeScreenAlumno")
                     }
                     else{
-                        navigation.navigate("HomeScreenDocente", {id: jsonRes.id,nombre: jsonRes.nombre, rol:rol} )
+                        store.dispatch(addIdDocente(id))
+                        store.dispatch(addNombreDocente(nombre))
+                        navigation.navigate("HomeScreenDocente")
                     }
                 }
             } catch (err) {

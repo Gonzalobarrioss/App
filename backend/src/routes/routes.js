@@ -12,7 +12,7 @@ import {
     getAllMaterias, 
     getClasesXMateria, 
     saveNota, 
-    getIdAlumno,
+    getAllMesaDeExamenesInscriptas,
     CursoPorClase,
     getRegimenXMateria,
     saveAsistencia
@@ -26,7 +26,9 @@ router.post('/signup', signup);
 
 router.get('/private', isAuth);
 
-router.get('/mesa_examenes', getAllMesaDeExamenes)
+router.get('/mesa_examenes/:id', getAllMesaDeExamenes)
+
+router.get('/mesa_examenes_inscriptas/:id', getAllMesaDeExamenesInscriptas)
 
 router.get('/cursos', getAllCursos)
 
@@ -44,7 +46,7 @@ router.post('/guardar_nota', saveNota)
 
 router.post('/guardar_asistencia', saveAsistencia)
 
-router.get('/id_alumno/:nombre', getIdAlumno)
+//router.get('/id_alumno/:nombre', getIdAlumno)
 
 router.get('/curso_clase/:id', CursoPorClase)
 

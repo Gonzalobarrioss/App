@@ -1,42 +1,41 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
-import { getIdAlumno, inscripcionMesaExamen } from '../api'
-import { useIsFocused } from '@react-navigation/core'
+import { inscripcionMesaExamen } from '../api'
 
+import { useSelector } from 'react-redux'
 
-const MesaExamen = ({mesa, alumno}) => {
+import { store } from '../redux/store'
+import { render } from '../redux/actions/RenderAction'
 
-    const focus = useIsFocused()
-    const [alumnoID, setAlumnoID] = useState("")
+const MesaExamen = ({ mesa }) => {
 
-    const handleIdAlumno = async() => {
-        const data = await getIdAlumno(alumno)
-        return setAlumnoID(data.id)
-    }
+    const nombreAlumno = useSelector(state => state.PersonaReducer.AlumnoReducer.nombre)
+    const idAlumno = useSelector(state => state.PersonaReducer.AlumnoReducer.id)
+    console.log("id alumno", idAlumno)
 
-    useEffect(() => {
-        handleIdAlumno();         
-    }, [focus])
-    
     const finalizarInscripcion = (mesaID) => {
-        const inscripcion = {mesaID: mesaID, alumnoID: alumnoID}
+        const inscripcion = {mesaID: mesaID, alumnoID: idAlumno}
         Alert.alert(
-            `Atencion`,
-            `Si continua se inscribirá en la mesa.`,
+            `Atencion ${nombreAlumno}`,
+            `Esta a punto de inscribirse en la siguiente mesa:
+
+            Materia: ${mesa.materia}
+            Descripcion: ${mesa.descripcion}
+            Fecha: ${mesa.fecha.slice(0,10)}
+            Llamado: ${mesa.llamado}
+                `,
             [
                 {
-                    text: "Inscribirse",
+                    text: "Inscribirme",
                     onPress: async () => {
-                        //console.log(inscripcion)
                         try {
-                            const result = await inscripcionMesaExamen(inscripcion)
-                            Alert.alert("Inscripcion exitosa")
-                            //console.log(result) 
+                            await inscripcionMesaExamen(inscripcion)
+                            store.dispatch(render(true))
+                            Alert.alert("Inscripcion exitosa.")
                         } catch (error) {
                             console.log(error)
-                            Alert.alert("No se pudo realizar la inscripcion")
+                            Alert.alert("No se pudo realizar la inscripcion.")
                         }
-                        
                     }
                 },
                 {
@@ -55,17 +54,17 @@ const MesaExamen = ({mesa, alumno}) => {
                     () => finalizarInscripcion(mesa.id)
                 }
             >
-                <Text style={styles.itemDescripcion}>MESA: {mesa.id}</Text>
-                <Text style={styles.itemDescripcion}>MATERIA: {mesa.descripcion}</Text>
+                <Text style={styles.itemDescripcion}>ID: {mesa.id}</Text>
+                <Text style={styles.itemDescripcion}>MESA: {mesa.descripcion}</Text>
+                <Text style={styles.itemDescripcion}>MATERIA: {mesa.materia}</Text>
                 <Text style={styles.itemDescripcion}>REGIMEN: {mesa.regimen}</Text>
+                <Text style={styles.itemDescripcion}>FECHA: { mesa.fecha.slice(0,10) }</Text>
                 <Text style={styles.itemDescripcion}>LLAMADO: {mesa.llamado}</Text>
                 <Text style={styles.itemDescripcion}>EXAMINADOR 1: {mesa.examinador1}</Text>
                 <Text style={styles.itemDescripcion}>EXAMINADOR 2: {mesa.examinador2}</Text>
                 <Text style={styles.itemDescripcion}>EXAMINADOR 3: {mesa.examinador3}</Text>
-            </TouchableOpacity>
-            
-        </View>
-        
+            </TouchableOpacity>           
+        </View>    
     )
 }
 

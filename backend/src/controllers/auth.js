@@ -59,8 +59,7 @@ export const login = (req, res, next) => {
         .then(dbUser => {
             try {
                 user = dbUser.dataValues.id
-                //console.log("user", user)
-                //console.log("user", dbUser.dataValues.id)
+ 
             } catch (error) {
                 console.log(error)
             } 
@@ -91,8 +90,7 @@ export const login = (req, res, next) => {
         .then(dbUser => {
             try {
                 user = dbUser.dataValues.id
-                //console.log("user", user)
-                //console.log("user", dbUser.dataValues.id)
+
             } catch (error) {
                 console.log(error)
             } 
@@ -121,14 +119,7 @@ export const login = (req, res, next) => {
 export const isAuth = (req, res, next) => {
     const authHeader = req.get("Authorization");
     const nombre = req.get("username")
-    /*try {
-        const id = req.get("id")
-        console.log("id",id)
-    } catch (error) {
-        console.log("error", error)
-    }
-    */
-    //HACER GET CURSO POR CLASE DESDE 0
+    
     if (!authHeader) {
         return res.status(401).json({ message: 'not authenticated' });
     };
@@ -147,10 +138,18 @@ export const isAuth = (req, res, next) => {
 };
 
 export const getAllMesaDeExamenes = async (req , res) => {
-
     const connection = await connect();
-    const [rows] = await connection.query("SELECT exa.id,mat.descripcion,mat.regimen,exa.llamado,exa.examinador1,exa.examinador2,exa.examinador3 FROM mesa_examen_novedad exa INNER JOIN materias mat ON exa.materia_id = mat.id");
-    //console.log(res.json(rows))
+    const [rows] = await connection.query("SELECT exa.id,examae.descripcion,mat.descripcion as materia,mat.regimen,exa.fecha,exa.llamado,exa.examinador1,exa.examinador2,exa.examinador3 FROM mesa_examen_novedad exa INNER JOIN materias mat ON exa.materia_id = mat.id INNER JOIN mesa_examen_maestro examae ON examae.id = exa.maestro_id INNER JOIN alumno_mesa alume ON (alume.alumno_id = ? AND exa.id != alume.mesa_id ) WHERE examae.estado = 1",[
+        req.params.id
+    ]);
+    res.json(rows);
+}
+
+export const getAllMesaDeExamenesInscriptas = async (req , res) => {
+    const connection = await connect();
+    const [rows] = await connection.query("SELECT exa.id,examae.descripcion,mat.descripcion as materia,mat.regimen,exa.fecha,exa.llamado,exa.examinador1,exa.examinador2,exa.examinador3 FROM alumno_mesa alume INNER JOIN mesa_examen_novedad exa ON alume.mesa_id = exa.id INNER JOIN mesa_examen_maestro examae ON examae.id = exa.maestro_id INNER JOIN materias mat ON exa.materia_id = mat.id WHERE alume.alumno_id = ?",[
+        req.params.id
+    ]);
     res.json(rows);
 }
 
@@ -158,13 +157,11 @@ export const getAllCursos = async (req , res) => {
 
     const connection = await connect();
     const [rows] = await connection.query("SELECT c.id,a.descripcion,c.nivel,c.turno,c.grado_ano,c.division FROM cursos c INNER JOIN aulas a ON c.aula_id = a.id");
-    //console.log(res.json(rows))
     res.json(rows);
 }
 
 
 export const getAllAlumnosXCurso = async (req , res) => {
-    //console.log("banckend recibe", req.params.id)
     const connection = await connect();
     const [rows] = await connection.query("SELECT a.id,d.nombre,d.apellido, a.curso_id FROM alumnos a INNER JOIN datos_personales d ON a.id = d.documento where a.curso_id = ?", [
         req.params.id,
@@ -204,40 +201,23 @@ export const getAllMaterias = async (req , res) => {
 
     const connection = await connect();
     const [rows] = await connection.query("SELECT id,descripcion,regimen,plan_estudio FROM materias");
-    //console.log(res.json(rows))
     res.json(rows);
 }
 
 export const getClasesXMateria = async (req , res) => {
-    //console.log("req.params", req.params.id)
     const connection = await connect();
     const [rows] = await connection.query("SELECT c.id,d.nombre,d.apellido,p.descripcion, a.descripcion,cur.nivel,cur.turno,cur.grado_ano,cur.division, c.dias, c.horario_inicio, c.horario_fin,c.curso_id FROM clases c INNER JOIN cursos cur ON c.curso_id = cur.id INNER JOIN aulas a ON a.id = cur.aula_id INNER JOIN docentes doc ON c.docente_id = doc.id INNER JOIN datos_personales d ON doc.id = d.documento INNER JOIN periodos p ON c.periodo_id = p.id WHERE materia_id = ?",[
         req.params.id
     ])
-    //
-    //console.log("asd",res.json(rows))
     res.json(rows);
 }
 
 export const getRegimenXMateria = async (req , res) => {
-    //console.log("req.params", req.params.id)
     const connection = await connect();
     const [rows] = await connection.query("SELECT regimen FROM materias WHERE id = ?",[
         req.params.id
     ])
-    //
-    //console.log("asd",res.json(rows))
     res.json(rows);
-}
-
-export const getIdAlumno = async (req , res) => {
-
-    const connection = await connect();
-    const [rows] = await connection.query("SELECT id FROM users WHERE username = ?",[
-        req.params.nombre
-    ])
-    //console.log(res.json(rows))
-    res.json(rows[0]);
 }
 
 export const saveNota = async (req , res) => {

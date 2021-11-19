@@ -2,8 +2,12 @@
 
 
 
-//GET MESA EXAMENES
-GET {{API}}/mesa_examenes
+//GET MESA EXAMENES POR ALUMNO
+GET {{API}}/mesa_examenes/39819973
+
+//GET MESA EXAMENES INSCRIPTAS POR ALUMNO
+###
+GET {{API}}/mesa_examenes_inscriptas/39819973
 
 //GET ID ALUMNO POR NOMBRE
 ###

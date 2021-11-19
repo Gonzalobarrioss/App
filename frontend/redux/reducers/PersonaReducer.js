@@ -1,4 +1,4 @@
-import { SET_NOMBRE_ALUMNO, SET_ID_ALUMNO, SET_NOMBRE_DOCENTE, SET_ID_DOCENTE, SET_ROL } from "../actions/PersonaAction";
+import { SET_NOMBRE_ALUMNO, SET_ID_ALUMNO, SET_NOMBRE_DOCENTE, SET_ID_DOCENTE, SET_ROL } from "../actions/PersonaAction"
 import { combineReducers} from 'redux'
 
 const initialState = {
@@ -19,7 +19,7 @@ const initialState = {
 function AlumnoReducer (state = initialState.alumno, action){
     switch (action.type) {
         case SET_NOMBRE_ALUMNO:
-            return { ...state, nombre: action.payload };
+            return { ...state, nombre: action.payload }
         case SET_ID_ALUMNO:
             return { ...state, id : action.payload}
         default:
@@ -30,20 +30,20 @@ function AlumnoReducer (state = initialState.alumno, action){
 function DocenteReducer(state = initialState.docente, action) {
     switch (action.type) { 
         case SET_NOMBRE_DOCENTE:
-            return { ...state, nombre : action.payload };
+            return { ...state, nombre : action.payload }
         case SET_ID_DOCENTE:
             return { ...state, id : action.payload}
         default:
-            return state;
+            return state
     }
 }
 
-function RolReducer(state = initialState.docente, action) {
+function RolReducer(state = initialState, action) {
     switch (action.type) { 
         case SET_ROL:
-            return { ...state, rol : action.payload };
+            return { ...state, rol : action.payload }
         default:
-            return state;
+            return state
     }
 }
 
