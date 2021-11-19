@@ -18,16 +18,12 @@ const AlumnosPorCursoList = () => {
     const focus = useIsFocused()
 
     const loadAlumnos = (alu) => {
-        //console.log("alumnos", alu.length)
         setAlumno(alu)
-        //console.log("seteo alu", alu, "con cursoID", curso)
     }
 
     useEffect( () => {
-        //console.log("useEffect Curso")
         try{
-            //console.log("curso desde store",store.getState().alumnosCursoReducer.curso)
-            //console.log("cambio el curso, se obtiene alumnos, curso:", curso)
+     
             store.dispatch(getAlumnosPorCurso(curso))
         } catch (error) {
             console.log("error",error)
@@ -35,10 +31,7 @@ const AlumnosPorCursoList = () => {
     }, [curso])
 
     useEffect(() => {
-        //console.log("useEffect alumnos")
         loadAlumnos(alumnosPorCurso);
-        //store.dispatch()
-        //
     }, [alumnosPorCurso])
 
     useEffect(() => {
@@ -55,15 +48,11 @@ const AlumnosPorCursoList = () => {
                 }
             >
                 {
-                    //console.log("desde reder",alumno)
-
                      alumno.length > 0 
                      ?  (alumno.map((item,key)=>{
                             return ( <Picker.Item label={item.nombre} value={item.id} key={key} />)
                         }))
-                    : ( <Picker.Item label={"SIN ALUMNOS"}  /> )
-
-                    
+                    : ( <Picker.Item label={"SIN ALUMNOS"}  /> )               
                 }
             </Picker>
         </View>     

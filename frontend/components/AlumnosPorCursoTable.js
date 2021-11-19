@@ -1,14 +1,13 @@
 import React, {useState, useEffect} from 'react'
 import { View, Alert, StyleSheet, TouchableOpacity, Text} from 'react-native'
-import { useIsFocused } from '@react-navigation/native'
 
 import { getAlumnosPorCurso } from '../redux/actions/AlumnoCursoAction'
 import { useSelector } from 'react-redux';
 import { store } from '../redux/store'
-import { addListaAlumnos, resetAsistencia } from '../redux/actions/AsistenciaAction';
+//import { addListaAlumnos, resetAsistencia } from '../redux/actions/AsistenciaAction';
 
 import { DataTable } from 'react-native-paper';
-
+import { saveAsistencia } from '../api';
 
 const optionsPerPage = [2, 3, 4];
 
@@ -18,8 +17,8 @@ const AlumnosPorCursoTable = () => {
     const [asistencia, setAsistencia] = useState({
         clase: clase,
         alumnos: [],
-        estado: []
-
+        estado: [],
+        render: false
     })
 
     const [page, setPage] = useState(0);
@@ -29,12 +28,10 @@ const AlumnosPorCursoTable = () => {
       setPage(0);
     }, [itemsPerPage]);
 
-    const focus = useIsFocused()
-    
     const clase = useSelector(state => state.ClasesReducer.id)
     useEffect(() => {
         setAsistencia({...asistencia, clase: clase})
-        console.log("clase desde store", store.getState().ClasesReducer.id)
+        //console.log("clase desde store", store.getState().ClasesReducer.id)
     }, [clase])
 
     const curso = useSelector(state => state.alumnosCursoReducer.curso)
@@ -52,30 +49,53 @@ const AlumnosPorCursoTable = () => {
             setAlumno(alu)          
         }
         if(alumnosPorCurso){
+            alumnosPorCurso.map((item,index)=>{
+                asistencia.estado.splice(index,1,"Ausente")
+                asistencia.alumnos.splice(index,1,item.id)
+            })
             loadAlumnos(alumnosPorCurso)
-           /* alumnosPorCurso.map((item)=>{
-                console.log(item.nombre)
-            })*/
+            //console.log("cantidad de alumnos", alumnosPorCurso.length)
         }
         else{
             loadAlumnos([])
         }
     }, [alumnosPorCurso])
 
-    const handleAsistencia = (nombre,id) => {
+    const handleAsistencia = (value) => {
 
         Alert.alert(
-            `Alumno: ${nombre}`,
+            `Alumno: ${value.nombre}`,
             `Insertar estado del alumno`,
             [
+                {
+                    text: "Retraso",
+                    onPress: () => {
+
+                        try {
+                            //setAsistencia({...asistencia, alumnos: })
+                            asistencia.alumnos.splice(value.key,1)
+                            asistencia.alumnos.splice(value.key,0,value.id)
+                            asistencia.estado.splice(value.key,1)
+                            asistencia.estado.splice(value.key,0,"Restraso")
+                            setAsistencia({...asistencia, render: true})
+                        } catch (error) {
+                            console.log(error)
+                            Alert.alert("No se pudo realizar la asistencia")
+                        }
+                        
+                    }
+                },
                 {
                     text: "Presente",
                     onPress: () => {
 
                         try {
-                            store.dispatch(addListaAlumnos(id,nombre,"Presente"))
-
-                            //store.dispatch(addEstado("Presente"))
+                            //setAsistencia({...asistencia, alumnos: })
+                            asistencia.alumnos.splice(value.key,1)
+                            asistencia.alumnos.splice(value.key,0,value.id)
+                            asistencia.estado.splice(value.key,1)
+                            asistencia.estado.splice(value.key,0,"Presente")
+                            setAsistencia({...asistencia, render: true})
                         } catch (error) {
                             console.log(error)
                             Alert.alert("No se pudo realizar la asistencia")
@@ -87,22 +107,55 @@ const AlumnosPorCursoTable = () => {
                     text: "Ausente",
                     onPress: () => {
                         try {
-                            store.dispatch(addListaAlumnos(id,nombre,"Ausente"))
-
-                            //store.dispatch(addEstado("Ausente"))
+                            asistencia.alumnos.splice(value.key,1)
+                            asistencia.alumnos.splice(value.key,0,value.id)
+                            asistencia.estado.splice(value.key,1)
+                            asistencia.estado.splice(value.key,0,"Ausente")
+                            setAsistencia({...asistencia, render: true})
                         } catch (error) {
                             console.log(error)
                             Alert.alert("No se pudo realizar la asistencia")
                         }
                     },
                     style: "cancel"
-                }
-            ]
+                }              
+            ],
+            {
+                cancelable: true
+            }
         )
     }
 
     const handleSaveAsistencia = () => {
-        console.log("asistencia", asistencia)
+        Alert.alert(
+            `Atencion`,
+            `Si continua guardará las asistencias`,
+            [
+                {
+                    text: "Continuar",
+                    onPress: () => {
+                        try {
+                            asistencia.alumnos.map(async (item,index)=>{
+                                await saveAsistencia({alumnoID:item, claseID: asistencia.clase, estado:asistencia.estado[index]})
+                                console.log("ASISTENCIA")
+                                console.log("Clase id: ", asistencia.clase)
+                                console.log("Alumno id: ", item)
+                                console.log("Estado: ", asistencia.estado[index])
+                                console.log("--------------------------")
+                            })
+                        } catch (error) {
+                            console.log("error", error)
+                        }
+                    }
+                },
+                {
+                    text: "Cancelar",
+                    style: "cancel"
+                }
+            ]
+        )
+        
+        //console.log("asistencia", asistencia)
     }
 
     return (
@@ -113,12 +166,11 @@ const AlumnosPorCursoTable = () => {
                     <DataTable.Title style={{ colSpan: 2}}>Estado</DataTable.Title>
                 </DataTable.Header>
                     {
-                        alumno.length > 0 ? //(console.log(alumno),
+                        alumno.length > 0 ? 
                         (alumno.map((row, key)=>(
-                            //console.log("filas", row),
-                            <DataTable.Row key={key} onPress={ () => handleAsistencia(row.nombre,row.id) } >
+                            <DataTable.Row key={key} onPress={ () => handleAsistencia({nombre:row.nombre,id:row.id, key:key}) } >
                                 <DataTable.Cell>{row.nombre}</DataTable.Cell>
-                                <DataTable.Cell>{row.estado}</DataTable.Cell>
+                                <DataTable.Cell>{asistencia.estado[key]}</DataTable.Cell>
                             </DataTable.Row>
                         )))    
                         : (<DataTable.Row  >
@@ -155,7 +207,7 @@ const styles = StyleSheet.create({
         padding: 7,
         borderRadius: 5,
         fontSize: 18,
-        width: "90%"
+        width: "100%"
     },
     txtGuardarAsistencia:{
         textAlign: 'center',

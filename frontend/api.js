@@ -1,5 +1,5 @@
 
-const API = "http://192.168.0.127:3000"
+const API = "http://192.168.1.115:3000"
 
 export const getMesaExamen = async () => {
     const res = await fetch(`${API}/mesa_examenes`);
@@ -17,6 +17,17 @@ export const saveNota = async (newNota) => {
             Accept: 'application/json', 'Content-Type':'application/json'
         },
         body: JSON.stringify(newNota)
+    })
+    return await res.json();
+}
+
+export const saveAsistencia = async (newAsistencia) => {
+    const res = await fetch(`${API}/guardar_asistencia`, { 
+        method: 'POST', 
+        headers: {
+            Accept: 'application/json', 'Content-Type':'application/json'
+        },
+        body: JSON.stringify(newAsistencia)
     })
     return await res.json();
 }

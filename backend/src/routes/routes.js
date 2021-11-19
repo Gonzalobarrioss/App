@@ -14,7 +14,8 @@ import {
     saveNota, 
     getIdAlumno,
     CursoPorClase,
-    getRegimenXMateria
+    getRegimenXMateria,
+    saveAsistencia
 } from '../controllers/auth.js';
 
 const router = express.Router();
@@ -40,6 +41,8 @@ router.get('/materias', getAllMaterias)
 router.get('/clase_materia/:id', getClasesXMateria)
 
 router.post('/guardar_nota', saveNota)
+
+router.post('/guardar_asistencia', saveAsistencia)
 
 router.get('/id_alumno/:nombre', getIdAlumno)
 
