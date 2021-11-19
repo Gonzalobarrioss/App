@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { View, Alert } from 'react-native'
+import { View, Alert, StyleSheet, TouchableOpacity, Text} from 'react-native'
 import { useIsFocused } from '@react-navigation/native'
 
 import { getAlumnosPorCurso } from '../redux/actions/AlumnoCursoAction'
@@ -14,9 +14,14 @@ const optionsPerPage = [2, 3, 4];
 
 const AlumnosPorCursoTable = () => {
 
-    const [alumno, setAlumno] = useState([
+    const [alumno, setAlumno] = useState([])
+    const [asistencia, setAsistencia] = useState({
+        clase: clase,
+        alumnos: [],
+        estado: []
 
-    ])
+    })
+
     const [page, setPage] = useState(0);
     const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]);
 
@@ -26,6 +31,11 @@ const AlumnosPorCursoTable = () => {
 
     const focus = useIsFocused()
     
+    const clase = useSelector(state => state.ClasesReducer.id)
+    useEffect(() => {
+        setAsistencia({...asistencia, clase: clase})
+        console.log("clase desde store", store.getState().ClasesReducer.id)
+    }, [clase])
 
     const curso = useSelector(state => state.alumnosCursoReducer.curso)
     useEffect( () => {
@@ -39,16 +49,18 @@ const AlumnosPorCursoTable = () => {
     const alumnosPorCurso = useSelector(state => state.alumnosCursoReducer.alumnos)
     useEffect(() => {
         const loadAlumnos = (alu) => {
-             setAlumno(alu)          
+            setAlumno(alu)          
         }
-        loadAlumnos(alumnosPorCurso)
-       // console.log("alumnos", alumnosPorCurso)     
+        if(alumnosPorCurso){
+            loadAlumnos(alumnosPorCurso)
+           /* alumnosPorCurso.map((item)=>{
+                console.log(item.nombre)
+            })*/
+        }
+        else{
+            loadAlumnos([])
+        }
     }, [alumnosPorCurso])
-
-    const asistencia = useSelector ( state => state.AsistenciaReducer)
-    useEffect(() => {
-        console.log("asistencia", asistencia)
-    }, [asistencia])
 
     const handleAsistencia = (nombre,id) => {
 
@@ -89,6 +101,10 @@ const AlumnosPorCursoTable = () => {
         )
     }
 
+    const handleSaveAsistencia = () => {
+        console.log("asistencia", asistencia)
+    }
+
     return (
         <View style={{ width: "90%", marginTop: "10%"}}>
             <DataTable style={{backgroundColor:"#ffffff"}}>
@@ -97,14 +113,14 @@ const AlumnosPorCursoTable = () => {
                     <DataTable.Title style={{ colSpan: 2}}>Estado</DataTable.Title>
                 </DataTable.Header>
                     {
-                        alumno.length > 0 ?
+                        alumno.length > 0 ? //(console.log(alumno),
                         (alumno.map((row, key)=>(
                             //console.log("filas", row),
                             <DataTable.Row key={key} onPress={ () => handleAsistencia(row.nombre,row.id) } >
                                 <DataTable.Cell>{row.nombre}</DataTable.Cell>
                                 <DataTable.Cell>{row.estado}</DataTable.Cell>
                             </DataTable.Row>
-                        )))
+                        )))    
                         : (<DataTable.Row  >
                                 <DataTable.Cell>SIN ALUMNOS</DataTable.Cell>
                             </DataTable.Row>)
@@ -122,8 +138,28 @@ const AlumnosPorCursoTable = () => {
                 optionsLabel={'Rows per page'}
                 
             />
+
+            <TouchableOpacity 
+                style={styles.btnGuardarAsistencia}
+                onPress = { () => handleSaveAsistencia()}
+            >
+                <Text style={styles.txtGuardarAsistencia}>Guardar Asistencia</Text>
+            </TouchableOpacity>
         </View>     
     )
 }
 
+const styles = StyleSheet.create({
+    btnGuardarAsistencia:{
+        backgroundColor: "#ffffff",
+        padding: 7,
+        borderRadius: 5,
+        fontSize: 18,
+        width: "90%"
+    },
+    txtGuardarAsistencia:{
+        textAlign: 'center',
+        fontSize:16
+    }
+})
 export default AlumnosPorCursoTable

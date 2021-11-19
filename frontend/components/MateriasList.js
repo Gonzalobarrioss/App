@@ -23,7 +23,7 @@ const MateriasList = () => {
         }
         loadMaterias();
 
-    }, [])
+    }, [focus])
 
    const handleMateria = (value) => {
         try {
@@ -42,14 +42,16 @@ const MateriasList = () => {
             <Picker
                 style={{color: "#ffffff"}}
                 selectedValue={selectedValue}
-                onValueChange={(itemValue, itemIndex) => handleMateria(itemValue)}
+                onValueChange={(itemValue) => handleMateria(itemValue)}
             >
                 {
+                    //materia.length > 0 ?
                     materia.map((item, key)=> {
                         return(
                             <Picker.Item label={item.descripcion} value={item.id} key={key}/>
                         )
                     })
+                    //: <Picker.Item label ="NO HAY MATERIAS" enabled={false} />
                 }
             </Picker>
         </View>
