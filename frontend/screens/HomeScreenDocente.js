@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import React from 'react'
+import { Text, TouchableOpacity, StyleSheet } from 'react-native'
 
 import Layout from '../components/Layout'
 
@@ -8,7 +8,7 @@ const HomeScreenDocente = ({ navigation}) => {
     return (
 
         <Layout>
-            <Text style={{color:"#ffffff"}}>Welcome</Text>
+            <Text style={styles.txtHeader}>Bienvenido</Text>
             <TouchableOpacity
                 style = { styles.btn }
                 onPress = { () => navigation.navigate("TomarAsistenciaScreen")}
@@ -32,15 +32,25 @@ const HomeScreenDocente = ({ navigation}) => {
 }
 
 const styles = StyleSheet.create({
+    txtHeader:{
+        color:"#fff",
+        fontSize: 20
+    },
     btn: {
         padding: 7,
         borderRadius: 5,
         backgroundColor: "#ffffff",
         width: "70%",
-        marginVertical: 8
+        height: "5%",
+        marginVertical: 8,
     },
     txt: {
-        textAlign: 'center'
+        flex: 1,
+        textAlign: 'center',
+        
+        alignItems: 'center',
+        fontSize:18,
+        
     }
 })
 

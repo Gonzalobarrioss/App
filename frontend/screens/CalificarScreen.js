@@ -1,13 +1,12 @@
-import React, {useState, useEffect} from 'react'
-import { Text, TextInput, StyleSheet, TouchableOpacity, Picker } from 'react-native'
+import React, {useEffect} from 'react'
+import { Text } from 'react-native'
 import Layout from '../components/Layout'
 import MateriasList from '../components/MateriasList'
 import CursosList from '../components/CursosList'
-import { saveNota, getNota, updateNota } from '../api'
 import AlumnosPorCursoTableCalificacion from '../components/AlumnosPorCursoTableCalificacion'
 import { useSelector } from 'react-redux';
 
-const CalificarScreen = () => {
+const CalificarScreen = ({navigation}) => {
     
     const regimen = useSelector(state => state.MateriasReducer.regimen)
     useEffect(() => {
@@ -19,11 +18,11 @@ const CalificarScreen = () => {
             
             <MateriasList />
 
-            <Text style={{color:"#fff", fontSize: 16}}> Regimen: {regimen} </Text>
+            <Text style={{color:"#fff", fontSize: 18, marginVertical: 10}}> Regimen: {regimen} </Text>
             
             <CursosList />
 
-            <AlumnosPorCursoTableCalificacion/>
+            <AlumnosPorCursoTableCalificacion navigation={navigation}/>
                       
         </Layout>
     )

@@ -9,7 +9,7 @@ const StartScreen = ({navigation}) => {
     return (
             <Layout>
             <View style={styles.card}>
-                <Text style={styles.heading}>Bienvenido, eres un: {rol}</Text>
+                <Text style={styles.heading}>Bienvenido: {rol}</Text>
                 <View style={styles.form}>
                     <View style={styles.inputs}>
                         <TouchableOpacity

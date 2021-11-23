@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Picker, View } from 'react-native'
+import { Picker, View, StyleSheet } from 'react-native'
 import { useIsFocused } from '@react-navigation/native'
 
 import { getAllMaterias } from '../api'
@@ -13,8 +13,6 @@ const MateriasList = () => {
     const [selectedValue, setSelectedValue] = useState("");
 
     const focus = useIsFocused()
-
-    
 
     useEffect(() => {
         const loadMaterias = async () => {
@@ -36,28 +34,29 @@ const MateriasList = () => {
    }
    
     return (
-        <View style={{ width: "90%"}}>
-            
-
+        <View style={{ width: "90%",borderWidth: 2, borderColor: '#10ac84', borderRadius: 5}}>
             <Picker
-                style={{color: "#ffffff"}}
+                style={styles.picker}
                 selectedValue={selectedValue}
                 onValueChange={(itemValue) => handleMateria(itemValue)}
             >
                 {
-                    //materia.length > 0 ?
                     materia.map((item, key)=> {
                         return(
                             <Picker.Item label={item.descripcion} value={item.id} key={key}/>
                         )
                     })
-                    //: <Picker.Item label ="NO HAY MATERIAS" enabled={false} />
                 }
             </Picker>
         </View>
-
-       
     )
-
 }
+
+const styles = StyleSheet.create({
+    picker:{
+        color:"#fff",
+        height: 50,
+    }
+})
+
 export default MateriasList

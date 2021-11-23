@@ -2,7 +2,7 @@ export const SET_MATERIA = 'SET_MATERIA';
 export const SET_ID_MATERIA = 'SET_ID_MATERIA'
 export const SET_REGIMEN_MATERIA = 'SET_REGIMEN_MATERIA'
 
-const API = "http://192.168.0.127:3000"
+const API = "http://192.168.1.117:3000"
 
 import  axios  from 'axios'
 

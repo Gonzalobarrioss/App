@@ -7,7 +7,7 @@ import { useIsFocused } from '@react-navigation/core';
 import { store } from '../redux/store';
 import { addIdAlumno, addIdDocente, addNombreAlumno, addNombreDocente, addRol } from '../redux/actions/PersonaAction';
 
-const API_URL = Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://192.168.0.127:3000';
+const API_URL = 'http://192.168.1.117:3000';
 
 const AuthScreen = ({route, navigation}) => {
     
@@ -30,7 +30,7 @@ const AuthScreen = ({route, navigation}) => {
         setMessage('')
     }, [focus])
 
-    const [isError, setIsError] = useState(false);
+    const [isError, setIsError] = useState(true);
     const [message, setMessage] = useState('');
     const [isLogin, setIsLogin] = useState(true);
 
@@ -114,8 +114,6 @@ const AuthScreen = ({route, navigation}) => {
     };
 
     const getMessage = () => {
-        /*const status = isError ? `Error: ` : `Success: `;
-        return status + message;*/
         return message
     }
 
@@ -142,18 +140,8 @@ const AuthScreen = ({route, navigation}) => {
         setId(newText)
     }
 
-    const handleDatosCorrectos = () => {
-        if (id.length == 8){
-            setdatosCorrectos(true)
-        }
-        else if(id.length < 8){
-            setMessage('Ingrese su documento correctamente')
-            setdatosCorrectos(false)
-        }
-    }
-
     return (
-            <Layout>
+        <Layout>
             <View style={styles.card}>
                 <Text style={styles.heading}>{isLogin ? 'Iniciar Sesión' : 'Registrarse'} {rol}</Text>
                 <View style={styles.form}>
@@ -163,12 +151,11 @@ const AuthScreen = ({route, navigation}) => {
                             !isLogin && 
                             <TextInput 
                                 style={styles.input} 
-                                placeholder="ID" 
+                                placeholder="DNI" 
                                 autoCapitalize="none" 
                                 onChangeText={ (text) => onChangedId(text)}
                                 keyboardType='numeric'
                                 maxLength = {8}
-                                onEndEditing = {() => handleDatosCorrectos()}
                             >    
                             </TextInput>
                         }
@@ -176,13 +163,11 @@ const AuthScreen = ({route, navigation}) => {
                         <TextInput secureTextEntry={true} style={styles.input} placeholder="Contraseña" onChangeText={setPassword}></TextInput>
                         <Text style={[styles.message, {color: isError ? 'red' : 'green'}]}>{message ? getMessage() : null}</Text>
                         
-                        
-
                         {
                             !isLogin 
                             ? (!datosCorrectos 
                                 ? 
-                                    <TouchableOpacity style={styles.button} onPress={() =>setMessage('Ingrese correctamente todos los datos')}>
+                                    <TouchableOpacity style={styles.button} onPress={() => setMessage('Ingrese correctamente todos los datos')}>
                                         <Text style={styles.buttonText}>Aceptar</Text>
                                     </TouchableOpacity>
                                 :   
@@ -196,14 +181,13 @@ const AuthScreen = ({route, navigation}) => {
                                 </TouchableOpacity>      
                         }
                         
-
                         <TouchableOpacity style={styles.buttonAlt} onPress={onChangeHandler}>
                             <Text style={styles.buttonAltText}>{isLogin ? 'Registrarse' : 'Iniciar Sesión'}</Text>
                         </TouchableOpacity>
                     </View>    
                 </View>
             </View>
-            </Layout>
+        </Layout>
     );
 };
 

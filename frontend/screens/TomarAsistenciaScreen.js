@@ -1,9 +1,9 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect} from 'react'
 import Layout from '../components/Layout'
 
 import MateriasList from '../components/MateriasList'
 import ClasePorMateriaList from '../components/ClasePorMateriaList'
-import AlumnosPorCursoTable from '../components/AlumnosPorCursoTable'
+import AlumnosPorCursoTableAsistencia from '../components/AlumnosPorCursoTableAsistencia'
 
 import { useSelector } from 'react-redux'
 
@@ -18,8 +18,7 @@ const TomarAsistenciaScreen = ({navigation}) => {
         <Layout>
             <MateriasList />
             <ClasePorMateriaList/>
-            <AlumnosPorCursoTable navigation={navigation}/>
-            
+            <AlumnosPorCursoTableAsistencia navigation={navigation}/>
         </Layout>
     )
 }

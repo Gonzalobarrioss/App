@@ -3,7 +3,7 @@ import { Text, TextInput, Picker, StyleSheet, TouchableOpacity, Alert } from 're
 import CursosList from '../components/CursosList'
 import AlumnosPorCursoList from '../components/AlumnosPorCursoList'
 import Layout from '../components/Layout'
-import { store } from '../redux/store'
+
 import { useSelector } from 'react-redux';
 
 import { useIsFocused } from '@react-navigation/core'
@@ -13,11 +13,8 @@ import { sancionarAlumno } from '../api'
 import moment from 'moment'
 
 const SancionarScreen = ({navigation}) => {
-    //console.log(store.getState().PersonaReducer)
 
     const idDocente = useSelector(state => state.PersonaReducer.DocenteReducer.id)
-    const nombreDocente = useSelector(state => state.PersonaReducer.DocenteReducer.nombre)
-    const rol = useSelector(state => state.PersonaReducer.DocenteReducer.rol)
     const idAlumno = useSelector(state => state.PersonaReducer.AlumnoReducer.id)
 
 
@@ -42,7 +39,6 @@ const SancionarScreen = ({navigation}) => {
     const handleChange = (name, value) => setSancion({ ...sancion, [name]: value})
 
     const handleSancionar = () => {
-        //console.log(sancion)
         Alert.alert(
             `Atencion`,
             `Si continua sancionara un alumno. Por favor asegúresee de que los datos sean correctos.`,
@@ -50,17 +46,14 @@ const SancionarScreen = ({navigation}) => {
                 {
                     text: "Sancionar",
                     onPress: async () => {
-                        //console.log(inscripcion)
                         try {
-                            //console.log(sancion)
-                            const result = await sancionarAlumno(sancion)
-                            Alert.alert("Sancion exitosa")
+                            await sancionarAlumno(sancion)
+                            Alert.alert("Sancion exitosa.")
                             try {
-                                navigation.navigate("HomeScreenDocente", {id: idDocente, nombre: nombreDocente, rol: rol })
+                                navigation.navigate("HomeScreenDocente")
                             } catch (error) {
                                 console.log(error)
                             }
-                            //console.log(result) 
                         } catch (error) {
                             console.log(error)
                             Alert.alert("No se pudo realizar la sancion")
@@ -82,7 +75,7 @@ const SancionarScreen = ({navigation}) => {
             <Picker
                 style={{color: "#ffffff", width: "90%"}}
                 selectedValue={ sancion.tipoSancion }
-                onValueChange={(itemValue, itemIndex) => handleChange("tipoSancion",itemValue)}
+                onValueChange={(itemValue) => handleChange("tipoSancion",itemValue)}
                         
             >
                 
@@ -102,14 +95,26 @@ const SancionarScreen = ({navigation}) => {
             <CursosList />
             <AlumnosPorCursoList/>
             
-            <TouchableOpacity
-                style={styles.buttonSave}
-                onPress = { handleSancionar }
-            >
-                <Text style={styles.buttonText}>
-                    SANCIONAR
-                </Text>
-            </TouchableOpacity>
+            {
+                sancion.descripcion.length > 0 
+                ?   <TouchableOpacity
+                        style={styles.buttonSave}
+                        onPress = { handleSancionar }
+                    >
+                        <Text style={styles.buttonText}>
+                            SANCIONAR
+                        </Text>
+                    </TouchableOpacity>
+                :   <TouchableOpacity
+                        style={styles.buttonSave}
+                        onPress = { () =>  Alert.alert("Ingrese una descripción.") }
+                    >
+                        <Text style={styles.buttonText}>
+                            SANCIONAR
+                        </Text>
+                    </TouchableOpacity>
+            }
+            
         </Layout>
     )
 }

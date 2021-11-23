@@ -11,7 +11,7 @@ import { saveAsistencia } from '../api';
 
 const optionsPerPage = [2, 3, 4];
 
-const AlumnosPorCursoTable = ({navigation}) => {
+const AlumnosPorCursoTableAsistencia = ({navigation}) => {
 
     const [alumno, setAlumno] = useState([])
     const [asistencia, setAsistencia] = useState({
@@ -48,13 +48,14 @@ const AlumnosPorCursoTable = ({navigation}) => {
         const loadAlumnos = (alu) => {
             setAlumno(alu)          
         }
+        asistencia.alumnos.splice(0,asistencia.alumnos.length)
+        asistencia.estado.splice(0,asistencia.estado.length)
         if(alumnosPorCurso){
             alumnosPorCurso.map((item,index)=>{
                 asistencia.estado.splice(index,1,"Ausente")
                 asistencia.alumnos.splice(index,1,item.id)
             })
             loadAlumnos(alumnosPorCurso)
-            //console.log("cantidad de alumnos", alumnosPorCurso.length)
         }
         else{
             loadAlumnos([])
@@ -76,7 +77,7 @@ const AlumnosPorCursoTable = ({navigation}) => {
                             asistencia.alumnos.splice(value.key,1)
                             asistencia.alumnos.splice(value.key,0,value.id)
                             asistencia.estado.splice(value.key,1)
-                            asistencia.estado.splice(value.key,0,"Restraso")
+                            asistencia.estado.splice(value.key,0,"Retraso")
                             setAsistencia({...asistencia, render: true})
                         } catch (error) {
                             console.log(error)
@@ -156,21 +157,20 @@ const AlumnosPorCursoTable = ({navigation}) => {
             ]
         )
         
-        //console.log("asistencia", asistencia)
     }
 
     return (
         <View style={{ width: "90%", marginTop: "10%"}}>
-            <DataTable style={{backgroundColor:"#ffffff"}}>
+            <DataTable style={{backgroundColor:"#ffffff", borderWidth: 2, borderColor: 'grey', borderRadius: 5}}>
                 <DataTable.Header >
                     <DataTable.Title>Alumno</DataTable.Title>
-                    <DataTable.Title style={{ colSpan: 2}}>Estado</DataTable.Title>
+                    <DataTable.Title >Estado</DataTable.Title>
                 </DataTable.Header>
                     {
                         alumno.length > 0 ? 
                         (alumno.map((row, key)=>(
                             <DataTable.Row key={key} onPress={ () => handleAsistencia({nombre:row.nombre,id:row.id, key:key}) } >
-                                <DataTable.Cell>{row.nombre}</DataTable.Cell>
+                                <DataTable.Cell>{row.apellido} {row.nombre}</DataTable.Cell>
                                 <DataTable.Cell>{asistencia.estado[key]}</DataTable.Cell>
                             </DataTable.Row>
                         )))    
@@ -204,7 +204,7 @@ const AlumnosPorCursoTable = ({navigation}) => {
             />*/
 const styles = StyleSheet.create({
     btnGuardarAsistencia:{
-        backgroundColor: "#ffffff",
+        backgroundColor: "#10ac84",
         padding: 7,
         borderRadius: 5,
         fontSize: 18,
@@ -213,7 +213,8 @@ const styles = StyleSheet.create({
     },
     txtGuardarAsistencia:{
         textAlign: 'center',
-        fontSize:16
+        fontSize:16,
+        color: "#fff"
     }
 })
-export default AlumnosPorCursoTable
+export default AlumnosPorCursoTableAsistencia
