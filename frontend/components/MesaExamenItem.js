@@ -11,7 +11,7 @@ const MesaExamen = ({ mesa }) => {
 
     const nombreAlumno = useSelector(state => state.PersonaReducer.AlumnoReducer.nombre)
     const idAlumno = useSelector(state => state.PersonaReducer.AlumnoReducer.id)
-    console.log("id alumno", idAlumno)
+    //console.log("id alumno", idAlumno)
 
     const finalizarInscripcion = (mesaID) => {
         const inscripcion = {mesaID: mesaID, alumnoID: idAlumno}

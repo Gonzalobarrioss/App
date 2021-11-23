@@ -11,7 +11,7 @@ import { saveAsistencia } from '../api';
 
 const optionsPerPage = [2, 3, 4];
 
-const AlumnosPorCursoTable = () => {
+const AlumnosPorCursoTable = ({navigation}) => {
 
     const [alumno, setAlumno] = useState([])
     const [asistencia, setAsistencia] = useState({
@@ -142,6 +142,7 @@ const AlumnosPorCursoTable = () => {
                                 console.log("Alumno id: ", item)
                                 console.log("Estado: ", asistencia.estado[index])
                                 console.log("--------------------------")
+                                navigation.navigate("HomeScreenDocente")
                             })
                         } catch (error) {
                             console.log("error", error)
@@ -178,18 +179,7 @@ const AlumnosPorCursoTable = () => {
                             </DataTable.Row>)
                     }  
             </DataTable>
-            <DataTable.Pagination
-                page={page}
-                numberOfPages={1}
-                onPageChange={(page) => setPage(page)}
-                label="1-2 of 6"
-                optionsPerPage={optionsPerPage}
-                itemsPerPage={itemsPerPage}
-                setItemsPerPage={setItemsPerPage}
-                showFastPagination
-                optionsLabel={'Rows per page'}
-                
-            />
+            
 
             <TouchableOpacity 
                 style={styles.btnGuardarAsistencia}
@@ -200,14 +190,26 @@ const AlumnosPorCursoTable = () => {
         </View>     
     )
 }
-
+/*<DataTable.Pagination
+                page={page}
+                numberOfPages={1}
+                onPageChange={(page) => setPage(page)}
+                label="1-2 of 6"
+                optionsPerPage={optionsPerPage}
+                itemsPerPage={itemsPerPage}
+                setItemsPerPage={setItemsPerPage}
+                showFastPagination
+                optionsLabel={'Rows per page'}
+                
+            />*/
 const styles = StyleSheet.create({
     btnGuardarAsistencia:{
         backgroundColor: "#ffffff",
         padding: 7,
         borderRadius: 5,
         fontSize: 18,
-        width: "100%"
+        width: "100%",
+        marginTop: 10
     },
     txtGuardarAsistencia:{
         textAlign: 'center',

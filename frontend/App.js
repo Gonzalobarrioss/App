@@ -31,22 +31,21 @@ const App = () => {
               <Stack.Screen 
                 name="StartScreen"
                 component = {StartScreen}
-                options = {({navigation}) => ({
+                options = {() => ({
                   title: "TESIS APP",
                   headerStyle: { backgroundColor: "#222f3e" },
                   headerTitleStyle: { color: "#ffffff" }
-
                 })}
               />
 
               <Stack.Screen 
                 name="AuthScreen"
                 component = {AuthScreen}
-                options = {({navigation}) => ({
+                options = {() => ({
                   title: "INGRESO",
                   headerStyle: { backgroundColor: "#222f3e" },
-                  headerTitleStyle: { color: "#ffffff" }
-
+                  headerTitleStyle: { color: "#ffffff" },
+                  headerBackVisible: false
                 })}
               
               
@@ -55,48 +54,53 @@ const App = () => {
             <Stack.Screen 
               name="HomeScreenAlumno" 
               component ={HomeScreenAlumno}
-              options = {({navigation})=>({
+              options = {()=>({
                 title: "INICIO ALUMNO",
                 headerStyle: { backgroundColor: "#222f3e" },
-                headerTitleStyle: { color: "#ffffff" }
+                headerTitleStyle: { color: "#ffffff" },
+                headerBackVisible: false
               })}  
             />
 
             <Stack.Screen 
               name="HomeScreenDocente" 
               component ={HomeScreenDocente}
-              options = {({navigation})=>({
+              options = {()=>({
                 title: "INICIO DOCENTE",
                 headerStyle: { backgroundColor: "#222f3e" },
                 headerTitleStyle: { color: "#ffffff" },
+                headerBackVisible: false
               })}  
             />
             <Stack.Screen 
               name="TomarAsistenciaScreen" 
               component ={TomarAsistenciaScreen}
-              options = {({navigation})=>({
+              options = {()=>({
                 title: "ASISTENCIA",
                 headerStyle: { backgroundColor: "#222f3e" },
-                headerTitleStyle: { color: "#ffffff" }
+                headerTitleStyle: { color: "#ffffff" },
+                headerBackVisible: false
               })}  
             />
             <Stack.Screen 
               name="CalificarScreen" 
               component ={CalificarScreen}
-              options = {({navigation})=>({
+              options = {()=>({
                 title: "CALIFICAR",
                 headerStyle: { backgroundColor: "#222f3e" },
                 headerTitleStyle: { color: "#ffffff" },
-                headerTintColor: "#ffffff"
+                headerTintColor: "#ffffff",
+                headerBackVisible: false
               })}  
             />
             <Stack.Screen 
               name="SancionarScreen" 
               component ={SancionarScreen}
-              options = {({navigation})=>({
+              options = {()=>({
                 title: "SANCIONES",
                 headerStyle: { backgroundColor: "#222f3e" },
-                headerTitleStyle: { color: "#ffffff" }
+                headerTitleStyle: { color: "#ffffff" },
+                headerBackVisible: false
               })}  
             />
           </Stack.Navigator>

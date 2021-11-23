@@ -5,24 +5,20 @@ import MateriasList from '../components/MateriasList'
 import ClasePorMateriaList from '../components/ClasePorMateriaList'
 import AlumnosPorCursoTable from '../components/AlumnosPorCursoTable'
 
-import { store } from '../redux/store'
 import { useSelector } from 'react-redux'
 
-const TomarAsistenciaScreen = () => {
+const TomarAsistenciaScreen = ({navigation}) => {
 
     const materia = useSelector(state => state.MateriasReducer.id)
 
     useEffect(() => {
-        //console.log("el id de la materia ", materia)
     }, [materia])
 
-//<AlumnosPorCursoList />
-//<CursosPorClaseList/>
     return (
         <Layout>
             <MateriasList />
             <ClasePorMateriaList/>
-            <AlumnosPorCursoTable/>
+            <AlumnosPorCursoTable navigation={navigation}/>
             
         </Layout>
     )

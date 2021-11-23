@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Platform, Alert } from 'react-native';
 import  Layout  from '../components/Layout'
+
+import { useIsFocused } from '@react-navigation/core';
+
 import { store } from '../redux/store';
 import { addIdAlumno, addIdDocente, addNombreAlumno, addNombreDocente, addRol } from '../redux/actions/PersonaAction';
 
-const API_URL = Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://192.168.1.115:3000';
+const API_URL = Platform.OS === 'ios' ? 'http://localhost:5000' : 'http://192.168.0.127:3000';
 
 const AuthScreen = ({route, navigation}) => {
     
+    const focus = useIsFocused()
+
     const rol = route.params.rol
 
     try {
@@ -19,7 +24,11 @@ const AuthScreen = ({route, navigation}) => {
     const [id, setId] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    //const [rol, setRol] = useState(params);
+    const [datosCorrectos, setdatosCorrectos] = useState(false)
+
+    useEffect(() => {
+        setMessage('')
+    }, [focus])
 
     const [isError, setIsError] = useState(false);
     const [message, setMessage] = useState('');
@@ -92,6 +101,8 @@ const AuthScreen = ({route, navigation}) => {
                     onLoggedIn(jsonRes.token);
                     setIsError(false);
                     setMessage(jsonRes.message);
+                    setIsLogin(true)
+                    
                 }
             } catch (err) {
                 console.log(err);
@@ -103,29 +114,91 @@ const AuthScreen = ({route, navigation}) => {
     };
 
     const getMessage = () => {
-        const status = isError ? `Error: ` : `Success: `;
-        return status + message;
+        /*const status = isError ? `Error: ` : `Success: `;
+        return status + message;*/
+        return message
+    }
+
+    const onChangedId = (id) => {
+        let newText = '';
+        let numbers = '0123456789';
+        setMessage("");
+        setdatosCorrectos(true)
+        if(id.length<8){
+            setMessage('El DNI debe tener 8 caracteres')
+            setdatosCorrectos(false)
+        }
+
+        for (var i=0; i < id.length; i++) {
+            if(numbers.indexOf(id[i]) > -1 ) {
+                newText = newText + id[i];
+            }
+            else {
+                setIsError(true)
+                setdatosCorrectos(false)
+                setMessage("Por favor ingrese solo datos numéricos");
+            }
+        }
+        setId(newText)
+    }
+
+    const handleDatosCorrectos = () => {
+        if (id.length == 8){
+            setdatosCorrectos(true)
+        }
+        else if(id.length < 8){
+            setMessage('Ingrese su documento correctamente')
+            setdatosCorrectos(false)
+        }
     }
 
     return (
             <Layout>
             <View style={styles.card}>
-                <Text style={styles.heading}>{isLogin ? 'Login' : 'Signup'} {rol}</Text>
+                <Text style={styles.heading}>{isLogin ? 'Iniciar Sesión' : 'Registrarse'} {rol}</Text>
                 <View style={styles.form}>
                     <View style={styles.inputs}>
-                        <TextInput style={styles.input} placeholder="Username" onChangeText={setUsername}></TextInput>
+                        <TextInput style={styles.input} placeholder="Usuario" onChangeText={setUsername}></TextInput>
                         {
                             !isLogin && 
-                            <TextInput style={styles.input} placeholder="ID" autoCapitalize="none" onChangeText={setId}></TextInput>
+                            <TextInput 
+                                style={styles.input} 
+                                placeholder="ID" 
+                                autoCapitalize="none" 
+                                onChangeText={ (text) => onChangedId(text)}
+                                keyboardType='numeric'
+                                maxLength = {8}
+                                onEndEditing = {() => handleDatosCorrectos()}
+                            >    
+                            </TextInput>
                         }
                         
-                        <TextInput secureTextEntry={true} style={styles.input} placeholder="Password" onChangeText={setPassword}></TextInput>
+                        <TextInput secureTextEntry={true} style={styles.input} placeholder="Contraseña" onChangeText={setPassword}></TextInput>
                         <Text style={[styles.message, {color: isError ? 'red' : 'green'}]}>{message ? getMessage() : null}</Text>
-                        <TouchableOpacity style={styles.button} onPress={onSubmitHandler}>
-                            <Text style={styles.buttonText}>Done</Text>
-                        </TouchableOpacity>
+                        
+                        
+
+                        {
+                            !isLogin 
+                            ? (!datosCorrectos 
+                                ? 
+                                    <TouchableOpacity style={styles.button} onPress={() =>setMessage('Ingrese correctamente todos los datos')}>
+                                        <Text style={styles.buttonText}>Aceptar</Text>
+                                    </TouchableOpacity>
+                                :   
+                                    <TouchableOpacity style={styles.button} onPress={onSubmitHandler}>
+                                        <Text style={styles.buttonText}>Aceptar</Text>
+                                    </TouchableOpacity>
+                            )
+                            :
+                                <TouchableOpacity style={styles.button} onPress={onSubmitHandler}>
+                                    <Text style={styles.buttonText}>Aceptar</Text>
+                                </TouchableOpacity>      
+                        }
+                        
+
                         <TouchableOpacity style={styles.buttonAlt} onPress={onChangeHandler}>
-                            <Text style={styles.buttonAltText}>{isLogin ? 'Sign Up' : 'Log In'}</Text>
+                            <Text style={styles.buttonAltText}>{isLogin ? 'Registrarse' : 'Iniciar Sesión'}</Text>
                         </TouchableOpacity>
                     </View>    
                 </View>

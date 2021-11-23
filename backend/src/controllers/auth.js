@@ -15,8 +15,8 @@ export const signup = (req, res, next) => {
     }})
     .then(dbUser => {
         if (dbUser) {
-            return res.status(409).json({message: "username already exists"});
-        } else if (req.body.username && req.body.password) {
+            return res.status(409).json({message: "El usuario ya existe"});
+        } else if (req.body.username && req.body.password && req.body.id) {
             // password hash
            /* bcrypt.hash(req.body.password, 12, (err, passwordHash) => {
                 if (err) {
@@ -29,19 +29,21 @@ export const signup = (req, res, next) => {
                         rol: req.body.rol
                     }))
                     .then(() => {
-                        res.status(200).json({message: "user created"});
+                        res.status(200).json({message: "Usuario creado"});
                     })
                     .catch(err => {
                         console.log(err);
-                        res.status(502).json({message: "error while creating the user"});
+                        res.status(502).json({message: "El id de usuario ya existe"});
                     });
                /* };
             });*/
         } else if (!req.body.password) {
-            return res.status(400).json({message: "password not provided"});
+            return res.status(400).json({message: "Ingrese una contraseña"});
         } else if (!req.body.username) {
-            return res.status(400).json({message: "username not provided"});
-        };
+            return res.status(400).json({message: "Ingrese un usuario"});
+        } else if (!req.body.id) {
+            return res.status(400).json({message: "Ingrese un ID"})
+        }
     })
     .catch(err => {
         console.log('error', err);
@@ -64,15 +66,15 @@ export const login = (req, res, next) => {
                 console.log(error)
             } 
             if (!dbUser) {
-                return res.status(404).json({message: "user not found"});
+                return res.status(404).json({message: "Usiario no encontrado"});
             } else {
                 // password hash
                 if ( req.body.password != dbUser.password){
-                    res.status(401).json({message: "invalid credentials"});
+                    res.status(401).json({message: "Datos incorrectos"});
                 }
                 else {
                     const token = jwt.sign({ username: req.body.username }, 'secret', { expiresIn: '1h' });
-                    res.status(200).json({message: "user logged in", "token": token});
+                    res.status(200).json({message: "Usuario logueado", "token": token});
                 }
 
             };
@@ -96,15 +98,15 @@ export const login = (req, res, next) => {
             } 
 
             if (!dbUser) {
-                return res.status(404).json({message: "user not found"});
+                return res.status(404).json({message: "Usuario no encontrado"});
             } else {
                 // password hash
                 if ( req.body.password != dbUser.password){
-                    res.status(401).json({message: "invalid credentials"});
+                    res.status(401).json({message: "Datos incorrectos"});
                 }
                 else {
                     const token = jwt.sign({ username: req.body.username }, 'secret', { expiresIn: '1h' });
-                    res.status(200).json({message: "user logged in", "token": token});
+                    res.status(200).json({message: "Usuario logueado", "token": token});
                 }
 
             };
@@ -133,13 +135,13 @@ export const isAuth = (req, res, next) => {
     if (!decodedToken) {
         res.status(401).json({ message: 'unauthorized' });
     } else {
-        res.status(200).json({ message: 'here is your resource', nombre: nombre, id: user });
+        res.status(200).json({ message: 'Ingresando...', nombre: nombre, id: user });
     };
 };
 
 export const getAllMesaDeExamenes = async (req , res) => {
     const connection = await connect();
-    const [rows] = await connection.query("SELECT exa.id,examae.descripcion,mat.descripcion as materia,mat.regimen,exa.fecha,exa.llamado,exa.examinador1,exa.examinador2,exa.examinador3 FROM mesa_examen_novedad exa INNER JOIN materias mat ON exa.materia_id = mat.id INNER JOIN mesa_examen_maestro examae ON examae.id = exa.maestro_id INNER JOIN alumno_mesa alume ON (alume.alumno_id = ? AND exa.id != alume.mesa_id ) WHERE examae.estado = 1",[
+    const [rows] = await connection.query("SELECT exa.id,examae.descripcion,mat.descripcion as materia,mat.regimen,exa.fecha,exa.llamado,exa.examinador1,exa.examinador2,exa.examinador3 FROM mesa_examen_novedad exa LEFT JOIN alumno_mesa alume ON exa.id = alume.mesa_id INNER JOIN materias mat ON exa.materia_id = mat.id INNER JOIN mesa_examen_maestro examae ON examae.id = exa.maestro_id WHERE exa.id NOT IN (SELECT mesa_id FROM alumno_mesa WHERE alumno_id = ?) AND examae.estado = 1",[
         req.params.id
     ]);
     res.json(rows);
@@ -206,7 +208,7 @@ export const getAllMaterias = async (req , res) => {
 
 export const getClasesXMateria = async (req , res) => {
     const connection = await connect();
-    const [rows] = await connection.query("SELECT c.id,d.nombre,d.apellido,p.descripcion, a.descripcion,cur.nivel,cur.turno,cur.grado_ano,cur.division, c.dias, c.horario_inicio, c.horario_fin,c.curso_id FROM clases c INNER JOIN cursos cur ON c.curso_id = cur.id INNER JOIN aulas a ON a.id = cur.aula_id INNER JOIN docentes doc ON c.docente_id = doc.id INNER JOIN datos_personales d ON doc.id = d.documento INNER JOIN periodos p ON c.periodo_id = p.id WHERE materia_id = ?",[
+    const [rows] = await connection.query("SELECT c.id,d.nombre,d.apellido,p.descripcion, a.descripcion,cur.nivel,cur.turno,cur.grado_ano,cur.division, c.dias, c.horario_inicio, c.horario_fin,c.curso_id FROM clases c INNER JOIN cursos cur ON c.curso_id = cur.id INNER JOIN aulas a ON a.id = cur.aula_id INNER JOIN docente doc ON c.docente_id = doc.id INNER JOIN datos_personales d ON doc.id = d.documento INNER JOIN periodos p ON c.periodo_id = p.id WHERE materia_id = ?",[
         req.params.id
     ])
     res.json(rows);
