@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Text, TextInput, Picker, StyleSheet, TouchableOpacity, Alert } from 'react-native'
+import { Text, TextInput, Picker, StyleSheet, TouchableOpacity, Alert, View } from 'react-native'
 import CursosList from '../components/CursosList'
 import AlumnosPorCursoList from '../components/AlumnosPorCursoList'
 import Layout from '../components/Layout'
@@ -72,19 +72,21 @@ const SancionarScreen = ({navigation}) => {
     return (
         <Layout>
             <Text style={{color:"#ffffff", fontSize:18}}>FORMULARIO SANCION</Text>
-            <Picker
-                style={{color: "#ffffff", width: "90%"}}
-                selectedValue={ sancion.tipoSancion }
-                onValueChange={(itemValue) => handleChange("tipoSancion",itemValue)}
+            <View style={{ width: "90%",borderWidth: 2, borderColor: '#10ac84', borderRadius: 5, marginTop:"10%"}}>
+                <Picker
+                    style={styles.picker}
+                    selectedValue={ sancion.tipoSancion }
+                    onValueChange={(itemValue) => handleChange("tipoSancion",itemValue)}
+                            
+                >
+                    
+                    <Picker.Item label="Leve" value="Leve"/>
+                    <Picker.Item label="Moderada" value="Moderada"/>
+                    <Picker.Item label="Grave" value="Grave"/>
                         
-            >
-                
-                <Picker.Item label="Leve" value="Leve"/>
-                <Picker.Item label="Moderada" value="Moderada"/>
-                <Picker.Item label="Grave" value="Grave"/>
-                     
-                
-            </Picker>
+                    
+                </Picker>
+            </View>
             <TextInput 
                 placeholder="Descripcion"
                 placeholderTextColor= "#546574"
@@ -123,10 +125,10 @@ const styles = StyleSheet.create({
     input: {
         width: "90%",
         fontSize: 14,
-        marginBottom: 7,
+        marginTop: "10%",
         borderWidth: 1,
         borderColor: "#10ac84",
-        height: "10%",
+        height: 50,
         color: "#ffffff",
         textAlign: "center",
         borderRadius: 5,
@@ -136,7 +138,7 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 10,
         borderRadius: 5,
-        marginBottom: 3,
+        marginTop: "10%",
         backgroundColor: "#10ac84",
         width: "90%",
     },
@@ -151,6 +153,10 @@ const styles = StyleSheet.create({
         marginBottom: 3,
         backgroundColor: "#e58e26",
         width: "90%"
+    },
+    picker:{
+        color:"#fff",
+        height: 50,
     }
 })
 export default SancionarScreen

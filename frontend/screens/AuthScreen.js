@@ -7,7 +7,7 @@ import { useIsFocused } from '@react-navigation/core';
 import { store } from '../redux/store';
 import { addIdAlumno, addIdDocente, addNombreAlumno, addNombreDocente, addRol } from '../redux/actions/PersonaAction';
 
-const API_URL = 'http://192.168.1.117:3000';
+const API_URL = 'http://192.168.0.127:3000';
 
 const AuthScreen = ({route, navigation}) => {
     

@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react'
 import Layout from '../components/Layout'
+import { ScrollView, StyleSheet } from 'react-native'
 
 import MateriasList from '../components/MateriasList'
 import ClasePorMateriaList from '../components/ClasePorMateriaList'
@@ -15,13 +16,21 @@ const TomarAsistenciaScreen = ({navigation}) => {
     }, [materia])
 
     return (
-        <Layout>
-            <MateriasList />
-            <ClasePorMateriaList/>
-            <AlumnosPorCursoTableAsistencia navigation={navigation}/>
-        </Layout>
+        <ScrollView style={styles.container}>
+            <Layout>
+                <MateriasList />
+                <ClasePorMateriaList/>
+                <AlumnosPorCursoTableAsistencia navigation={navigation}/>
+            </Layout>
+        </ScrollView>
     )
 }
 
+const styles = StyleSheet.create({
+    container:{
+        width:"100%",
+        backgroundColor: "#222f3e"
+    }
+})
 
 export default TomarAsistenciaScreen

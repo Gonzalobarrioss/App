@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import { Text } from 'react-native'
+import { Text, ScrollView, StyleSheet } from 'react-native'
 import Layout from '../components/Layout'
 import MateriasList from '../components/MateriasList'
 import CursosList from '../components/CursosList'
@@ -14,21 +14,23 @@ const CalificarScreen = ({navigation}) => {
     }, [regimen])
 
     return (
-        <Layout>
-            
-            <MateriasList />
-
-            <Text style={{color:"#fff", fontSize: 18, marginVertical: 10}}> Regimen: {regimen} </Text>
-            
-            <CursosList />
-
-            <AlumnosPorCursoTableCalificacion navigation={navigation}/>
-                      
-        </Layout>
+        <ScrollView style={styles.container}>
+            <Layout>
+                <MateriasList />
+                <Text style={{color:"#fff", fontSize: 18, marginVertical: 10}}> Regimen: {regimen} </Text>
+                <CursosList />
+                <AlumnosPorCursoTableCalificacion navigation={navigation}/>
+            </Layout>
+        </ScrollView>
     )
 }
 
-
+const styles = StyleSheet.create({
+    container:{
+        width:"100%",
+        backgroundColor: "#222f3e"
+    }
+})
 
 
 export default CalificarScreen

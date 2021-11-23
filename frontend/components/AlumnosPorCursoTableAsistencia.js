@@ -4,12 +4,9 @@ import { View, Alert, StyleSheet, TouchableOpacity, Text} from 'react-native'
 import { getAlumnosPorCurso } from '../redux/actions/AlumnoCursoAction'
 import { useSelector } from 'react-redux';
 import { store } from '../redux/store'
-//import { addListaAlumnos, resetAsistencia } from '../redux/actions/AsistenciaAction';
 
 import { DataTable } from 'react-native-paper';
 import { saveAsistencia } from '../api';
-
-const optionsPerPage = [2, 3, 4];
 
 const AlumnosPorCursoTableAsistencia = ({navigation}) => {
 
@@ -21,17 +18,9 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
         render: false
     })
 
-    const [page, setPage] = useState(0);
-    const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]);
-
-    useEffect(() => {
-      setPage(0);
-    }, [itemsPerPage]);
-
     const clase = useSelector(state => state.ClasesReducer.id)
     useEffect(() => {
         setAsistencia({...asistencia, clase: clase})
-        //console.log("clase desde store", store.getState().ClasesReducer.id)
     }, [clase])
 
     const curso = useSelector(state => state.alumnosCursoReducer.curso)
@@ -73,7 +62,6 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
                     onPress: () => {
 
                         try {
-                            //setAsistencia({...asistencia, alumnos: })
                             asistencia.alumnos.splice(value.key,1)
                             asistencia.alumnos.splice(value.key,0,value.id)
                             asistencia.estado.splice(value.key,1)
@@ -91,7 +79,6 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
                     onPress: () => {
 
                         try {
-                            //setAsistencia({...asistencia, alumnos: })
                             asistencia.alumnos.splice(value.key,1)
                             asistencia.alumnos.splice(value.key,0,value.id)
                             asistencia.estado.splice(value.key,1)
@@ -180,28 +167,29 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
                     }  
             </DataTable>
             
+            {
+                asistencia.estado.length > 0
+                ?
+                    <TouchableOpacity 
+                        style={styles.btnGuardarAsistencia}
+                        onPress = { () => handleSaveAsistencia()}
+                    >
+                        <Text style={styles.txtGuardarAsistencia}>Guardar Asistencia</Text>
+                    </TouchableOpacity>
+                :
+                    <TouchableOpacity 
+                        style={styles.btnGuardarAsistencia}
+                        onPress = { () => Alert.alert("La clase no posee alumnos.")}
+                    >
+                        <Text style={styles.txtGuardarAsistencia}>Guardar Asistencia</Text>
+                    </TouchableOpacity>
+            }
 
-            <TouchableOpacity 
-                style={styles.btnGuardarAsistencia}
-                onPress = { () => handleSaveAsistencia()}
-            >
-                <Text style={styles.txtGuardarAsistencia}>Guardar Asistencia</Text>
-            </TouchableOpacity>
+            
         </View>     
     )
 }
-/*<DataTable.Pagination
-                page={page}
-                numberOfPages={1}
-                onPageChange={(page) => setPage(page)}
-                label="1-2 of 6"
-                optionsPerPage={optionsPerPage}
-                itemsPerPage={itemsPerPage}
-                setItemsPerPage={setItemsPerPage}
-                showFastPagination
-                optionsLabel={'Rows per page'}
-                
-            />*/
+
 const styles = StyleSheet.create({
     btnGuardarAsistencia:{
         backgroundColor: "#10ac84",

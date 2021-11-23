@@ -141,7 +141,7 @@ export const isAuth = (req, res, next) => {
 
 export const getAllMesaDeExamenes = async (req , res) => {
     const connection = await connect();
-    const [rows] = await connection.query("SELECT exa.id,examae.descripcion,mat.descripcion as materia,mat.regimen,exa.fecha,exa.llamado,exa.examinador1,exa.examinador2,exa.examinador3 FROM mesa_examen_novedad exa LEFT JOIN alumno_mesa alume ON exa.id = alume.mesa_id INNER JOIN materias mat ON exa.materia_id = mat.id INNER JOIN mesa_examen_maestro examae ON examae.id = exa.maestro_id WHERE exa.id NOT IN (SELECT mesa_id FROM alumno_mesa WHERE alumno_id = ?) AND examae.estado = 1",[
+    const [rows] = await connection.query("SELECT DISTINCT exa.id,examae.descripcion,mat.descripcion as materia,mat.regimen,exa.fecha,exa.llamado,exa.examinador1,exa.examinador2,exa.examinador3 FROM mesa_examen_novedad exa LEFT JOIN alumno_mesa alume ON exa.id = alume.mesa_id INNER JOIN materias mat ON exa.materia_id = mat.id INNER JOIN mesa_examen_maestro examae ON examae.id = exa.maestro_id INNER JOIN alumno_materia aluma ON exa.materia_id = aluma.materia_id WHERE exa.id NOT IN (SELECT mesa_id FROM alumno_mesa WHERE alumno_id = ?) AND examae.estado = 1 ORDER BY exa.id",[
         req.params.id
     ]);
     res.json(rows);
@@ -149,19 +149,17 @@ export const getAllMesaDeExamenes = async (req , res) => {
 
 export const getAllMesaDeExamenesInscriptas = async (req , res) => {
     const connection = await connect();
-    const [rows] = await connection.query("SELECT exa.id,examae.descripcion,mat.descripcion as materia,mat.regimen,exa.fecha,exa.llamado,exa.examinador1,exa.examinador2,exa.examinador3 FROM alumno_mesa alume INNER JOIN mesa_examen_novedad exa ON alume.mesa_id = exa.id INNER JOIN mesa_examen_maestro examae ON examae.id = exa.maestro_id INNER JOIN materias mat ON exa.materia_id = mat.id WHERE alume.alumno_id = ?",[
+    const [rows] = await connection.query("SELECT DISTINCT exa.id,examae.descripcion,mat.descripcion as materia,mat.regimen,exa.fecha,exa.llamado,exa.examinador1,exa.examinador2,exa.examinador3 FROM alumno_mesa alume INNER JOIN mesa_examen_novedad exa ON alume.mesa_id = exa.id INNER JOIN mesa_examen_maestro examae ON examae.id = exa.maestro_id INNER JOIN materias mat ON exa.materia_id = mat.id WHERE alume.alumno_id = ?",[
         req.params.id
     ]);
     res.json(rows);
 }
 
 export const getAllCursos = async (req , res) => {
-
     const connection = await connect();
-    const [rows] = await connection.query("SELECT c.id,a.descripcion,c.nivel,c.turno,c.grado_ano,c.division FROM cursos c INNER JOIN aulas a ON c.aula_id = a.id");
+    const [rows] = await connection.query("SELECT c.id,a.descripcion,c.nivel,c.turno,c.grado_ano,c.division FROM cursos c INNER JOIN aulas a ON c.aula_id = a.id WHERE c.estado = 1");
     res.json(rows);
 }
-
 
 export const getAllAlumnosXCurso = async (req , res) => {
     const connection = await connect();
@@ -200,15 +198,14 @@ export const inscripcionMesaExamen = async (req , res) => {
 
 
 export const getAllMaterias = async (req , res) => {
-
     const connection = await connect();
-    const [rows] = await connection.query("SELECT id,descripcion,regimen,plan_estudio FROM materias");
+    const [rows] = await connection.query("SELECT id,descripcion,regimen,plan_estudio FROM materias WHERE estado = 1");
     res.json(rows);
 }
 
 export const getClasesXMateria = async (req , res) => {
     const connection = await connect();
-    const [rows] = await connection.query("SELECT c.id,d.nombre,d.apellido,p.descripcion, a.descripcion,cur.nivel,cur.turno,cur.grado_ano,cur.division, c.dias, c.horario_inicio, c.horario_fin,c.curso_id FROM clases c INNER JOIN cursos cur ON c.curso_id = cur.id INNER JOIN aulas a ON a.id = cur.aula_id INNER JOIN docentes doc ON c.docente_id = doc.id INNER JOIN datos_personales d ON doc.id = d.documento INNER JOIN periodos p ON c.periodo_id = p.id WHERE materia_id = ?",[
+    const [rows] = await connection.query("SELECT c.id,d.nombre,d.apellido,p.descripcion, a.descripcion,cur.nivel,cur.turno,cur.grado_ano,cur.division, c.dias, c.horario_inicio, c.horario_fin,c.curso_id FROM clases c INNER JOIN cursos cur ON c.curso_id = cur.id INNER JOIN aulas a ON a.id = cur.aula_id INNER JOIN docente doc ON c.docente_id = doc.id INNER JOIN datos_personales d ON doc.id = d.documento INNER JOIN periodos p ON c.periodo_id = p.id WHERE materia_id = ? AND c.estado = 1",[
         req.params.id
     ])
     res.json(rows);
@@ -253,7 +250,6 @@ export const saveAsistencia = async (req , res) => {
 }
 
 export const CursoPorClase = async (req , res) => {
-    
     const connection = await connect();
     const [rows] = await connection.query("SELECT cur.id 'id curso',cur.grado_ano,cur.division,cur.turno,cur.nivel,a.descripcion FROM cursos cur INNER JOIN clases c ON cur.id =  c.curso_id INNER JOIN aulas a ON a.id = cur.aula_id WHERE cur.id = ?", [
         req.params.id,

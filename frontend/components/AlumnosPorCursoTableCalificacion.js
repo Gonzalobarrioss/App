@@ -181,7 +181,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
     const handleChange = (name, value) => setCalificaciones({ ...calificaciones, [name]: value})
 
     return (
-        <View style={{ width: "90%"}}>
+        <View style={{width: "90%"}}>
             <View style={styles.container}>
                 <Picker
                     style={styles.picker}
@@ -213,9 +213,8 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                     {
                         calificaciones.alumnos.length > 0 ?
                         (calificaciones.alumnos.map((row, key)=>(
-                            //console.log("filas", row),
                             <DataTable.Row key={key} >
-                                <DataTable.Cell>{row.nombre}</DataTable.Cell>
+                                <DataTable.Cell>{row.apellido}, {row.nombre}</DataTable.Cell>
                                 <DataTable.Cell>
                                     <View>
                                         <TextInput 
@@ -230,7 +229,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                                     </View>
                                 </DataTable.Cell>
                                 <DataTable.Cell
-                                    style={{marginLeft:5}}
+                                    style={{marginLeft:50}}
                                 >
                                     <View>
                                         <TouchableOpacity

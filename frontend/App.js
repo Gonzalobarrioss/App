@@ -31,7 +31,7 @@ const App = () => {
               <Stack.Screen 
                 name="StartScreen"
                 component = {StartScreen}
-                options = {() => ({
+                options = {({navigation}) => ({
                   title: "TESIS APP",
                   headerStyle: { backgroundColor: "#222f3e" },
                   headerTitleStyle: { color: "#ffffff" }
@@ -41,7 +41,7 @@ const App = () => {
               <Stack.Screen 
                 name="AuthScreen"
                 component = {AuthScreen}
-                options = {() => ({
+                options = {({navigation}) => ({
                   title: "INGRESO",
                   headerStyle: { backgroundColor: "#222f3e" },
                   headerTitleStyle: { color: "#ffffff" },
@@ -54,7 +54,7 @@ const App = () => {
             <Stack.Screen 
               name="HomeScreenAlumno" 
               component ={HomeScreenAlumno}
-              options = {()=>({
+              options = {({navigation})=>({
                 title: "INICIO ALUMNO",
                 headerStyle: { backgroundColor: "#222f3e" },
                 headerTitleStyle: { color: "#ffffff" },
