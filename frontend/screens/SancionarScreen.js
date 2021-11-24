@@ -17,14 +17,12 @@ const SancionarScreen = ({navigation}) => {
     const idDocente = useSelector(state => state.PersonaReducer.DocenteReducer.id)
     const idAlumno = useSelector(state => state.PersonaReducer.AlumnoReducer.id)
 
-
     const [ sancion, setSancion ] =  useState ({
         descripcion: '',
         alumnoID: idAlumno,
         docenteID: idDocente,
         tipoSancion: 'Leve',
         fecha: moment().utcOffset('-03:00').format('YYYY-MM-DD')
-
     })
 
     const focus = useIsFocused()
@@ -98,6 +96,7 @@ const SancionarScreen = ({navigation}) => {
             <AlumnosPorCursoList/>
             
             {
+                sancion.alumnoID ?
                 sancion.descripcion.length > 0 
                 ?   <TouchableOpacity
                         style={styles.buttonSave}
@@ -115,6 +114,18 @@ const SancionarScreen = ({navigation}) => {
                             SANCIONAR
                         </Text>
                     </TouchableOpacity>
+
+
+                :
+                
+                    <TouchableOpacity
+                        style={styles.buttonSave}
+                        onPress = { () => Alert.alert("El curso no posee alumnos.") }
+                    >
+                        <Text style={styles.buttonText}>
+                            SANCIONAR
+                        </Text>
+                    </TouchableOpacity> 
             }
             
         </Layout>

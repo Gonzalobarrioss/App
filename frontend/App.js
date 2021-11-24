@@ -1,5 +1,4 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -14,7 +13,6 @@ import SancionarScreen from './screens/SancionarScreen';
 import { Provider } from 'react-redux';
 import { store, persistor } from './redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
-
 
 const Stack = createNativeStackNavigator()
 
@@ -31,7 +29,7 @@ const App = () => {
               <Stack.Screen 
                 name="StartScreen"
                 component = {StartScreen}
-                options = {({navigation}) => ({
+                options = {() => ({
                   title: "TESIS APP",
                   headerStyle: { backgroundColor: "#222f3e" },
                   headerTitleStyle: { color: "#ffffff" }
@@ -41,7 +39,7 @@ const App = () => {
               <Stack.Screen 
                 name="AuthScreen"
                 component = {AuthScreen}
-                options = {({navigation}) => ({
+                options = {() => ({
                   title: "INGRESO",
                   headerStyle: { backgroundColor: "#222f3e" },
                   headerTitleStyle: { color: "#ffffff" },
@@ -54,7 +52,7 @@ const App = () => {
             <Stack.Screen 
               name="HomeScreenAlumno" 
               component ={HomeScreenAlumno}
-              options = {({navigation})=>({
+              options = {()=>({
                 title: "INICIO ALUMNO",
                 headerStyle: { backgroundColor: "#222f3e" },
                 headerTitleStyle: { color: "#ffffff" },
@@ -112,13 +110,5 @@ const App = () => {
 
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#ffffff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export default App

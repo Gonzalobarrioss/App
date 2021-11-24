@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Platform, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import  Layout  from '../components/Layout'
 
 import { useIsFocused } from '@react-navigation/core';
@@ -7,7 +7,7 @@ import { useIsFocused } from '@react-navigation/core';
 import { store } from '../redux/store';
 import { addIdAlumno, addIdDocente, addNombreAlumno, addNombreDocente, addRol } from '../redux/actions/PersonaAction';
 
-const API_URL = 'http://192.168.0.127:3000';
+import {API} from '../constants'
 
 const AuthScreen = ({route, navigation}) => {
     
@@ -40,7 +40,7 @@ const AuthScreen = ({route, navigation}) => {
     };
 
     const onLoggedIn = token => {
-        fetch(`${API_URL}/private`, {
+        fetch(`${API}/private`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ const AuthScreen = ({route, navigation}) => {
             password,
             rol,
         };
-        fetch(`${API_URL}/${isLogin ? 'login' : 'signup'}`, {
+        fetch(`${API}/${isLogin ? 'login' : 'register'}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

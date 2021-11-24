@@ -7,16 +7,12 @@ import alumnosCursoReducer from './reducers/AlumnoCursoReducer';
 import PersonaReducer from './reducers/PersonaReducer';
 import MateriasReducer from './reducers/MateriaReducer';
 import ClasesReducer from './reducers/ClaseReducer';
-import CursosReducer from './reducers/CursoReducer';
-import AsistenciaReducer from './reducers/AsistenciaReducer';
-import GuardarCalificacionReducer from './reducers/GuardarCalificacionReducer';
 import RenderReducer from './reducers/RenderReducer';
 
 
 const persistConfig = {
     key: 'root',
     storage: AsyncStorage,
-    //whitelist: ['curso']
   };
 
 const rootReducer = combineReducers({ 
@@ -24,9 +20,6 @@ const rootReducer = combineReducers({
     PersonaReducer,
     MateriasReducer,
     ClasesReducer,
-    CursosReducer,
-    AsistenciaReducer,
-    GuardarCalificacionReducer,
     RenderReducer
 });
 

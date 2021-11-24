@@ -9,8 +9,7 @@ import { useSelector } from 'react-redux';
 const CalificarScreen = ({navigation}) => {
     
     const regimen = useSelector(state => state.MateriasReducer.regimen)
-    useEffect(() => {
-        
+    useEffect(() => { 
     }, [regimen])
 
     return (
@@ -31,6 +30,5 @@ const styles = StyleSheet.create({
         backgroundColor: "#222f3e"
     }
 })
-
 
 export default CalificarScreen

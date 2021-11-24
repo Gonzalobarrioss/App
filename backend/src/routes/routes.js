@@ -1,28 +1,18 @@
 import express from 'express';
 
-import {    
-    signup, 
-    login, 
-    isAuth, 
-    getAllMesaDeExamenes, 
-    getAllCursos, 
-    getAllAlumnosXCurso, 
-    sancionarAlumno, 
-    inscripcionMesaExamen, 
-    getAllMaterias, 
-    getClasesXMateria, 
-    saveNota, 
-    getAllMesaDeExamenesInscriptas,
-    CursoPorClase,
-    getRegimenXMateria,
-    saveAsistencia
-} from '../controllers/auth.js';
+import { register, login, isAuth } from '../controllers/Autenticacion.js'
+import { getAllMesaDeExamenes,getAllMesaDeExamenesInscriptas, inscripcionMesaExamen } from '../controllers/MesaDeExamenes.js'
+import { getAllCursos, getAllAlumnosPorCurso } from '../controllers/Cursos.js'
+import { getAllMaterias, getClasesPorMateria, getRegimenPorMateria } from '../controllers/Materias.js'
+import { addSancion } from '../controllers/Sanciones.js'
+import { addNota } from '../controllers/Calificaciones.js'
+import { addAsistencia } from '../controllers/Asistencias.js'
 
 const router = express.Router();
 
 router.post('/login', login);
 
-router.post('/signup', signup);
+router.post('/register', register);
 
 router.get('/private', isAuth);
 
@@ -30,36 +20,22 @@ router.get('/mesa_examenes/:id', getAllMesaDeExamenes)
 
 router.get('/mesa_examenes_inscriptas/:id', getAllMesaDeExamenesInscriptas)
 
+router.post('/inscripcion_mesa', inscripcionMesaExamen)
+
 router.get('/cursos', getAllCursos)
 
-router.get('/alu_cursos/:id', getAllAlumnosXCurso)
-
-router.post('/sancion', sancionarAlumno)
-
-router.post('/inscripcion_mesa', inscripcionMesaExamen)
+router.get('/alu_cursos/:id', getAllAlumnosPorCurso)
 
 router.get('/materias', getAllMaterias)
 
-router.get('/clase_materia/:id', getClasesXMateria)
+router.get('/clase_materia/:id', getClasesPorMateria)
 
-router.post('/guardar_nota', saveNota)
+router.get('/regimen_materia/:id', getRegimenPorMateria)
 
-router.post('/guardar_asistencia', saveAsistencia)
+router.post('/sancion', addSancion)
 
-//router.get('/id_alumno/:nombre', getIdAlumno)
+router.post('/guardar_nota', addNota)
 
-router.get('/curso_clase/:id', CursoPorClase)
-
-router.get('/regimen_materia/:id', getRegimenXMateria)
-
-
-router.get('/public', (req, res, next) => {
-    res.status(200).json({ message: "here is your public resource" });
-});
-
-// will match any other path
-router.use('/', (req, res, next) => {
-    res.status(404).json({error : "page not found"});
-});
+router.post('/guardar_asistencia', addAsistencia)
 
 export default router;

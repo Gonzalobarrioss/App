@@ -163,6 +163,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                                 console.log("descripcion", calificaciones.descripcion)
                                 console.log("-------------------------------")
                             })
+                            Alert.alert("Se guardaron las calificaciones.")
                             navigation.navigate("HomeScreenDocente")
                         }
                         catch (error) {
@@ -251,8 +252,10 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
             </DataTable>
 
             {
+                calificaciones.alumnos.length > 0 ?
+
                 calificaciones.descripcion.length > 0
-                ?   (datosCorrectos 
+                ?   (datosCorrectos
                     ?  <TouchableOpacity style = {styles.buttonSave} onPress={handleSubmit}>
                             <Text style= {styles.buttonText}>Guardar Nota</Text>
                         </TouchableOpacity>             
@@ -263,25 +266,16 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                 :   <TouchableOpacity style = {styles.buttonSave} onPress={() => Alert.alert("Debe ingresar todos los campos.")}>
                         <Text style= {styles.buttonText}>Guardar Nota</Text>
                     </TouchableOpacity>
+
+                :   <TouchableOpacity style = {styles.buttonSave} onPress={() => Alert.alert("El curso no posee alumnos.")}>
+                        <Text style= {styles.buttonText}>Guardar Nota</Text>
+                    </TouchableOpacity>
+            
             }
-
-            
-            
-
         </View>     
     )
-}/*<DataTable.Pagination
-                page={page}
-                numberOfPages={1}
-                onPageChange={(page) => setPage(page)}
-                label="1-2 of 6"
-                optionsPerPage={optionsPerPage}
-                itemsPerPage={itemsPerPage}
-                setItemsPerPage={setItemsPerPage}
-                showFastPagination
-                optionsLabel={'Rows per page'}
-                
-            /> */ 
+}
+
 const styles = StyleSheet.create({
     input: {
         width: "100%",

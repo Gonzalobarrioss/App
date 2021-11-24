@@ -1,17 +1,21 @@
 @API = http://localhost:3000
 
-
-
-//GET MESA EXAMENES POR ALUMNO
+//GET ALL MESA DE EXAMENES (POR ALUMNO)
 GET {{API}}/mesa_examenes/39819973
 
-//GET MESA EXAMENES INSCRIPTAS POR ALUMNO
+//GET ALL MESA DE EXAMENES INSCRIPTAS (POR ALUMNO)
 ###
 GET {{API}}/mesa_examenes_inscriptas/39819973
 
-//GET ID ALUMNO POR NOMBRE
+//INSCRIPCION MESA DE EXAMEN
 ###
-GET {{API}}/id_alumno/ponja
+POST {{API}}/inscripcion_mesa
+Content-Type: application/json
+
+{
+    "alumnoID": "39819973",
+    "mesaID": "1"
+}
 
 //GET ALL CURSOS
 ###
@@ -19,30 +23,7 @@ GET {{API}}/cursos
 
 //GET ALUMNOS X CURSO
 ###
-GET {{API}}/alu_cursos/4
-
-//SANCIONAR ALUMNO
-###
-POST {{API}}/sancion
-Content-Type: application/json
-
-{
-    "alumnoID": "2",
-    "docenteID": "4",
-    "tipoSancion": "Leve",
-    "descripcion": "duerme en clases",
-    "fecha": "2021-10-31"
-}
-
-//INSCRIBIRSE EN MESA DE EXAMEN
-###
-POST {{API}}/inscripcion_mesa
-Content-Type: application/json
-
-{
-    "alumnoID": "2",
-    "mesaID": "1"
-}
+GET {{API}}/alu_cursos/2
 
 //GET ALL MATERIAS
 ###
@@ -55,3 +36,43 @@ GET {{API}}/clase_materia/1
 //GET REGIMEN X MATERIA
 ###
 GET {{API}}/regimen_materia/1
+
+
+//SANCIONAR ALUMNO
+###
+POST {{API}}/sancion
+Content-Type: application/json
+
+{
+    "alumnoID": "39819973",
+    "docenteID": "42555120",
+    "tipoSancion": "Leve",
+    "descripcion": "duerme en clases",
+    "fecha": "2021-11-24"
+}
+
+//GUARDAR CALIFICACIONES
+###
+POST {{API}}/guardar_nota
+Content-Type: application/json
+
+{
+    "alumnoID": "39819973",
+    "docenteID": "42555120",
+    "materiaID": "1",
+    "regimen": "Anual",
+    "etapa": "1",
+    "nota": "10",
+    "descripcion": "Mesa de examenes Diciembre"
+}
+
+//TOMAR ASISTENCIA
+###
+POST {{API}}/guardar_asistencia
+Content-Type: application/json
+
+{
+    "alumnoID": "39819973",
+    "claseID": "2",
+    "estado": "Presente"
+}

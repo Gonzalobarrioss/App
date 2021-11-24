@@ -5,7 +5,6 @@ import  Layout  from '../components/Layout'
 const StartScreen = ({navigation}) => {
 
     const [rol, setRol] = useState('')
-
     return (
             <Layout>
             <View style={styles.card}>
@@ -36,12 +35,8 @@ const StartScreen = ({navigation}) => {
                                         }}>
                                     <Text style={styles.buttonText}>Aceptar</Text>
                                 </TouchableOpacity> )
-                            : (<Text></Text>)
-                            
-                            
-                        }
-
-                        
+                            : (<Text></Text>)   
+                        }        
                     </View>    
                 </View>
             </View>

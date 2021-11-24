@@ -1,30 +1,26 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import { Text, TouchableOpacity, StyleSheet, Alert, BackHandler } from 'react-native'
+import { useBackHandler } from '@react-native-community/hooks'
 
 import Layout from '../components/Layout'
 
-const HomeScreenDocente = ({ navigation}) => {
+const HomeScreenDocente = ({ navigation }) => {
 
-    useEffect(() => {
-        const backAction = () => {
-          Alert.alert("Atencion", "Si continua se perderá la sesión", [
-            {
-              text: "Cancel",
-              onPress: () => null,
-              style: "cancel"
-            },
-            { text: "Continuar", onPress: () => navigation.navigate("StartScreen") }
-          ]);
-          return true;
-        };
-    
-        const backHandler = BackHandler.addEventListener(
-          "hardwareBackPress",
-          backAction
-        );
-    
-        return () => backHandler.remove();
-    }, []);
+    useBackHandler(() => {
+
+        if (navigation.getState().index == 2) {
+            Alert.alert("Atencion", "Si continua se perderá la sesión", [
+                {
+                  text: "Cancel",
+                  onPress: () => null,
+                  style: "cancel"
+                },
+                { text: "Continuar", onPress: () => navigation.navigate("StartScreen") }
+              ]);
+          return true
+        }
+        return false
+    })
     
     return (
 
@@ -49,7 +45,7 @@ const HomeScreenDocente = ({ navigation}) => {
                 <Text style = { styles.txt }>Sancionar</Text>
             </TouchableOpacity>
         </Layout>
-    )
+    )  
 }
 
 const styles = StyleSheet.create({
@@ -68,10 +64,8 @@ const styles = StyleSheet.create({
     txt: {
         flex: 1,
         textAlign: 'center',
-        
         alignItems: 'center',
         fontSize:18,
-        
     }
 })
 

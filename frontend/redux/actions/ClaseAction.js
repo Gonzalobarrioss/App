@@ -1,9 +1,7 @@
 export const SET_CLASES = 'SET_CLASES';
 export const SET_ID_CLASE = 'SET_ID_CLASE'
 
-
 export const addClases = clase => dispatch => {
-  //console.log("action", clase)
     dispatch({
       type: SET_CLASES,
       payload: clase

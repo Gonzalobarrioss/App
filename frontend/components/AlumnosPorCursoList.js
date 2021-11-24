@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import { Picker, StyleSheet, View } from 'react-native'
-import { useIsFocused } from '@react-navigation/native'
 
 import { getAlumnosPorCurso } from '../redux/actions/AlumnoCursoAction'
+import { addIdAlumno } from '../redux/actions/PersonaAction'
 import { useSelector } from 'react-redux';
 import { store } from '../redux/store'
 
@@ -14,26 +14,31 @@ const AlumnosPorCursoList = () => {
     const curso = useSelector(state => state.alumnosCursoReducer.curso)
     const alumnosPorCurso = useSelector(state => state.alumnosCursoReducer.alumnos) 
 
-    const focus = useIsFocused()
-
-    const loadAlumnos = (alu) => {
-        setAlumno(alu)
-    }
-
     useEffect( () => {
         try{
-     
             store.dispatch(getAlumnosPorCurso(curso))
         } catch (error) {
-            console.log("error",error)
+            console.log("error en dispatch GetAlumnosPorCurso",error)
         }
     }, [curso])
 
     useEffect(() => {
-        loadAlumnos(alumnosPorCurso);
+        const loadAlumnos = (alu) => {
+            setAlumno(alu)
+        }
+        if(alumnosPorCurso.length > 0){
+            store.dispatch(addIdAlumno(alumnosPorCurso[0].id))
+            loadAlumnos(alumnosPorCurso);
+        }
+        else{
+            store.dispatch(addIdAlumno(0))
+            loadAlumnos([])
+        }
+        
     }, [alumnosPorCurso])
 
     useEffect(() => {
+        store.dispatch(addIdAlumno(selectedValue))
     }, [selectedValue])
 
     return (
@@ -41,7 +46,7 @@ const AlumnosPorCursoList = () => {
             <Picker
                 style={styles.picker}
                 selectedValue={selectedValue}
-                onValueChange={(itemValue, itemIndex) => 
+                onValueChange={(itemValue) => 
                         setSelectedValue(itemValue)
                 }
             >

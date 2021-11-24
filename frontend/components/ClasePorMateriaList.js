@@ -87,11 +87,8 @@ const ClasePorMateriasList = () => {
                         }))
                 }
             </Picker>
-        </View>
-
-       
+        </View>     
     )
-
 }
 
 const styles = StyleSheet.create({

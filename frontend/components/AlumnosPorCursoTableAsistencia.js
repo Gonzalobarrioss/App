@@ -130,8 +130,9 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
                                 console.log("Alumno id: ", item)
                                 console.log("Estado: ", asistencia.estado[index])
                                 console.log("--------------------------")
-                                navigation.navigate("HomeScreenDocente")
                             })
+                            Alert.alert("Se guardaron las asistencias.")
+                            navigation.navigate("HomeScreenDocente")
                         } catch (error) {
                             console.log("error", error)
                         }

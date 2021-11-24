@@ -1,3 +1,3 @@
-import StartScreen from './StartScreen';
+import StartScreen from './StartScreen'
 
-export { StartScreen };
+export {StartScreen}
