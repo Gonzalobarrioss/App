@@ -32,10 +32,14 @@ router.get('/clase_materia/:id', getClasesPorMateria)
 
 router.get('/regimen_materia/:id', getRegimenPorMateria)
 
-router.post('/sancion', addSancion)
+router.post('/sancion', addSancion) 
 
 router.post('/guardar_nota', addNota)
 
 router.post('/guardar_asistencia', addAsistencia)
+
+router.get('/',(req,res)=>{
+    res.sendFile('../../../frontend/App.js')
+})
 
 export default router;
