@@ -214,8 +214,10 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                     {
                         calificaciones.alumnos.length > 0 ?
                         (calificaciones.alumnos.map((row, key)=>(
-                            <DataTable.Row key={key} >
-                                <DataTable.Cell>{row.apellido}, {row.nombre}</DataTable.Cell>
+                            <DataTable.Row key={key}  >
+                                <DataTable.Cell> {row.apellido},  
+                                    {row.nombre}</DataTable.Cell>
+                                
                                 <DataTable.Cell>
                                     <View>
                                         <TextInput 
