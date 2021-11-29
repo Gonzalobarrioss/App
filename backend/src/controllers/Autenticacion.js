@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-import User from '../models/user.js';
+import {User,Alumno, Docente} from '../models/user.js';
 
 export const register = (req, res) => {
     User.findOne({ where : {
@@ -8,21 +8,58 @@ export const register = (req, res) => {
     }})
     .then(dbUser => {
         if (dbUser) {
-            return res.status(409).json({message: "El usuario ya existe"});
+            return res.status(409).json({message: "El nombre de usuario ya existe"});
         } else if (req.body.username && req.body.password && req.body.id) {
-            return User.create(({
-                id: req.body.id,
-                username: req.body.username,
-                password: req.body.password,
-                rol: req.body.rol
-            }))
-            .then(() => {
-                res.status(200).json({message: "Usuario creado"});
-            })
-            .catch(err => {
-                console.log(err);
-                res.status(502).json({message: "El id de usuario ya existe"});
-            });
+            if (req.body.rol == "Alumno"){
+                Alumno.findOne({ where : {
+                    id: req.body.id
+                }})
+                .then(async dbAlumno => {
+                    if(dbAlumno){
+                        return await User.create(({
+                            id: req.body.id,
+                            username: req.body.username,
+                            password: req.body.password,
+                            rol: req.body.rol
+                        }))
+                        .then(() => {
+                            res.status(200).json({message: "Usuario creado"});
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            res.status(502).json({message: "El id de usuario ya existe"});
+                        });
+                    }
+                    else{
+                        res.status(502).json({message: "No existe alumno en sistema."})
+                    }
+                })
+            }
+            else if(req.body.rol == "Docente"){
+                Docente.findOne({ where : {
+                    id: req.body.id
+                }})
+                .then(async dbDocente => {
+                    if(dbDocente){
+                        return await User.create(({
+                            id: req.body.id,
+                            username: req.body.username,
+                            password: req.body.password,
+                            rol: req.body.rol
+                        }))
+                        .then(() => {
+                            res.status(200).json({message: "Usuario creado"});
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            res.status(502).json({message: "El id de usuario ya existe"});
+                        });
+                    }
+                    else{
+                        res.status(502).json({message: "No existe docente en sistema."})
+                    }
+                })
+            } 
         } else if (!req.body.password) {
             return res.status(400).json({message: "Ingrese una contraseña"});
         } else if (!req.body.username) {
@@ -47,7 +84,6 @@ export const login = (req, res) => {
         .then(dbUser => {
             try {
                 user = dbUser.dataValues.id
- 
             } catch (error) {
                 console.log("Error al obtener el id", error)
             } 
@@ -58,10 +94,21 @@ export const login = (req, res) => {
                     res.status(401).json({message: "Datos incorrectos"});
                 }
                 else {
-                    const token = jwt.sign({ username: req.body.username }, 'secret', { expiresIn: '1h' });
-                    res.status(200).json({message: "Usuario logueado", "token": token});
+                    Alumno.findOne ({ where: {
+                        id: user,
+                        estado: 1
+                    }})
+                    .then(dbAlumno => {
+                        if(dbAlumno){
+                            const token = jwt.sign({ username: req.body.username }, 'secret', { expiresIn: '1h' });
+                            res.status(200).json({message: "Usuario logueado", "token": token});
+                        }
+                        else{
+                            res.status(502).json({message: "Alumno dado de baja."})
+                        }
+                    })
+                    
                 }
-
             };
         })
         .catch(err => {
@@ -75,7 +122,6 @@ export const login = (req, res) => {
         .then(dbUser => {
             try {
                 user = dbUser.dataValues.id
-
             } catch (error) {
                 console.log("Error al obtener el id",error)
             } 
@@ -86,8 +132,20 @@ export const login = (req, res) => {
                     res.status(401).json({message: "Datos incorrectos"});
                 }
                 else {
-                    const token = jwt.sign({ username: req.body.username }, 'secret', { expiresIn: '1h' });
-                    res.status(200).json({message: "Usuario logueado", "token": token});
+                    Docente.findOne ({ where: {
+                        id: user,
+                        estado: 1
+                    }})
+                    .then(dbDocente => {
+                        if(dbDocente){
+                            const token = jwt.sign({ username: req.body.username }, 'secret', { expiresIn: '1h' });
+                            res.status(200).json({message: "Usuario logueado", "token": token});
+                        }
+                        else{
+                            res.status(502).json({message: "Docente dado de baja."})
+                        }
+                    })
+                    
                 }
             };
         })
