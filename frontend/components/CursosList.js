@@ -12,16 +12,15 @@ const CursosList = () => {
     const [curso, setCurso] = useState([])
     const [selectedValue, setSelectedValue] = useState("");
 
-    const loadCursos = async () => {
-        const data = await getAllCursos();
-        setCurso(data)
-    }
-
     const dispatch = useDispatch();
 
     const handleSelectedCurso = selectedValue => dispatch(addCurso(selectedValue))
 
     useEffect(() => {
+        const loadCursos = async () => {
+            const data = await getAllCursos();
+            setCurso(data)
+        }
         loadCursos();
         handleSelectedCurso(selectedValue);
     }, [selectedValue])

@@ -2,7 +2,7 @@ import  {Sequelize}  from 'sequelize';
 
 import sequelize from '../database.js';
 
-const User = sequelize.define('users', {
+export const User = sequelize.define('users', {
    id: {
       type: Sequelize.INTEGER,
       autoIncrement: false,
@@ -27,5 +27,21 @@ const User = sequelize.define('users', {
    updatedAt:false
 });
 
+export const Alumno = sequelize.define('alumnos',{
+   
+},{
+   createdAt: false,
+   updatedAt:false
+}
+)
 
-export default User;
+export const Docente = sequelize.define('docentes',{
+   
+},{
+   createdAt: false,
+   updatedAt:false
+}
+)
+
+
+//export default User;

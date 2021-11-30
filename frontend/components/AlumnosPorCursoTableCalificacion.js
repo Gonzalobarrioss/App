@@ -100,7 +100,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
             if(numbers.indexOf(nota[i]) > -1 ) {
                 newNota = newNota + nota[i];
                 if(newNota > 10){
-                    Alert.alert("La nota no puede superar el valor de 10.")
+                    Alert.alert("La nota no puede superar el valor de 10. Se establecerá por defecto nota 10(Diez).")
                     newNota = 10;
                 }
             }
@@ -214,8 +214,10 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                     {
                         calificaciones.alumnos.length > 0 ?
                         (calificaciones.alumnos.map((row, key)=>(
-                            <DataTable.Row key={key} >
-                                <DataTable.Cell>{row.apellido}, {row.nombre}</DataTable.Cell>
+                            <DataTable.Row key={key}  >
+                                <DataTable.Cell> {row.apellido},  
+                                    {row.nombre}</DataTable.Cell>
+                                
                                 <DataTable.Cell>
                                     <View>
                                         <TextInput 

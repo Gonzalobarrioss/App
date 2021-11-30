@@ -28,19 +28,25 @@ const HomeScreenDocente = ({ navigation }) => {
             <Text style={styles.txtHeader}>Bienvenido</Text>
             <TouchableOpacity
                 style = { styles.btn }
-                onPress = { () => navigation.navigate("TomarAsistenciaScreen")}
+                onPress = { 
+                    () => {navigation.navigate("TomarAsistenciaScreen")}
+                }
             >
                 <Text style = { styles.txt }>Tomar Asistencia</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style = { styles.btn }
-                onPress = { () => navigation.navigate("CalificarScreen")}
+                onPress = { 
+                    () => {navigation.navigate("CalificarScreen")}
+                }
             >
                 <Text style = { styles.txt }>Calificar</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style = { styles.btn }
-                onPress = { () => navigation.navigate("SancionarScreen")}
+                onPress = { 
+                    () => {navigation.navigate("SancionarScreen")}
+                }
             >
                 <Text style = { styles.txt }>Sancionar</Text>
             </TouchableOpacity>

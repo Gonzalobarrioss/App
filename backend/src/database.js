@@ -1,8 +1,8 @@
 import { Sequelize } from 'sequelize';
 
-const sequelize = new Sequelize('db_web_alumnos', 'root', '', {
+const sequelize = new Sequelize('brunoemasn_web_alumnos','250475_jojo', 'steelballrun', {
     dialect: 'mysql',
-    host: 'localhost', 
+    host: 'mysql-brunoemasn.alwaysdata.net', 
 });
 
 export default sequelize
