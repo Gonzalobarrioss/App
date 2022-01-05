@@ -6,7 +6,7 @@ import Layout from '../components/Layout'
 const HomeScreenAlumno = ({navigation}) => {  
   useEffect(() => {
     const backAction = () => {
-      Alert.alert("Atencion", "Si continua se perderá la sesión", [
+      Alert.alert("Atencion", "Si  continua se perderá la sesión", [
         {
           text: "Cancel",
           onPress: () => null,
