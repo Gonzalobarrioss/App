@@ -1,42 +1,37 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import  Layout  from '../components/Layout'
+import { addRol } from '../redux/actions/PersonaAction';
+import { store } from '../redux/store';
+
 
 const StartScreen = ({navigation}) => {
 
-    const [rol, setRol] = useState('')
+    //const [rol, setRol] = useState('')
+
+    const handleChoice = (rol) => {
+        store.dispatch(addRol(rol))
+        navigation.navigate('AuthScreen')   
+    }
+
     return (
             <Layout>
             <View style={styles.card}>
-                <Text style={styles.heading}>Bienvenido: {rol}</Text>
+                <Text style={styles.heading}>Bienvenido: </Text>
                 <View style={styles.form}>
                     <View style={styles.inputs}>
                         <TouchableOpacity
                             style={styles.buttonAlt} 
-                            onPress={ () => {
-                                setRol('Alumno')
-                                }}>
+                            onPress={ () => { handleChoice('Alumno') }}>
                             <Text style={styles.buttonAltText}>Alumno</Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
                             style={styles.buttonAlt} 
-                            onPress={  () => {
-                                setRol('Docente')
-                                }}>
+                            onPress={  () => { handleChoice('Docente') }}>
                             <Text style={styles.buttonAltText}>Docente</Text>
                         </TouchableOpacity>
                         
-                        {
-                            rol !== '' 
-                            ?   (<TouchableOpacity 
-                                    style={styles.button} 
-                                    onPress={  () => {
-                                        navigation.navigate('AuthScreen', { rol: rol })
-                                        }}>
-                                    <Text style={styles.buttonText}>Aceptar</Text>
-                                </TouchableOpacity> )
-                            : (<Text></Text>)   
-                        }        
+                             
                     </View>    
                 </View>
             </View>

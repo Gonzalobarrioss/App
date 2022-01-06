@@ -14,14 +14,20 @@ const MesaExamen = ({ mesa }) => {
 
     const finalizarInscripcion = (mesaID) => {
         const inscripcion = {mesaID: mesaID, alumnoID: idAlumno}
+        console.log(mesa)
         Alert.alert(
             `Atencion ${nombreAlumno}`,
             `Esta a punto de inscribirse en la siguiente mesa:
 
+            ${mesa.descripcion}
             Materia: ${mesa.materia}
-            Descripcion: ${mesa.descripcion}
+            Regimen: ${mesa.regimen}
             Fecha: ${mesa.fecha.slice(0,10)}
             Llamado: ${mesa.llamado}
+            Docentes: 
+                - ${mesa.examinador1}
+                - ${mesa.examinador2}
+                - ${mesa.examinador3}
                 `,
             [
                 {
@@ -53,15 +59,10 @@ const MesaExamen = ({ mesa }) => {
                     () => finalizarInscripcion(mesa.id)
                 }
             >
-                <Text style={styles.itemDescripcion}>ID: {mesa.id}</Text>
                 <Text style={styles.itemDescripcion}>MESA: {mesa.descripcion}</Text>
                 <Text style={styles.itemDescripcion}>MATERIA: {mesa.materia}</Text>
-                <Text style={styles.itemDescripcion}>REGIMEN: {mesa.regimen}</Text>
                 <Text style={styles.itemDescripcion}>FECHA: { mesa.fecha.slice(0,10) }</Text>
                 <Text style={styles.itemDescripcion}>LLAMADO: {mesa.llamado}</Text>
-                <Text style={styles.itemDescripcion}>EXAMINADOR 1: {mesa.examinador1}</Text>
-                <Text style={styles.itemDescripcion}>EXAMINADOR 2: {mesa.examinador2}</Text>
-                <Text style={styles.itemDescripcion}>EXAMINADOR 3: {mesa.examinador3}</Text>
             </TouchableOpacity>           
         </View>    
     )
@@ -75,7 +76,8 @@ const styles = StyleSheet.create({
         borderRadius: 5
     },
     itemDescripcion: {
-        color: "#ffffff"
+        color: "#ffffff",
+        fontSize:20
     }
 })
 

@@ -57,21 +57,22 @@ const HomeScreenDocente = ({ navigation }) => {
 const styles = StyleSheet.create({
     txtHeader:{
         color:"#fff",
-        fontSize: 20
+        fontSize: 35
     },
     btn: {
         padding: 7,
         borderRadius: 5,
         backgroundColor: "#ffffff",
-        width: "70%",
-        height: "5%",
+        width: "95%",
+        height: "30%",
         marginVertical: 8,
+        justifyContent: "center"
     },
     txt: {
-        flex: 1,
+        
         textAlign: 'center',
-        alignItems: 'center',
-        fontSize:18,
+        fontSize:30,
+        display: "flex",
     }
 })
 

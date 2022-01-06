@@ -5,21 +5,17 @@ import  Layout  from '../components/Layout'
 import { useIsFocused } from '@react-navigation/core';
 
 import { store } from '../redux/store';
-import { addIdAlumno, addIdDocente, addNombreAlumno, addNombreDocente, addRol } from '../redux/actions/PersonaAction';
+import { addIdAlumno, addIdDocente, addNombreAlumno, addNombreDocente } from '../redux/actions/PersonaAction';
 
 import {API} from '../constants'
 
-const AuthScreen = ({route, navigation}) => {
+import { useSelector } from 'react-redux';
+
+const AuthScreen = ({ navigation}) => {
     
     const focus = useIsFocused()
 
-    const rol = route.params.rol
-
-    try {
-        store.dispatch(addRol(rol))
-    } catch (error) {
-        console.log("No se pudo registrar el rol.", error)
-    }
+    const rol = useSelector(state => state.PersonaReducer.RolReducer.rol)
 
     const [id, setId] = useState('');
     const [username, setUsername] = useState('');
@@ -28,6 +24,7 @@ const AuthScreen = ({route, navigation}) => {
 
     useEffect(() => {
         setMessage('')
+        //console.log(rol)
     }, [focus])
 
     const [isError, setIsError] = useState(true);
