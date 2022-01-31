@@ -12,11 +12,15 @@ const AsistenciasList = () => {
 
     const focus = useIsFocused()
     const claseId = useSelector(state => state.ClasesReducer.id)
+    const id_docente = useSelector(state => state.PersonaReducer.DocenteReducer.id)
 
     
     //console.log(fecha)
     const [asistencias, setAsistencias] = useState([])
     const [message, setMessage] = useState(null)
+
+   
+    
 
     useEffect(() => {
         let controller = new AbortController()
@@ -31,26 +35,29 @@ const AsistenciasList = () => {
             
             const fecha = year + "-" + month + "-" + day
             
-            const datos = {
-                claseId : claseId,
-                fecha: fecha
-            }
+            
             if (claseId){
-                //console.log(claseId)
+                const datos = {
+                    claseId : claseId,
+                    fecha: fecha,
+                    docente: id_docente
+                }
                 const data = await getAsistencias(datos,{
                     signal: controller.signal
                 });
-                //console.log(data);
-                setAsistencias(data)
+                if (data.length){
+                    setAsistencias(data)  
+                }
+                else{
+                    setMessage("No se registró asistencias el dia de hoy.")
+                    setAsistencias([])
+                }
                 controller = null
-            }
-            else{
-                setMessage("No se registró asistencias el dia de hoy.")
             }
         }
         loadAsistencias()
         return () => controller?.abort()
-    }, [focus]);
+    }, [claseId]);
     
 
     const render = useSelector(state => state.RenderReducer)
@@ -76,7 +83,7 @@ const AsistenciasList = () => {
 
     return (
         <View style={{width: "100%", height: "100%"}}>
-            <Text style={styles.textInfo}> {message ? message : "Asistencias"} </Text>
+            <Text style={styles.textInfo}> {message ? message : null} </Text>
             <FlatList
                 data={asistencias}
                 keyExtractor = {(item) => item.id + ''}

@@ -109,6 +109,6 @@ export const sancionarAlumno = async (newSancion) => {
 }
 
 export const getAsistencias = async (datos) => {
-    const res = await fetch(`${API}/asistencias/${datos.claseId}/${datos.fecha}`);
+    const res = await fetch(`${API}/asistencias/${datos.docente}/${datos.claseId}/${datos.fecha}`);
     return res.json();
 }

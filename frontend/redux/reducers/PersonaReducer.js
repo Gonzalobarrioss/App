@@ -10,9 +10,7 @@ const initialState = {
         nombre: "",
         id: "",
     },
-    rol:{
-        rol: ""
-    }
+    rol: ""
 };
 
 

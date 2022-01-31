@@ -15,6 +15,8 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
     const [alumno, setAlumno] = useState([])
     
     const id_clase = useSelector(state => state.ClasesReducer.id)
+    const curso = useSelector(state => state.alumnosCursoReducer.cursoId)
+
 
     const [asistencia, setAsistencia] = useState({
         clase: id_clase,
@@ -23,44 +25,34 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
         render: false
     })
 
-    const curso = useSelector(state => state.alumnosCursoReducer.cursoId)
-/*
-    useEffect( () => {
-
-        try{
-            //console.log("curso", curso)
-
-            store.dispatch(getAlumnosPorCurso(curso))
-        } catch (error) {
-            console.log("error",error)
+    useEffect(() => {
+        let controller = new AbortController()
+        const getAlumnos = () => {
+            if (curso){
+                try {
+                    //realizar request aca
+                    store.dispatch(getAlumnosPorCurso(curso))
+                    controller = null
+                } catch (error) {
+                    console.log("error",error)
+                }
+            } 
         }
-    }, [curso])*/
+        console.log("cursooo", curso);
+        getAlumnos()
 
-    useFocusEffect(
-        React.useCallback(() => {
-            let controller = new AbortController()
-            const getAlumnos = () => {
-                if (curso){
-                    try {
-                        store.dispatch(getAlumnosPorCurso(curso))
-                        controller = null
-                    } catch (error) {
-                        console.log("error",error)
-                    }
-                } 
-            }
-            getAlumnos()
+        return () => controller?.abort()
+    }, [curso]);
 
-            return () => controller?.abort()
-        },[curso])
-    )
+    const alumnosPorCurso = useSelector(state => state.alumnosCursoReducer.alumnos)   
 
-    const alumnosPorCurso = useSelector(state => state.alumnosCursoReducer.alumnos)
-    /*useEffect(() => {
+    useEffect(() => {
+        let controller = new AbortController()
         const loadAlumnos = (alu) => {
-            setAlumno(alu)          
+            setAlumno(alu)
+            controller = null        
         }
-        console.log("primero", asistencia.alumnos.length)
+       // console.log("primero", asistencia.alumnos.length)
         asistencia.alumnos.splice(0,asistencia.alumnos.length)
         asistencia.estado.splice(0,asistencia.estado.length)
         if(alumnosPorCurso){
@@ -70,29 +62,9 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
             })
             loadAlumnos(alumnosPorCurso)
         }
-    }, [alumnosPorCurso])*/
-
-    useFocusEffect(
-        
-        React.useCallback(() => {
-            let controller = new AbortController()
-            const loadAlumnos = (alu) => {
-                setAlumno(alu)
-                controller = null        
-            }
-            console.log("primero", asistencia.alumnos.length)
-            asistencia.alumnos.splice(0,asistencia.alumnos.length)
-            asistencia.estado.splice(0,asistencia.estado.length)
-            if(alumnosPorCurso){
-                alumnosPorCurso.map((item,index)=>{
-                    asistencia.estado.splice(index,1,"Ausente")
-                    asistencia.alumnos.splice(index,1,item.id)
-                })
-                loadAlumnos(alumnosPorCurso)
-            }
-            return () => controller?.abort()
-        },[alumnosPorCurso])
-    )
+        return () => controller?.abort()
+    }, [alumnosPorCurso]);
+    
 
     const handleAsistencia = (value) => {
 

@@ -1,10 +1,30 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { Text, TouchableOpacity, StyleSheet, Alert, BackHandler } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
+
+import { useIsFocused } from '@react-navigation/native'
+import {store} from '../redux/store'
+import { addIdMateria } from '../redux/actions/MateriaAction'
+import { addIdClase } from '../redux/actions/ClaseAction'
+import { addIdCurso } from '../redux/actions/AlumnoCursoAction'
 
 import Layout from '../components/Layout'
 
 const HomeScreenDocente = ({ navigation }) => {
+
+    const focus = useIsFocused()
+    useEffect(() => {
+        let controller = new AbortController()
+        store.dispatch(addIdMateria(0))
+        store.dispatch(addIdClase(0))
+        store.dispatch(addIdCurso(0))
+        controller = null
+      return () => {
+        controller?.abort()
+      };
+    }, [focus]);
+    
+    
 
     useBackHandler(() => {
 

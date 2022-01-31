@@ -78,4 +78,4 @@ Content-Type: application/json
 }
 //OBTENER ASISTENCIAS
 ###
-GET {{API}}/asistencias/3/2022-01-28
+GET {{API}}/asistencias/39819975/2/2022-01-31

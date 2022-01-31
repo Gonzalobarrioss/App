@@ -42,7 +42,7 @@ router.post('/guardar_nota', addNota)
 
 router.post('/guardar_asistencia', addAsistencia)
 
-router.get('/asistencias/:id/:fecha', getAsistencias)
+router.get('/asistencias/:docente/:id/:fecha', getAsistencias)
 
 router.get('/', (req, res, next) => {
     res.status(404).json({error : "page not founds"});

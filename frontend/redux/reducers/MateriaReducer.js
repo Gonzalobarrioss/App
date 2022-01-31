@@ -1,8 +1,9 @@
-import { SET_ID_MATERIA, SET_REGIMEN_MATERIA } from "../actions/MateriaAction"
+import { SET_ID_MATERIA, SET_REGIMEN_MATERIA, SET_NOMBRE_MATERIA } from "../actions/MateriaAction"
 
 const initialState = {
     id: "",
-    regimen: ""
+    regimen: "",
+    nombre: ""
 };
 
 function MateriasReducer(state = initialState, action) {
@@ -11,6 +12,8 @@ function MateriasReducer(state = initialState, action) {
             return { ...state, id: action.payload };
         case SET_REGIMEN_MATERIA:
             return { ...state, regimen: action.payload };
+        case SET_NOMBRE_MATERIA:
+            return { ...state, nombre: action.payload };
         default:
             return state;
     }

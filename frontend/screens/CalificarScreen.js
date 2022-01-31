@@ -9,14 +9,12 @@ import { useSelector } from 'react-redux';
 const CalificarScreen = ({navigation}) => {
     
     const regimen = useSelector(state => state.MateriasReducer.regimen)
-    useEffect(() => { 
-    }, [regimen])
 
     return (
         <ScrollView style={styles.container}>
             <Layout>
                 <MateriasList />
-                <Text style={{color:"#fff", fontSize: 18, marginVertical: 10}}> Regimen: {regimen} </Text>
+                <Text style={{color:"#fff", fontSize: 18, marginVertical: 10}}> Regimen: {regimen ? regimen : null} </Text>
                 <CursosList />
                 <AlumnosPorCursoTableCalificacion navigation={navigation}/>
             </Layout>

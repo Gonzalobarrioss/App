@@ -6,10 +6,12 @@ import {Picker} from '@react-native-picker/picker';
 import { getAllMateriasPorProfesor } from '../api'
 
 import { store } from '../redux/store'
-import { addIdMateria, addRegimenMateria } from '../redux/actions/MateriaAction'
+import { addIdMateria, addNombreMateria, addRegimenMateria } from '../redux/actions/MateriaAction'
 
 import { useSelector } from 'react-redux'
 import { datosValidos } from '../redux/actions/RenderAction'
+import { addIdClase } from '../redux/actions/ClaseAction';
+import { addIdCurso } from '../redux/actions/AlumnoCursoAction';
 
 const MateriasList = () => {
 
@@ -18,10 +20,13 @@ const MateriasList = () => {
 
     const id_docente = useSelector(state => state.PersonaReducer.DocenteReducer.id)
 
+    const focus = useIsFocused()
+
     useEffect(() => {
         let controller = new AbortController()
         const loadMaterias = async (id_docente) => {
-            await store.dispatch(addIdMateria(0))
+            //console.log(id_docente);
+            
             const data = await getAllMateriasPorProfesor(id_docente,{
                 signal: controller.signal
             });
@@ -32,38 +37,18 @@ const MateriasList = () => {
         
         loadMaterias(id_docente);
         return () => controller?.abort();
-    }, [id_docente]);
-    
-    /*useFocusEffect(
-        
-        React.useCallback(() => {
-            let controller = new AbortController()
-            store.dispatch(addIdMateria(0))
-            const loadMaterias = async (id_docente) => {
-                const data = await getAllMateriasPorProfesor(id_docente,{
-                    signal: controller.signal
-                });
-                setMateria(data)
-                controller = null
-            }
-            console.log("loadMaterias")
-            
-            loadMaterias(id_docente);
-            return () => controller?.abort();
-            
-        },[id_docente])
-    )*/
+    }, [focus,id_docente]);
+ 
 
     const handleMateria = (value) => {
-            try {
-                setSelectedValue(value)
-                //store.dispatch(datosValidos(true))
-                store.dispatch(addIdMateria(value))
-                store.dispatch(addRegimenMateria(value))
-                //console.log("paso")
-            } catch (error) {
-                console.log("handleMateria",error)
-            }
+        try {
+            setSelectedValue(value)
+            store.dispatch(addIdMateria(value))
+            store.dispatch(addRegimenMateria(value))
+                //store.dispatch(addNombreMateria(value.nombre))
+        } catch (error) {
+            console.log("handleMateria",error)
+        }
     }
    
     return (
@@ -73,7 +58,7 @@ const MateriasList = () => {
                 selectedValue={selectedValue}
                 onValueChange={(itemValue) => handleMateria(itemValue)}
             >
-                <Picker.Item label={"Seleccione una materia"} enabled={false} value={0}/>
+                <Picker.Item label={"Seleccione una materia"} enabled={false}/>
                 {
                     
                     materia.length > 0 ?    
