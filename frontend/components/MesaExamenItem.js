@@ -14,7 +14,7 @@ const MesaExamen = ({ mesa }) => {
 
     const finalizarInscripcion = (mesaID) => {
         const inscripcion = {mesaID: mesaID, alumnoID: idAlumno}
-        console.log(mesa)
+        //console.log(mesa)
         Alert.alert(
             `Atencion ${nombreAlumno}`,
             `Esta a punto de inscribirse en la siguiente mesa:

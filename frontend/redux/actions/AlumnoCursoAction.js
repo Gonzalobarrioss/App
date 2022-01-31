@@ -5,7 +5,7 @@ import  axios  from 'axios'
 export const GET_ALUMNOS_CURSO = 'GET_ALUMNOS_CURSO';
 export const SET_CURSO = 'SET_CURSO';
 
-export const addCurso = curso => dispatch => {
+export const addIdCurso = curso => dispatch => {
     dispatch({
       type: SET_CURSO,
       payload: curso

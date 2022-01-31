@@ -9,6 +9,7 @@ import HomeScreenDocente from './screens/HomeScreenDocente';
 import TomarAsistenciaScreen from './screens/TomarAsistenciaScreen';
 import CalificarScreen from './screens/CalificarScreen';
 import SancionarScreen from './screens/SancionarScreen';
+import AsistenciasScreen from './screens/VerAsistenciasScreen';
 
 import { Provider } from 'react-redux';
 import { store, persistor } from './redux/store';
@@ -96,6 +97,16 @@ const App = () => {
               component ={SancionarScreen}
               options = {()=>({
                 title: "SANCIONES",
+                headerStyle: { backgroundColor: "#222f3e" },
+                headerTitleStyle: { color: "#ffffff" },
+                headerBackVisible: false
+              })}  
+            />
+            <Stack.Screen 
+              name="Ver Asistencias" 
+              component ={AsistenciasScreen}
+              options = {()=>({
+                title: "ASISTENCIAS",
                 headerStyle: { backgroundColor: "#222f3e" },
                 headerTitleStyle: { color: "#ffffff" },
                 headerBackVisible: false

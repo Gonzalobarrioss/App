@@ -76,3 +76,6 @@ Content-Type: application/json
     "claseID": "2",
     "estado": "Presente"
 }
+//OBTENER ASISTENCIAS
+###
+GET {{API}}/asistencias/3/2022-01-28

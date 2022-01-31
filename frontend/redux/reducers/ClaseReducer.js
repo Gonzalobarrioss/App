@@ -2,7 +2,7 @@ import { SET_CLASES, SET_ID_CLASE } from "../actions/ClaseAction"
 
 const initialState = {
     clases : [],
-    id: ""
+    id: 0
 };
 
 function ClasesReducer(state = initialState, action) {

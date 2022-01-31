@@ -10,10 +10,11 @@ import { addIdAlumno, addIdDocente, addNombreAlumno, addNombreDocente } from '..
 import {API} from '../constants'
 
 import { useSelector } from 'react-redux';
+import { login, register } from '../api';
 
 const AuthScreen = ({ navigation}) => {
     
-    const focus = useIsFocused()
+    //const focus = useIsFocused()
 
     const rol = useSelector(state => state.PersonaReducer.RolReducer.rol)
 
@@ -21,15 +22,16 @@ const AuthScreen = ({ navigation}) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [datosCorrectos, setdatosCorrectos] = useState(false)
+    const [isError, setIsError] = useState(true);
+    const [message, setMessage] = useState('');
+    const [isLogin, setIsLogin] = useState(true);
 
     useEffect(() => {
         setMessage('')
         //console.log(rol)
-    }, [focus])
+    }, [rol])
 
-    const [isError, setIsError] = useState(true);
-    const [message, setMessage] = useState('');
-    const [isLogin, setIsLogin] = useState(true);
+    
 
     const onChangeHandler = () => {
         setIsLogin(!isLogin);
@@ -37,6 +39,12 @@ const AuthScreen = ({ navigation}) => {
     };
 
     const onLoggedIn = token => {
+
+        const datos = {
+            username: username,
+            rol: rol
+        }
+
         fetch(`${API}/private`, {
             method: 'GET',
             headers: {
@@ -44,11 +52,13 @@ const AuthScreen = ({ navigation}) => {
                 'Authorization': `Bearer ${token}`,
                 'username': username,
                 'rol': rol
-            },
+            }
         })
         .then(async res => { 
             try {
+                //console.log("paso por /private")
                 const jsonRes = await res.json();
+                //console.log(jsonRes)
                 if (res.status === 200) {
                     setMessage(jsonRes.message);
                     const id = jsonRes.id
@@ -81,13 +91,14 @@ const AuthScreen = ({ navigation}) => {
             password,
             rol,
         };
+
         fetch(`${API}/${isLogin ? 'login' : 'register'}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(datos),
-        })
+        }) 
         .then(async res => { 
             try {
                 const jsonRes = await res.json();
@@ -140,7 +151,7 @@ const AuthScreen = ({ navigation}) => {
     return (
         <Layout>
             <View style={styles.card}>
-                <Text style={styles.heading}>{isLogin ? 'Iniciar Sesión' : 'Registrarse'} {rol}</Text>
+                <Text style={styles.heading}>{isLogin ? 'Iniciar Sesión' : 'Registrarse'} {rol ? rol : null}</Text>
                 <View style={styles.form}>
                     <View style={styles.inputs}>
                         <TextInput style={styles.input} placeholder="Usuario" onChangeText={setUsername}></TextInput>

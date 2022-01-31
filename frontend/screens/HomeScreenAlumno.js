@@ -3,7 +3,8 @@ import MesaExamenesList from '../components/MesaExamenesList'
 import { BackHandler, Alert } from 'react-native'
 import Layout from '../components/Layout'
 
-const HomeScreenAlumno = ({navigation}) => {  
+const HomeScreenAlumno = ({navigation}) => { 
+   
   useEffect(() => {
     const backAction = () => {
       Alert.alert("Atencion", "Si  continua se perderá la sesión", [

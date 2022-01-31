@@ -17,6 +17,7 @@ const MesaExamenes = () => {
 
     const render = useSelector(state => state.RenderReducer)
     useEffect(() => {
+
         const loadMesasExamenes = async () => {
             const data = await getMesaExamen(idAlumno);
             setMesasExamenes(data)
@@ -27,6 +28,7 @@ const MesaExamenes = () => {
         }
         loadMesasExamenes()
         loadMesasExamenesInscriptas()
+        
     }, [render])
 
    

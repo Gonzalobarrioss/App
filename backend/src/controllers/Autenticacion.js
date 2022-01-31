@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken';
 
+import bcrypt from 'bcryptjs';
+
 import {User,Alumno, Docente} from '../models/user.js';
 
 export const register = (req, res) => {
@@ -14,21 +16,28 @@ export const register = (req, res) => {
                 Alumno.findOne({ where : {
                     id: req.body.id
                 }})
-                .then(async dbAlumno => {
+                .then(dbAlumno => {
                     if(dbAlumno){
-                        return await User.create(({
-                            id: req.body.id,
-                            username: req.body.username,
-                            password: req.body.password,
-                            rol: req.body.rol
-                        }))
-                        .then(() => {
-                            res.status(200).json({message: "Usuario creado"});
+                        bcrypt.hash(req.body.password, 12, (err, passwordHash) => {
+                            if (err) {
+                                return res.status(500).json({message: "No se pudo encriptar contraseña."}); 
+                            } else if (passwordHash) {
+                                return User.create(({
+                                    id: req.body.id,
+                                    username: req.body.username,
+                                    password: passwordHash,
+                                    rol: req.body.rol
+                                }))
+                                .then(() => {
+                                    res.status(200).json({message: "Usuario creado"});
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                    res.status(502).json({message: "El id de usuario ya existe"});
+                                });
+                            }
                         })
-                        .catch(err => {
-                            console.log(err);
-                            res.status(502).json({message: "El id de usuario ya existe"});
-                        });
+                        
                     }
                     else{
                         res.status(502).json({message: "No existe alumno en sistema."})
@@ -39,21 +48,27 @@ export const register = (req, res) => {
                 Docente.findOne({ where : {
                     id: req.body.id
                 }})
-                .then(async dbDocente => {
+                .then(dbDocente => {
                     if(dbDocente){
-                        return await User.create(({
-                            id: req.body.id,
-                            username: req.body.username,
-                            password: req.body.password,
-                            rol: req.body.rol
-                        }))
-                        .then(() => {
-                            res.status(200).json({message: "Usuario creado"});
+                        bcrypt.hash(req.body.password, 12, (err, passwordHash) => {
+                            if (err) {
+                                return res.status(500).json({message: "No se pudo encriptar contraseña."}); 
+                            } else if (passwordHash) {
+                                return User.create(({
+                                    id: req.body.id,
+                                    username: req.body.username,
+                                    password: passwordHash,
+                                    rol: req.body.rol
+                                }))
+                                .then(() => {
+                                    res.status(200).json({message: "Usuario creado"});
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                    res.status(502).json({message: "El id de usuario ya existe"});
+                                });
+                            }
                         })
-                        .catch(err => {
-                            console.log(err);
-                            res.status(502).json({message: "El id de usuario ya existe"});
-                        });
                     }
                     else{
                         res.status(502).json({message: "No existe docente en sistema."})
@@ -88,33 +103,38 @@ export const login = (req, res) => {
                 console.log("Error al obtener el id", error)
             } 
             if (!dbUser) {
-                return res.status(404).json({message: "Usiario no encontrado"});
+                return res.status(404).json({message: "Usuario no encontrado"});
             } else {
-                if ( req.body.password != dbUser.password){
-                    res.status(401).json({message: "Datos incorrectos"});
-                }
-                else {
-                    Alumno.findOne ({ where: {
-                        id: user,
-                        estado: 1
-                    }})
-                    .then(dbAlumno => {
-                        if(dbAlumno){
-                            const token = jwt.sign({ username: req.body.username }, 'secret', { expiresIn: '1h' });
-                            res.status(200).json({message: "Usuario logueado", "token": token});
-                        }
-                        else{
-                            res.status(502).json({message: "Alumno dado de baja."})
-                        }
-                    })
-                    
-                }
+                bcrypt.compare(req.body.password, dbUser.password, (err, compareRes) => {
+                    if (err) { // error while comparing
+                        res.status(502).json({message: "Error al verificar la contraseña"});
+                    }
+                    else if (compareRes) { 
+                        Alumno.findOne ({ where: {
+                            id: user,
+                            estado: 1
+                        }})
+                        .then(dbAlumno => {
+                            if(dbAlumno){
+                                const token = jwt.sign({ username: req.body.username }, 'secret', { expiresIn: '1h' });
+                                res.status(200).json({message: "Usuario logueado", "token": token});
+                            }
+                            else{
+                                res.status(502).json({message: "Alumno dado de baja."})
+                            }
+                        })
+                    }
+                    else{
+                        res.status(401).json({message: "Contraseña incorrecta"});
+                    }
+                })
             };
         })
         .catch(err => {
             console.log('error', err);
         });
     }else {
+        //console.log("docente")
         User.findOne({ where : {
             username: req.body.username,
             rol: 'Docente'
@@ -127,27 +147,32 @@ export const login = (req, res) => {
             } 
             if (!dbUser) {
                 return res.status(404).json({message: "Usuario no encontrado"});
-            } else {
-                if ( req.body.password != dbUser.password){
-                    res.status(401).json({message: "Datos incorrectos"});
-                }
-                else {
-                    Docente.findOne ({ where: {
-                        id: user,
-                        estado: 1
-                    }})
-                    .then(dbDocente => {
-                        if(dbDocente){
-                            const token = jwt.sign({ username: req.body.username }, 'secret', { expiresIn: '1h' });
-                            res.status(200).json({message: "Usuario logueado", "token": token});
-                        }
-                        else{
-                            res.status(502).json({message: "Docente dado de baja."})
-                        }
-                    })
-                    
-                }
-            };
+            }
+            else {
+                bcrypt.compare(req.body.password, dbUser.password, (err, compareRes) => {
+                    if (err) { // error while comparing
+                        res.status(502).json({message: "Error al verificar la contraseña"});
+                    }
+                    else if (compareRes) { 
+                        Docente.findOne ({ where: {
+                            id: user,
+                            estado: 1
+                        }})
+                        .then(dbDocente => {
+                            if(dbDocente){
+                                const token = jwt.sign({ username: req.body.username }, 'secret', { expiresIn: '1h' });
+                                res.status(200).json({message: "Usuario logueado", "token": token});
+                            }
+                            else{
+                                res.status(502).json({message: "Docente dado de baja."})
+                            }
+                        })
+                    }
+                    else{
+                        res.status(401).json({message: "Contraseña incorrecta"});
+                    }
+                })
+            }
         })
         .catch(err => {
             console.log('error', err);

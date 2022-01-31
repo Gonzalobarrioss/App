@@ -8,35 +8,59 @@ import { store } from '../redux/store'
 import { DataTable } from 'react-native-paper';
 import { saveAsistencia } from '../api';
 
+import { useFocusEffect } from '@react-navigation/native';
+
 const AlumnosPorCursoTableAsistencia = ({navigation}) => {
 
     const [alumno, setAlumno] = useState([])
+    
+    const id_clase = useSelector(state => state.ClasesReducer.id)
+
     const [asistencia, setAsistencia] = useState({
-        clase: clase,
+        clase: id_clase,
         alumnos: [],
         estado: [],
         render: false
     })
 
-    const clase = useSelector(state => state.ClasesReducer.id)
-    useEffect(() => {
-        setAsistencia({...asistencia, clase: clase})
-    }, [clase])
-
-    const curso = useSelector(state => state.alumnosCursoReducer.curso)
+    const curso = useSelector(state => state.alumnosCursoReducer.cursoId)
+/*
     useEffect( () => {
+
         try{
+            //console.log("curso", curso)
+
             store.dispatch(getAlumnosPorCurso(curso))
         } catch (error) {
             console.log("error",error)
         }
-    }, [curso])
+    }, [curso])*/
+
+    useFocusEffect(
+        React.useCallback(() => {
+            let controller = new AbortController()
+            const getAlumnos = () => {
+                if (curso){
+                    try {
+                        store.dispatch(getAlumnosPorCurso(curso))
+                        controller = null
+                    } catch (error) {
+                        console.log("error",error)
+                    }
+                } 
+            }
+            getAlumnos()
+
+            return () => controller?.abort()
+        },[curso])
+    )
 
     const alumnosPorCurso = useSelector(state => state.alumnosCursoReducer.alumnos)
-    useEffect(() => {
+    /*useEffect(() => {
         const loadAlumnos = (alu) => {
             setAlumno(alu)          
         }
+        console.log("primero", asistencia.alumnos.length)
         asistencia.alumnos.splice(0,asistencia.alumnos.length)
         asistencia.estado.splice(0,asistencia.estado.length)
         if(alumnosPorCurso){
@@ -46,10 +70,29 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
             })
             loadAlumnos(alumnosPorCurso)
         }
-        else{
-            loadAlumnos([])
-        }
-    }, [alumnosPorCurso])
+    }, [alumnosPorCurso])*/
+
+    useFocusEffect(
+        
+        React.useCallback(() => {
+            let controller = new AbortController()
+            const loadAlumnos = (alu) => {
+                setAlumno(alu)
+                controller = null        
+            }
+            console.log("primero", asistencia.alumnos.length)
+            asistencia.alumnos.splice(0,asistencia.alumnos.length)
+            asistencia.estado.splice(0,asistencia.estado.length)
+            if(alumnosPorCurso){
+                alumnosPorCurso.map((item,index)=>{
+                    asistencia.estado.splice(index,1,"Ausente")
+                    asistencia.alumnos.splice(index,1,item.id)
+                })
+                loadAlumnos(alumnosPorCurso)
+            }
+            return () => controller?.abort()
+        },[alumnosPorCurso])
+    )
 
     const handleAsistencia = (value) => {
 
@@ -115,6 +158,13 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
     }
 
     const handleSaveAsistencia = () => {
+        const date = new Date()
+
+        const year = date.getFullYear()
+        const month = date.getMonth() + 1 < 10 ? "0"+(date.getMonth() + 1) : date.getMonth() + 1 
+        const day = date.getDate() < 10 ? "0"+(date.getDate()) : date.getDate()
+            
+        const fecha = year + "-" + month + "-" + day
         Alert.alert(
             `Atencion`,
             `Si continua guardará las asistencias`,
@@ -124,7 +174,7 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
                     onPress: () => {
                         try {
                             asistencia.alumnos.map(async (item,index)=>{
-                                await saveAsistencia({alumnoID:item, claseID: asistencia.clase, estado:asistencia.estado[index]})
+                                await saveAsistencia({alumnoID:item, claseID: asistencia.clase,fecha:fecha, estado:asistencia.estado[index]})
                                 console.log("ASISTENCIA")
                                 console.log("Clase id: ", asistencia.clase)
                                 console.log("Alumno id: ", item)
@@ -149,16 +199,21 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
 
     return (
         <View style={{ width: "90%", marginTop: "10%"}}>
+            <TouchableOpacity style={styles.btnGuardarAsistencia}>
+                <Text>Todos Ausentes</Text>
+            </TouchableOpacity>
             <DataTable style={{backgroundColor:"#ffffff", borderWidth: 2, borderColor: 'grey', borderRadius: 5}}>
                 <DataTable.Header >
-                    <DataTable.Title>Alumno</DataTable.Title>
-                    <DataTable.Title >Estado</DataTable.Title>
+                    <DataTable.Title>Apellido</DataTable.Title>
+                    <DataTable.Title>Nombre</DataTable.Title>
+                    <DataTable.Title>Estado</DataTable.Title>
                 </DataTable.Header>
                     {
                         alumno.length > 0 ? 
                         (alumno.map((row, key)=>(
                             <DataTable.Row key={key} onPress={ () => handleAsistencia({nombre:row.nombre,id:row.id, key:key}) } >
-                                <DataTable.Cell>{row.apellido} {row.nombre}</DataTable.Cell>
+                                <DataTable.Cell>{row.apellido} </DataTable.Cell>
+                                <DataTable.Cell> {row.nombre}</DataTable.Cell>
                                 <DataTable.Cell>{asistencia.estado[key]}</DataTable.Cell>
                             </DataTable.Row>
                         )))    
@@ -178,12 +233,7 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
                         <Text style={styles.txtGuardarAsistencia}>Guardar Asistencia</Text>
                     </TouchableOpacity>
                 :
-                    <TouchableOpacity 
-                        style={styles.btnGuardarAsistencia}
-                        onPress = { () => Alert.alert("La clase no posee alumnos.")}
-                    >
-                        <Text style={styles.txtGuardarAsistencia}>Guardar Asistencia</Text>
-                    </TouchableOpacity>
+                    null
             }
 
             

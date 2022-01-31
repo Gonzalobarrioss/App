@@ -6,6 +6,7 @@ export const getAllMesaDeExamenes = async (req , res) => {
         req.params.id
     ]);
     res.json(rows);
+    connection.destroy()
 }
 
 export const getAllMesaDeExamenesInscriptas = async (req , res) => {
@@ -14,6 +15,7 @@ export const getAllMesaDeExamenesInscriptas = async (req , res) => {
         req.params.id
     ]);
     res.json(rows);
+    connection.destroy()
 }
 
 export const inscripcionMesaExamen = async (req , res) => {
@@ -26,4 +28,16 @@ export const inscripcionMesaExamen = async (req , res) => {
         ...req.body,
         id: result.insertId
     })
+    connection.destroy()
+}
+
+export const bajaMesaExamen = async (req , res) => {
+    //console.log("hola")
+    const connection = await connect()
+    await connection.query("DELETE FROM alumno_mesa WHERE alumno_id = ? and mesa_id = ?",[
+        req.body.alumnoID,
+        req.body.mesaID
+    ]);
+    res.sendStatus(204)
+    connection.destroy()
 }

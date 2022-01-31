@@ -17,8 +17,8 @@ app.use((_, res, next) => {
     next();
 });
 
-app.use(router);
-
 sequelize.sync(); 
+
+app.use(router);
 
 export default app

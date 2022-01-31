@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import { View, Alert, TouchableOpacity, Text, TextInput, Picker, StyleSheet } from 'react-native'
-import { useIsFocused } from '@react-navigation/native'
+import { used } from '@react-navigation/native'
 
 import { getAlumnosPorCurso } from '../redux/actions/AlumnoCursoAction'
 import { render }  from '../redux/actions/RenderAction'
@@ -12,11 +12,6 @@ import { DataTable } from 'react-native-paper';
 import { saveNota } from '../api'
 
 const AlumnosPorCursoTableCalificacion = ({navigation}) => {
-
-    const focus = useIsFocused()
-    useEffect(() => {
-        
-    }, [focus])
 
     const docente = useSelector(state => state.PersonaReducer.DocenteReducer.id)
     const regimen = useSelector(state => state.MateriasReducer.regimen)

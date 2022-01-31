@@ -6,3 +6,11 @@ export const config = {
     database: 'brunoemasn_web_alumnos'
 
 }
+/*
+export const config = {
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'db_web_alumnos'
+}
+*/

@@ -4,6 +4,7 @@ export const getAllCursos = async (req , res) => {
     const connection = await connect();
     const [rows] = await connection.query("SELECT c.id,a.descripcion,c.nivel,c.turno,c.grado_ano,c.division FROM cursos c INNER JOIN aulas a ON c.aula_id = a.id WHERE c.estado = 1");
     res.json(rows);
+    connection.destroy()
 }
 
 export const getAllAlumnosPorCurso = async (req , res) => {
@@ -12,4 +13,5 @@ export const getAllAlumnosPorCurso = async (req , res) => {
         req.params.id,
     ]);
     res.json(rows);
+    connection.destroy()
 }

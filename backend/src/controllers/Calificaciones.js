@@ -15,4 +15,5 @@ export const addNota = async (req , res) => {
         ...req.body,
         id: result.insertId
     })
+    connection.destroy()
 }
