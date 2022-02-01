@@ -10,6 +10,9 @@ import { useSelector } from 'react-redux'
 import { useFocusEffect } from '@react-navigation/native'
 import { store } from '../redux/store'
 import { addIdMateria } from '../redux/actions/MateriaAction'
+import { addIdClase } from '../redux/actions/ClaseAction'
+
+
 
 const TomarAsistenciaScreen = ({navigation}) => {
 
@@ -23,6 +26,8 @@ const TomarAsistenciaScreen = ({navigation}) => {
     React.useLayoutEffect(() => {
         let controller = new AbortController()
         const handleAsistencia = () => {
+            store.dispatch(addIdMateria(0))
+            store.dispatch(addIdClase(0))
             controller = null
             navigation.navigate("Ver Asistencias")
         }

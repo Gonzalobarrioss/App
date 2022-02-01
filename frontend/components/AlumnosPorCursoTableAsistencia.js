@@ -6,46 +6,111 @@ import { useSelector } from 'react-redux';
 import { store } from '../redux/store'
 
 import { DataTable } from 'react-native-paper';
-import { saveAsistencia } from '../api';
+import { saveAsistencia, getAlumnosXCurso } from '../api';
 
 import { useFocusEffect } from '@react-navigation/native';
 
+import RadioGroup from 'react-native-radio-buttons-group';
+import alumnosCursoReducer from '../redux/reducers/AlumnoCursoReducer';
+
 const AlumnosPorCursoTableAsistencia = ({navigation}) => {
 
-    const [alumno, setAlumno] = useState([])
-    
     const id_clase = useSelector(state => state.ClasesReducer.id)
-    const curso = useSelector(state => state.alumnosCursoReducer.cursoId)
+    const id_docente = useSelector(state => state.PersonaReducer.DocenteReducer.id)
 
+    const curso = useSelector(state => state.alumnosCursoReducer.cursoId)
+    const [alumno, setAlumno] = useState([{apellido:"CARGANDO..."}])
 
     const [asistencia, setAsistencia] = useState({
         clase: id_clase,
         alumnos: [],
         estado: [],
+        docente: id_docente,
         render: false
     })
 
+    const radioButtonsData = [{
+        id: '1', // acts as primary key, should be unique and non-empty string
+        label: 'Todos Ausentes',
+        value: 'Ausente',
+        color: '#ffffff',
+        size: 20,
+        labelStyle: {
+            color: '#ffffff'
+        },
+        onPress: (id) => handleEstado(id)
+    }, {
+        id: '2',
+        label: 'Todos Presentes',
+        value: 'Presente',
+        color: '#ffffff',
+        size: 20,
+        labelStyle: {
+            color: '#ffffff'
+        },
+        onPress:  (id) => handleEstado(id)
+    }]
+    
+    const [radioButtons, setRadioButtons] = useState(radioButtonsData)
+
+    function onPressRadioButton(radio) {
+        radio.map((item) => {
+            if (item.selected){
+                const estado = item.id === 1 ? "Ausente" : "Presente"
+                alumno.map((item,index) => {
+                    console.log("item", item);
+                    setAsistencia({...asistencia, [asistencia.alumnos[index]]: item.id[index], [asistencia.estado[index]]: estado   })
+                })
+                console.log("ID radio button",item.id);
+            }
+        })
+        //setRadioButtons(radioButtonsArray);
+        //console.log(radioButtonsArray);
+        //console.log("alumnos",alumno);
+        //console.log("id", id);
+    }
+    let newArray
     useEffect(() => {
         let controller = new AbortController()
-        const getAlumnos = () => {
+        const getAlumnos = async (curso) => {
             if (curso){
                 try {
                     //realizar request aca
-                    store.dispatch(getAlumnosPorCurso(curso))
+                    //store.dispatch(getAlumnosPorCurso(curso))
+                    const data = await getAlumnosXCurso(curso,{
+                        signal: controller.signal
+                    });
+                    newArray = data
+                    //console.log(newArray);
+                    setAlumno(data)
                     controller = null
                 } catch (error) {
                     console.log("error",error)
                 }
             } 
         }
-        console.log("cursooo", curso);
-        getAlumnos()
+       // console.log("cursooo", curso);
+        getAlumnos(curso)
 
         return () => controller?.abort()
     }, [curso]);
 
-    const alumnosPorCurso = useSelector(state => state.alumnosCursoReducer.alumnos)   
-
+    const handleEstado = (id) => {
+       // console.log("se presiono", id);
+       // console.log("newArray", newArray);
+                //asistencia.alumnos.splice(0,asistencia.alumnos.length) //elimina array alumnos
+                //asistencia.estado.splice(0,asistencia.estado.length)  //elimina array estado alumnos
+       /* if(newArray.length){
+            newArray.map((item,index)=>{
+                id == 1 ? asistencia.estado.splice(index,1,"Ausente") : asistencia.estado.splice(index,1,"Presente")
+                asistencia.alumnos.splice(index,1,item.id) 
+            })
+        }   
+        setAsistencia({...asistencia, render: true})    */
+    }
+    
+    //const alumnosPorCurso = useSelector(state => state.alumnosCursoReducer.alumnos)   
+/*
     useEffect(() => {
         let controller = new AbortController()
         const loadAlumnos = (alu) => {
@@ -63,7 +128,7 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
             loadAlumnos(alumnosPorCurso)
         }
         return () => controller?.abort()
-    }, [alumnosPorCurso]);
+    }, [alumnosPorCurso]);*/
     
 
     const handleAsistencia = (value) => {
@@ -146,7 +211,7 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
                     onPress: () => {
                         try {
                             asistencia.alumnos.map(async (item,index)=>{
-                                await saveAsistencia({alumnoID:item, claseID: asistencia.clase,fecha:fecha, estado:asistencia.estado[index]})
+                                await saveAsistencia({alumnoID:item, claseID: asistencia.clase,fecha:fecha, estado:asistencia.estado[index], docente: asistencia.docente})
                                 console.log("ASISTENCIA")
                                 console.log("Clase id: ", asistencia.clase)
                                 console.log("Alumno id: ", item)
@@ -171,9 +236,18 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
 
     return (
         <View style={{ width: "90%", marginTop: "10%"}}>
-            <TouchableOpacity style={styles.btnGuardarAsistencia}>
-                <Text>Todos Ausentes</Text>
-            </TouchableOpacity>
+
+
+
+            <RadioGroup 
+                radioButtons={radioButtonsData} 
+                onPress={(radio) => onPressRadioButton(radio)}
+                layout={'row'}
+                containerStyle={{
+                    justifyContent: 'center'
+                }}                
+            />
+
             <DataTable style={{backgroundColor:"#ffffff", borderWidth: 2, borderColor: 'grey', borderRadius: 5}}>
                 <DataTable.Header >
                     <DataTable.Title>Apellido</DataTable.Title>
@@ -189,9 +263,9 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
                                 <DataTable.Cell>{asistencia.estado[key]}</DataTable.Cell>
                             </DataTable.Row>
                         )))    
-                        : (<DataTable.Row  >
+                        :   <DataTable.Row  >
                                 <DataTable.Cell>SIN ALUMNOS</DataTable.Cell>
-                            </DataTable.Row>)
+                            </DataTable.Row>
                     }  
             </DataTable>
             

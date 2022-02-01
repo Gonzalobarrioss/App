@@ -40,21 +40,28 @@ const MateriasList = () => {
     }, [focus,id_docente]);
  
 
-    const handleMateria = (value) => {
+    const handleMateria = async (value) => {
+        let controller = new AbortController()
         try {
+            store.dispatch(addIdCurso(0))
+            store.dispatch(addIdClase(0))
+            await store.dispatch(addIdMateria(0))
             setSelectedValue(value)
             store.dispatch(addIdMateria(value))
             store.dispatch(addRegimenMateria(value))
+            controller = null
                 //store.dispatch(addNombreMateria(value.nombre))
         } catch (error) {
             console.log("handleMateria",error)
         }
+        return () => controller?.abort()
     }
    
     return (
         <View style={{ width: "90%",borderWidth: 2, borderColor: '#10ac84', borderRadius: 5}}>
             <Picker
                 style={styles.picker}
+                dropdownIconColor='#ffffff'
                 selectedValue={selectedValue}
                 onValueChange={(itemValue) => handleMateria(itemValue)}
             >

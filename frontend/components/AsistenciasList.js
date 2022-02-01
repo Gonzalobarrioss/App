@@ -45,14 +45,15 @@ const AsistenciasList = () => {
                 const data = await getAsistencias(datos,{
                     signal: controller.signal
                 });
-                if (data.length){
-                    setAsistencias(data)  
+                if (data){
+                    setAsistencias(data) 
                 }
-                else{
-                    setMessage("No se registró asistencias el dia de hoy.")
-                    setAsistencias([])
-                }
+                data.length ? setMessage('') : setMessage("No se registró asistencias el dia de hoy.")
+            
                 controller = null
+            }
+            else{
+                setMessage('')
             }
         }
         loadAsistencias()
@@ -60,7 +61,7 @@ const AsistenciasList = () => {
     }, [claseId]);
     
 
-    const render = useSelector(state => state.RenderReducer)
+    //const render = useSelector(state => state.RenderReducer)
    /* useFocusEffect(
         
         React.useCallback(() => {

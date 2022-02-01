@@ -10,22 +10,22 @@ import { useSelector } from 'react-redux'
 import { addIdCurso, getAlumnosPorCurso } from '../redux/actions/AlumnoCursoAction'
 import { addClases, addIdClase } from '../redux/actions/ClaseAction';
 
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { addIdMateria } from '../redux/actions/MateriaAction';
 
 
 const ClasePorMateriasList = () => {
 
-    const [selectedValue, setSelectedValue] = useState();
+    const [selectedValue, setSelectedValue] = useState(0);
     const [clases, setClases] = useState([])
 
- 
 
     const materia = useSelector(state => state.MateriasReducer.id)
 
     useEffect(() => {
         let controller = new AbortController()
         const loadClases = async () => {
+            //console.log(selectedValue);
             const data = await getClaseXMateria(materia, {
                 signal: controller.signal
             })
@@ -34,15 +34,16 @@ const ClasePorMateriasList = () => {
                 store.dispatch(addIdCurso(0))
             }
             else{
-                //console.log("id curso", selectedValue);
                 store.dispatch(addIdCurso(selectedValue))
+                //selectedValue ? store.dispatch(addIdCurso(data[0].curso_id)) : store.dispatch(addIdCurso(selectedValue))
+                
             }
             setClases(data)
             controller =  null 
         }
 
-        console.log("loadclases")
         if(materia){
+            console.log("loadclases")
             loadClases();
         }
         return () => controller?.abort()
@@ -55,10 +56,6 @@ const ClasePorMateriasList = () => {
                 store.dispatch(addIdCurso(value.curso))
                 store.dispatch(addIdClase(value.clase))
             }
-            else{
-                store.dispatch(addIdCurso(0))
-                store.dispatch(addIdClase(0))
-            }
             
         } catch (error) {
             console.log("handleClase",error)
@@ -70,13 +67,14 @@ const ClasePorMateriasList = () => {
 
             <Picker
                 style={styles.picker}
+                dropdownIconColor='#ffffff'
                 selectedValue={selectedValue}
                 onValueChange={(itemValue) => {
                     handleCurso({curso: itemValue.curso, clase: itemValue.clase})
                     }
                 }
             >
-                <Picker.Item label={"Seleccione una clase"} value={{curso: 0, clase: 0}}/>
+                <Picker.Item label={"Seleccione una clase"} enabled={false} value={{curso: 0, clase: 0}}  />
 
                 {
                     !clases.length > 0
