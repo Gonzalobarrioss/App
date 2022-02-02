@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react'
-import { Text } from 'react-native'
 import AsistenciasList from '../components/AsistenciasList'
 import Layout from '../components/Layout'
 
@@ -21,7 +20,7 @@ const AsistenciasScreen = ({navigation}) => {
 
   const materia = useSelector(state => state.MateriasReducer.id)
   const clase = useSelector(state => state.ClasesReducer.id)
-  console.log(navigation.getState().index)
+  //console.log(navigation.getState().index)
   //console.log(nombre_materia);
   //<Text style={{color: "#fff", fontSize:18}}>{nombre_materia ? nombre_materia : null}</Text>
   useBackHandler(() => {
@@ -31,8 +30,10 @@ const AsistenciasScreen = ({navigation}) => {
       store.dispatch(addIdClase(0))
       store.dispatch(addIdCurso(0))
       controller = null
+      console.log("paso");
     }
     if (navigation.getState().index == 4) {
+      console.log("handleEvent");
       handleEvent()
     }
     controller?.abort()
@@ -42,11 +43,12 @@ const AsistenciasScreen = ({navigation}) => {
 
   
   return ( 
-    <Layout>
-      <MateriasList /> 
-      { materia ? <ClasePorMateriasList /> : null }
-      { clase ? <AsistenciasList /> : null }
-    </Layout>
+      <Layout>
+        <MateriasList /> 
+        { materia ? <ClasePorMateriasList /> : null }
+        { clase ? <AsistenciasList /> : null }
+      </Layout>
+
   )
 }
 

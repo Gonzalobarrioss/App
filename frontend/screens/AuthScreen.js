@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { ActivityIndicator, View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import  Layout  from '../components/Layout'
 
 import { useIsFocused } from '@react-navigation/core';
@@ -150,6 +150,8 @@ const AuthScreen = ({ navigation}) => {
 
     return (
         <Layout>
+            <ActivityIndicator color="#ffffff" size="large" />
+
             <View style={styles.card}>
                 <Text style={styles.heading}>{isLogin ? 'Iniciar Sesión' : 'Registrarse'} {rol ? rol : null}</Text>
                 <View style={styles.form}>
@@ -195,6 +197,7 @@ const AuthScreen = ({ navigation}) => {
                     </View>    
                 </View>
             </View>
+
         </Layout>
     );
 };
@@ -209,7 +212,7 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#ffffff',
         width: '80%',
-        marginTop: '40%',
+        marginTop: '20%',
         borderRadius: 20,
         maxHeight: 380,
         paddingBottom: '30%',

@@ -79,3 +79,13 @@ Content-Type: application/json
 //OBTENER ASISTENCIAS
 ###
 GET {{API}}/asistencias/39819975/2/2022-01-31
+
+
+###
+PUT {{API}}/edit_asistencia
+Content-Type: application/json
+
+{
+    "estado": "Presente",
+    "id": "21"
+}

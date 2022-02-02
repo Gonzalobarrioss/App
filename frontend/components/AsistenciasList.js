@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { FlatList,View,Text, StyleSheet } from 'react-native'
+import { FlatList,View,Text, StyleSheet, Alert } from 'react-native'
 
 import { getAsistencias } from '../api'
 
@@ -8,13 +8,17 @@ import { useIsFocused, useFocusEffect } from '@react-navigation/native'
 
 import { useSelector } from 'react-redux'
 
+import { store } from '../redux/store'
+import { editAsistencias } from '../redux/actions/AsistenciasAction'
+
+
 const AsistenciasList = () => {
 
     const focus = useIsFocused()
     const claseId = useSelector(state => state.ClasesReducer.id)
     const id_docente = useSelector(state => state.PersonaReducer.DocenteReducer.id)
 
-    
+    const asis = useSelector(state => state.AsistenciasReducer.asistencias)
     //console.log(fecha)
     const [asistencias, setAsistencias] = useState([])
     const [message, setMessage] = useState(null)
@@ -46,6 +50,8 @@ const AsistenciasList = () => {
                     signal: controller.signal
                 });
                 if (data){
+                    console.log("edita");
+                    //store.dispatch(editAsistencias(data))
                     setAsistencias(data) 
                 }
                 data.length ? setMessage('') : setMessage("No se registró asistencias el dia de hoy.")
@@ -59,21 +65,6 @@ const AsistenciasList = () => {
         loadAsistencias()
         return () => controller?.abort()
     }, [claseId]);
-    
-
-    //const render = useSelector(state => state.RenderReducer)
-   /* useFocusEffect(
-        
-        React.useCallback(() => {
-            
-        },[claseId])
-    )
-    /*
-    useEffect(() => {
-        
-    }, [render])*/
-
-   
 
     const renderItem = ({item}) => {
         return (

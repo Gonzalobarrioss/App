@@ -1,28 +1,88 @@
 import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
-import { inscripcionMesaExamen } from '../api'
+import { editAsistencias, inscripcionMesaExamen } from '../api'
 
 import { useSelector } from 'react-redux'
 
 import { store } from '../redux/store'
 import { render } from '../redux/actions/RenderAction'
+import { addIdClase } from '../redux/actions/ClaseAction'
+
 
 const AsistenciaItem = ({ asistencias }) => {
 
-    //const nombreAlumno = useSelector(state => state.PersonaReducer.AlumnoReducer.nombre)
-    //const idAlumno = useSelector(state => state.PersonaReducer.AlumnoReducer.id)
 
-    const editAsistencia = (id) => {
-        console.log(id)
-        
+    const claseId = useSelector(state => state.ClasesReducer.id)
+
+    const refreshList = () => {
+        store.dispatch(addIdClase(0))
+        store.dispatch(addIdClase(claseId))
     }
- 
+
+    const handleEditAsistencia = (value) => {
+        Alert.alert(
+            `Alumno: ${value.nombre}`,
+            `Insertar estado del alumno`,
+            [
+                {
+                    text: "Retraso",
+                    onPress: async () => {
+
+                        try {
+                           await editAsistencias({estado: "Retraso", id: value.id})
+                            .finally(() =>{
+                                refreshList()
+                            })
+                        } catch (error) {
+                            console.log(error)
+                            Alert.alert("No se pudo editar la asistencia")
+                        }
+                        
+                    }
+                },
+                {
+                    text: "Presente",
+                    onPress: async () => {
+
+                        try {
+                            await editAsistencias({estado: "Presente", id: value.id})
+                            .finally(() =>{
+                                refreshList()
+                            })
+                        } catch (error) {
+                            console.log(error)
+                            Alert.alert("No se pudo editar la asistencia")
+                        }
+                        
+                    }
+                },
+                {
+                    text: "Ausente",
+                    onPress: async () => {
+                        try {
+                            await editAsistencias({estado: "Ausente", id: value.id})
+                            .finally(() =>{
+                                refreshList()
+                            })
+                        } catch (error) {
+                            console.log(error)
+                            Alert.alert("No se pudo editar la asistencia")
+                        }
+                    },
+                    style: "cancel"
+                }              
+            ],
+            {
+                cancelable: true
+            }
+        )
+    }
 
     return (
         <View style={styles.itemContainer}>
             <TouchableOpacity
                 onPress = { 
-                    () => editAsistencia(asistencias.id)
+                    () => handleEditAsistencia({id: asistencias.id, nombre:asistencias.nombre})
                 }
             >
                 <Text style={styles.itemDescripcion}>Alumno: {asistencias.apellido}, {asistencias.nombre}</Text>

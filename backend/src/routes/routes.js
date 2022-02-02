@@ -8,6 +8,7 @@ import { addSancion } from '../controllers/Sanciones.js'
 import { addNota } from '../controllers/Calificaciones.js'
 import { addAsistencia, getAsistencias } from '../controllers/Asistencias.js'
 import { getClasesPorMateria } from '../controllers/Clases.js';
+import { editAsistencias } from '../controllers/Asistencias.js';
 
 
 const router = express.Router();
@@ -43,6 +44,8 @@ router.post('/guardar_nota', addNota)
 router.post('/guardar_asistencia', addAsistencia)
 
 router.get('/asistencias/:docente/:id/:fecha', getAsistencias)
+
+router.put('/edit_asistencia', editAsistencias)
 
 router.get('/', (req, res, next) => {
     res.status(404).json({error : "page not founds"});

@@ -8,7 +8,7 @@ import PersonaReducer from './reducers/PersonaReducer';
 import MateriasReducer from './reducers/MateriaReducer';
 import ClasesReducer from './reducers/ClaseReducer';
 import RenderReducer from './reducers/RenderReducer';
-
+import AsistenciasReducer from './reducers/AsistenciasReducer'
 
 const persistConfig = {
     key: 'root',
@@ -20,7 +20,8 @@ const rootReducer = combineReducers({
     PersonaReducer,
     MateriasReducer,
     ClasesReducer,
-    RenderReducer
+    RenderReducer,
+    AsistenciasReducer
 });
 
 export const store = createStore(rootReducer, applyMiddleware(thunk));

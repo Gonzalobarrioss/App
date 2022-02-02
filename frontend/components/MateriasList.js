@@ -45,7 +45,9 @@ const MateriasList = () => {
         try {
             store.dispatch(addIdCurso(0))
             store.dispatch(addIdClase(0))
-            await store.dispatch(addIdMateria(0))
+            await store.dispatch(addIdMateria(0),{
+                signal: controller.signal
+            })
             setSelectedValue(value)
             store.dispatch(addIdMateria(value))
             store.dispatch(addRegimenMateria(value))

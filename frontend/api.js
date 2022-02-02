@@ -83,7 +83,7 @@ export const saveNota = async (newNota) => {
         },
         body: JSON.stringify(newNota)
     })
-    return await res.json();
+    return res.json();
 }
 
 export const saveAsistencia = async (newAsistencia) => {
@@ -94,7 +94,7 @@ export const saveAsistencia = async (newAsistencia) => {
         },
         body: JSON.stringify(newAsistencia)
     })
-    return await res.json();
+    return res.json();
 }
 
 export const sancionarAlumno = async (newSancion) => {
@@ -105,10 +105,21 @@ export const sancionarAlumno = async (newSancion) => {
         },
         body: JSON.stringify(newSancion)
     })
-    return await res.json();
+    return res.json();
 }
 
 export const getAsistencias = async (datos) => {
     const res = await fetch(`${API}/asistencias/${datos.docente}/${datos.claseId}/${datos.fecha}`);
     return res.json();
+}
+
+export const editAsistencias = async (datos) => {
+    const res = await fetch(`${API}/edit_asistencia`,{
+        method: 'PUT',
+        headers:{
+            Accept: 'application/json', 'Content-Type':'application/json'
+        },
+        body: JSON.stringify(datos)
+    })
+    return res
 }

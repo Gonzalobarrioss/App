@@ -27,3 +27,13 @@ export const getAsistencias = async (req, res) => {
     res.json(rows);
     connection.destroy()
 }
+
+export const editAsistencias = async (req,res) => {
+    const connection = await connect();
+    await connection.query(`UPDATE asistencias SET estado = ? WHERE id = ?`,[
+        req.body.estado,
+        req.body.id
+    ]);
+    res.sendStatus(204);
+    connection.destroy()  
+}
