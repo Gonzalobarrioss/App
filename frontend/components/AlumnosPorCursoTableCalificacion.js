@@ -1,22 +1,24 @@
 import React, {useState, useEffect} from 'react'
-import { View, Alert, TouchableOpacity, Text, TextInput, Picker, StyleSheet } from 'react-native'
+import { View, Alert, TouchableOpacity, Text, TextInput, StyleSheet } from 'react-native'
 import { used } from '@react-navigation/native'
+import {Picker} from '@react-native-picker/picker';
 
 import { getAlumnosPorCurso } from '../redux/actions/AlumnoCursoAction'
-import { render }  from '../redux/actions/RenderAction'
 import { useSelector } from 'react-redux';
 import { store } from '../redux/store'
 
 import { DataTable } from 'react-native-paper';
+import { isLoading } from '../redux/actions/LoadingAction';
 
-import { saveNota } from '../api'
+import { saveNota, getAlumnosXCurso } from '../api'
 
 const AlumnosPorCursoTableCalificacion = ({navigation}) => {
 
     const docente = useSelector(state => state.PersonaReducer.DocenteReducer.id)
     const regimen = useSelector(state => state.MateriasReducer.regimen)
     const materia = useSelector(state => state.MateriasReducer.id)
-    const rendering = useSelector(state => state.RenderReducer.render)
+    const curso = useSelector(state => state.alumnosCursoReducer.cursoId)
+
     const [etapa, setEtapa] = useState([]) 
     const [datosCorrectos, setDatosCorrectos] = useState(true)
 
@@ -42,12 +44,6 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
         setCalificaciones({...calificaciones, regimen: regimen})
     }, [regimen])
     
-    
-
-    useEffect(() => {
-        setCalificaciones({...calificaciones, materia: materia})
-    }, [materia])
-    
     const [calificaciones, setCalificaciones] = useState({
         alumnos:[],
         nota:[],
@@ -56,18 +52,45 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
         materia: materia,
         regimen: regimen,
         descripcion: "",
-        etapa: '1'
+        etapa: null
     })
 
-    const curso = useSelector(state => state.alumnosCursoReducer.curso)
     useEffect( () => {
-        try{
-            store.dispatch(getAlumnosPorCurso(curso))
-        } catch (error) {
-            console.log("error dispatch getAlumnosPorCurso",error)
+        store.dispatch(isLoading(true))
+        let controller = new AbortController()
+        const getAlumnos = async (curso) => {
+            try {
+                const data = await getAlumnosXCurso(curso,{
+                    signal: controller.signal
+                })
+                .finally(()=> {
+                    store.dispatch(isLoading(false))
+                });
+                const array_nota = []
+                if(data.length){
+                    for (let i = 0; i < data.length; i++) {
+                        array_nota.push(1)    
+                    }
+                }
+                setCalificaciones({...calificaciones, alumnos:data, nota: array_nota })
+                controller = null
+            } catch (error) {
+                console.log("error",error)
+            }
         }
+        //console.log("curso", curso);
+        if (curso){
+            console.log("load Table");
+            getAlumnos(curso)
+        }
+
+        return () => {
+            controller?.abort()
+        }
+  
     }, [curso])
 
+    /*
     const alumnosPorCurso = useSelector(state => state.alumnosCursoReducer.alumnos)
     useEffect(() => {
         const loadAlumnos = (alu) => {
@@ -85,7 +108,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
             loadAlumnos([])
         }
     }, [alumnosPorCurso])
-
+    */
     const handleSetNota = (nota, key) => {
         let newNota = '';
         let numbers = '0123456789';
@@ -109,11 +132,9 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
         }
         calificaciones.nota.splice(key,1)
         calificaciones.nota.splice(key,0,newNota)
-        store.dispatch(render(newNota))
+        //store.dispatch(render(newNota))
     }
 
-    useEffect(() => {
-    }, [rendering])
 
     const handleRemoveRow = (key,id) => {
         Alert.alert(
@@ -147,7 +168,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                     onPress: () => {
                         try {
                             calificaciones.alumnos.map(async (item,index)=>{
-                                await saveNota({alumnoID: item.id, docenteID:calificaciones.docente, materiaID: calificaciones.materia, regimen: calificaciones.regimen, etapa: calificaciones.etapa, nota: calificaciones.nota[index], descripcion: calificaciones.descripcion})
+                                //await saveNota({alumnoID: item.id, docenteID:calificaciones.docente, materiaID: calificaciones.materia, regimen: calificaciones.regimen, etapa: calificaciones.etapa, nota: calificaciones.nota[index], descripcion: calificaciones.descripcion})
                                 console.log("ALUMNO")
                                 console.log("alumno",item.id, item.nombre)
                                 console.log("docente id", calificaciones.docente)
@@ -158,8 +179,8 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                                 console.log("descripcion", calificaciones.descripcion)
                                 console.log("-------------------------------")
                             })
-                            Alert.alert("Se guardaron las calificaciones.")
-                            navigation.navigate("HomeScreenDocente")
+                            //Alert.alert("Se guardaron las calificaciones.")
+                           // navigation.navigate("HomeScreenDocente")
                         }
                         catch (error) {
                             console.log("error en nota", error)
@@ -177,13 +198,15 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
     const handleChange = (name, value) => setCalificaciones({ ...calificaciones, [name]: value})
 
     return (
-        <View style={{width: "90%"}}>
+        <View style={{width: "100%"}}>
+
             <View style={styles.container}>
                 <Picker
                     style={styles.picker}
                     selectedValue={calificaciones.etapa}
                     onValueChange={(itemValue) => handleChange('etapa', itemValue)}    
                 >
+                    <Picker.Item label ={"Seleccione una etapa"} enabled={false} />
                 {
                     etapa.length > 0 
                         ?
@@ -194,6 +217,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                 }      
                 </Picker>
             </View>
+
             <TextInput 
                 placeholder="Descripcion de la calificación"
                 placeholderTextColor= "#546574"
@@ -204,25 +228,31 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
             <DataTable style={{backgroundColor:"#ffffff", borderWidth: 2, borderColor: 'grey', borderRadius: 5, marginTop:"5%"}}>
                 <DataTable.Header >
                     <DataTable.Title>Alumno</DataTable.Title>
-                    <DataTable.Title >Nota</DataTable.Title>
+                    <DataTable.Title>Nota</DataTable.Title>
+                    <DataTable.Title>Eliminar</DataTable.Title>
                 </DataTable.Header>
                     {
                         calificaciones.alumnos.length > 0 ?
                         (calificaciones.alumnos.map((row, key)=>(
-                            <DataTable.Row key={key}  >
-                                <DataTable.Cell> {row.apellido},  
-                                    {row.nombre}</DataTable.Cell>
-                                
-                                <DataTable.Cell>
+                            <DataTable.Row key={key}>
+                                <DataTable.Cell style={{width:850,height: 150, backgroundColor:"red"}} >
+                                        <Text style={{fontSize:15, backgroundColor:"blue"}}>{
+                                        ` ${row.apellido}`} 
+                                        </Text>
+                                        <Text>
+                                            asdsadasd
+                                        </Text>
+                                </DataTable.Cell>
+                                <DataTable.Cell numeric>
                                     <View>
                                         <TextInput 
-                                            placeholder="INGRESE NOTA"
+                                            placeholder="NOTA"
                                             placeholderTextColor= "black"
-                                            style= {{backgroundColor: "#fff", textAlign: 'right'}}
+                                            style= {{backgroundColor: "#fff", textAlign: 'right',fontSize:25}}
                                             onChangeText = { (value) => handleSetNota(value, key)}
                                             keyboardType = "numeric"
                                             maxLength = {2}
-                                            value = {calificaciones.nota[key].toString()}
+                                            value = {"1"}
                                         />
                                     </View>
                                 </DataTable.Cell>
@@ -234,7 +264,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                                             style = {styles.btnEliminar}
                                             onPress = { () => handleRemoveRow(key,row.id)}
                                         >
-                                            <Text style = {{color: "#fff", fontSize: 14, textAlign:'center'}}> Eliminar </Text>
+                                            <Text style = {{color: "#fff", fontSize: 25, textAlign:'center'}}> X </Text>
                                         </TouchableOpacity>
                                     </View>
                                 </DataTable.Cell>

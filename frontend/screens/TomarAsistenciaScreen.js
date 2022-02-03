@@ -1,6 +1,6 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import Layout from '../components/Layout'
-import { ScrollView, StyleSheet, TouchableOpacity, Text } from 'react-native'
+import { ScrollView, StyleSheet, TouchableOpacity, Text, ActivityIndicator } from 'react-native'
 
 import MateriasList from '../components/MateriasList'
 import ClasePorMateriaList from '../components/ClasePorMateriaList'
@@ -21,6 +21,18 @@ const TomarAsistenciaScreen = ({navigation}) => {
     const curso = useSelector(state => state.alumnosCursoReducer.cursoId)
     const clases = useSelector(state => state.ClasesReducer.id)
 
+    const isLoading = useSelector(state => state.LoadingReducer.loading)
+
+    const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        let controller = new AbortController()
+        setLoading(isLoading)
+        controller = null
+        return () => {
+            controller?.abort()    
+        };
+    }, [isLoading]);
     
 
     React.useLayoutEffect(() => {
@@ -52,8 +64,10 @@ const TomarAsistenciaScreen = ({navigation}) => {
     return (
         <ScrollView style={styles.container}>
             <Layout>
+                { loading ? <ActivityIndicator color="#ffffff" size="large" style={{marginBottom: 10}}/> : <Text style={{height: 36, marginBottom: 10}}/> }
+
                 <MateriasList />
-                { materia ? <ClasePorMateriaList/> : null}
+                { materia  ? <ClasePorMateriaList/> : null}
                 { curso ? <AlumnosPorCursoTableAsistencia navigation={navigation}/> : null}
             </Layout>
         </ScrollView>

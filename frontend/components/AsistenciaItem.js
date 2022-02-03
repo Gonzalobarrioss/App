@@ -5,8 +5,9 @@ import { editAsistencias, inscripcionMesaExamen } from '../api'
 import { useSelector } from 'react-redux'
 
 import { store } from '../redux/store'
-import { render } from '../redux/actions/RenderAction'
+//import { render } from '../redux/actions/RenderAction'
 import { addIdClase } from '../redux/actions/ClaseAction'
+import { isLoading } from '../redux/actions/LoadingAction'
 
 
 const AsistenciaItem = ({ asistencias }) => {
@@ -17,6 +18,7 @@ const AsistenciaItem = ({ asistencias }) => {
     const refreshList = () => {
         store.dispatch(addIdClase(0))
         store.dispatch(addIdClase(claseId))
+        store.dispatch(isLoading(false))
     }
 
     const handleEditAsistencia = (value) => {
@@ -27,6 +29,7 @@ const AsistenciaItem = ({ asistencias }) => {
                 {
                     text: "Retraso",
                     onPress: async () => {
+                        store.dispatch(isLoading(true))
 
                         try {
                            await editAsistencias({estado: "Retraso", id: value.id})
@@ -43,6 +46,7 @@ const AsistenciaItem = ({ asistencias }) => {
                 {
                     text: "Presente",
                     onPress: async () => {
+                        store.dispatch(isLoading(true))
 
                         try {
                             await editAsistencias({estado: "Presente", id: value.id})
@@ -59,6 +63,8 @@ const AsistenciaItem = ({ asistencias }) => {
                 {
                     text: "Ausente",
                     onPress: async () => {
+                        store.dispatch(isLoading(true))
+
                         try {
                             await editAsistencias({estado: "Ausente", id: value.id})
                             .finally(() =>{

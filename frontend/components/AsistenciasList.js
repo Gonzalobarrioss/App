@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux'
 
 import { store } from '../redux/store'
 import { editAsistencias } from '../redux/actions/AsistenciasAction'
+import { isLoading } from '../redux/actions/LoadingAction';
 
 
 const AsistenciasList = () => {
@@ -27,6 +28,7 @@ const AsistenciasList = () => {
     
 
     useEffect(() => {
+        store.dispatch(isLoading(true))
         let controller = new AbortController()
 
         const loadAsistencias = async () => {
@@ -48,6 +50,9 @@ const AsistenciasList = () => {
                 }
                 const data = await getAsistencias(datos,{
                     signal: controller.signal
+                })
+                .finally(() => {
+                    store.dispatch(isLoading(false))
                 });
                 if (data){
                     console.log("edita");

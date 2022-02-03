@@ -12,6 +12,7 @@ import { addClases, addIdClase } from '../redux/actions/ClaseAction';
 
 import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 import { addIdMateria } from '../redux/actions/MateriaAction';
+import { isLoading } from '../redux/actions/LoadingAction';
 
 
 const ClasePorMateriasList = () => {
@@ -23,11 +24,15 @@ const ClasePorMateriasList = () => {
     const materia = useSelector(state => state.MateriasReducer.id)
 
     useEffect(() => {
+        store.dispatch(isLoading(true))
         let controller = new AbortController()
         const loadClases = async () => {
             //console.log(selectedValue);
             const data = await getClaseXMateria(materia, {
                 signal: controller.signal
+            })
+            .finally(()=> {
+                store.dispatch(isLoading(false))
             })
             if(!data.length){
                // console.log("paso");
@@ -36,7 +41,6 @@ const ClasePorMateriasList = () => {
             else{
                 store.dispatch(addIdCurso(selectedValue))
                 //selectedValue ? store.dispatch(addIdCurso(data[0].curso_id)) : store.dispatch(addIdCurso(selectedValue))
-                
             }
             setClases(data)
             controller =  null 

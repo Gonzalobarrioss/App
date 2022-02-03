@@ -12,6 +12,8 @@ import { useFocusEffect } from '@react-navigation/native';
 
 import RadioGroup from 'react-native-radio-buttons-group';
 import alumnosCursoReducer from '../redux/reducers/AlumnoCursoReducer';
+import { isLoading } from '../redux/actions/LoadingAction';
+
 
 const AlumnosPorCursoTableAsistencia = ({navigation}) => {
 
@@ -37,7 +39,6 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
         labelStyle: {
             color: '#ffffff'
         },
-        onPress: (id) => handleEstado(id)
     }, {
         id: '2',
         label: 'Todos Presentes',
@@ -47,7 +48,6 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
         labelStyle: {
             color: '#ffffff'
         },
-        onPress:  (id) => handleEstado(id)
     }]
     
     const [radioButtons, setRadioButtons] = useState(radioButtonsData)
@@ -68,11 +68,15 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
 
     }
     useEffect(() => {
+        store.dispatch(isLoading(true))
         let controller = new AbortController()
         const getAlumnos = async (curso) => {
             try {
                 const data = await getAlumnosXCurso(curso,{
                     signal: controller.signal
+                })
+                .finally(()=> {
+                    store.dispatch(isLoading(false))
                 });
                 const array_estado = []
                 if(data.length){
@@ -175,8 +179,8 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
                                 console.log("Estado: ", asistencia.estado[index])
                                 console.log("--------------------------")
                             })
-                           // Alert.alert("Se guardaron las asistencias.")
-                           // navigation.navigate("HomeScreenDocente")
+                            Alert.alert("Se guardaron las asistencias.")
+                            navigation.navigate("HomeScreenDocente")
                         } catch (error) {
                             console.log("error", error)
                         }

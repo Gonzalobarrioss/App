@@ -5,7 +5,7 @@ import { inscripcionMesaExamen } from '../api'
 import { useSelector } from 'react-redux'
 
 import { store } from '../redux/store'
-import { render } from '../redux/actions/RenderAction'
+//import { render } from '../redux/actions/RenderAction'
 
 const MesaExamen = ({ mesa }) => {
 
@@ -35,7 +35,7 @@ const MesaExamen = ({ mesa }) => {
                     onPress: async () => {
                         try {
                             await inscripcionMesaExamen(inscripcion)
-                            store.dispatch(render(true))
+                            //store.dispatch(render(true))
                             Alert.alert("Inscripcion exitosa.")
                         } catch (error) {
                             console.log(error)

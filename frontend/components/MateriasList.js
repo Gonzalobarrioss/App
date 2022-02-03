@@ -9,9 +9,9 @@ import { store } from '../redux/store'
 import { addIdMateria, addNombreMateria, addRegimenMateria } from '../redux/actions/MateriaAction'
 
 import { useSelector } from 'react-redux'
-import { datosValidos } from '../redux/actions/RenderAction'
 import { addIdClase } from '../redux/actions/ClaseAction';
 import { addIdCurso } from '../redux/actions/AlumnoCursoAction';
+import { isLoading } from '../redux/actions/LoadingAction';
 
 const MateriasList = () => {
 
@@ -23,12 +23,16 @@ const MateriasList = () => {
     const focus = useIsFocused()
 
     useEffect(() => {
+        store.dispatch(isLoading(true))
         let controller = new AbortController()
         const loadMaterias = async (id_docente) => {
             //console.log(id_docente);
             
             const data = await getAllMateriasPorProfesor(id_docente,{
                 signal: controller.signal
+            })
+            .finally(()=> {
+                store.dispatch(isLoading(false))
             });
             setMateria(data)
             controller = null

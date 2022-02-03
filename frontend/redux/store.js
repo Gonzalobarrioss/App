@@ -7,7 +7,7 @@ import alumnosCursoReducer from './reducers/AlumnoCursoReducer';
 import PersonaReducer from './reducers/PersonaReducer';
 import MateriasReducer from './reducers/MateriaReducer';
 import ClasesReducer from './reducers/ClaseReducer';
-import RenderReducer from './reducers/RenderReducer';
+import LoadingReducer from './reducers/LoadingReducer';
 import AsistenciasReducer from './reducers/AsistenciasReducer'
 
 const persistConfig = {
@@ -20,7 +20,7 @@ const rootReducer = combineReducers({
     PersonaReducer,
     MateriasReducer,
     ClasesReducer,
-    RenderReducer,
+    LoadingReducer,
     AsistenciasReducer
 });
 

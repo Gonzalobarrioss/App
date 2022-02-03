@@ -1,7 +1,7 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import AsistenciasList from '../components/AsistenciasList'
 import Layout from '../components/Layout'
-
+import { ActivityIndicator,Text } from 'react-native'
 import { useIsFocused, useFocusEffect } from '@react-navigation/native'
 import { useBackHandler } from '@react-native-community/hooks'
 
@@ -20,6 +20,19 @@ const AsistenciasScreen = ({navigation}) => {
 
   const materia = useSelector(state => state.MateriasReducer.id)
   const clase = useSelector(state => state.ClasesReducer.id)
+
+  const [loading, setLoading] = useState(false)
+  const isLoading = useSelector(state => state.LoadingReducer.loading)
+
+  useEffect(() => {
+    let controller = new AbortController()
+    setLoading(isLoading)
+    controller = null
+    return () => {
+      controller?.abort()    
+    };
+}, [isLoading]);
+
   //console.log(navigation.getState().index)
   //console.log(nombre_materia);
   //<Text style={{color: "#fff", fontSize:18}}>{nombre_materia ? nombre_materia : null}</Text>
@@ -44,6 +57,8 @@ const AsistenciasScreen = ({navigation}) => {
   
   return ( 
       <Layout>
+        { loading ? <ActivityIndicator color="#ffffff" size="large" style={{marginBottom: 10}}/> : <Text style={{height: 36, marginBottom: 10}}/> }
+
         <MateriasList /> 
         { materia ? <ClasePorMateriasList /> : null }
         { clase ? <AsistenciasList /> : null }

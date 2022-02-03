@@ -25,6 +25,7 @@ const AuthScreen = ({ navigation}) => {
     const [isError, setIsError] = useState(true);
     const [message, setMessage] = useState('');
     const [isLogin, setIsLogin] = useState(true);
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         setMessage('')
@@ -85,6 +86,8 @@ const AuthScreen = ({ navigation}) => {
 
     const onSubmitHandler = () => {
         
+        setLoading(true)
+
         const datos = {
             id,
             username,
@@ -118,6 +121,9 @@ const AuthScreen = ({ navigation}) => {
         })
         .catch(err => {
             console.log(err);
+        })
+        .finally(() =>{
+            setLoading(false)
         });
     };
 
@@ -150,7 +156,7 @@ const AuthScreen = ({ navigation}) => {
 
     return (
         <Layout>
-            <ActivityIndicator color="#ffffff" size="large" />
+            { loading ? <ActivityIndicator color="#ffffff" size="large" /> : null }
 
             <View style={styles.card}>
                 <Text style={styles.heading}>{isLogin ? 'Iniciar Sesión' : 'Registrarse'} {rol ? rol : null}</Text>
