@@ -19,6 +19,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
     const materia = useSelector(state => state.MateriasReducer.id)
     const curso = useSelector(state => state.alumnosCursoReducer.cursoId)
 
+    const [loading, setLoading] = useState(false)
     const [etapa, setEtapa] = useState([]) 
     const [datosCorrectos, setDatosCorrectos] = useState(true)
 
@@ -51,12 +52,13 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
         docente: docente,
         materia: materia,
         regimen: regimen,
-        descripcion: "",
+        descripcion: null,
         etapa: null
     })
 
     useEffect( () => {
         store.dispatch(isLoading(true))
+        setLoading(true)
         let controller = new AbortController()
         const getAlumnos = async (curso) => {
             try {
@@ -109,16 +111,23 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
         }
     }, [alumnosPorCurso])
     */
-    const handleSetNota = (nota, key) => {
+    const handleSetNota = (nota, key ) => {
         let newNota = '';
-        let numbers = '0123456789';
-        setDatosCorrectos(true)
-
+        let numbers = '0123456789,.';
+      //  let myRe = /\d(\.\d\d?)?    |   10/
+        // \d(\.\d?)\d? | [1][0]? | [1-9]?
+        
+        //console.log("asd",nota);
+        //console.log("validarrr", myArray);
+        //console.log("key",key);
+     //   console.log("asd", typeof(calificaciones.nota))
         for (let i=0; i < nota.length; i++) {
             if(numbers.indexOf(nota[i]) > -1 ) {
                 newNota = newNota + nota[i];
+                //newNota = parseFloat(newNota.replace(",","."))
+                //console.log(typeof(newNota), newNota);
                 if(newNota > 10){
-                    Alert.alert("La nota no puede superar el valor de 10. Se establecerá por defecto nota 10(Diez).")
+                  //  Alert.alert("La nota no puede superar el valor de 10. Se establecerá por defecto nota 10(Diez).")
                     newNota = 10;
                 }
             }
@@ -127,11 +136,23 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                 Alert.alert("Solo se aceptan valores numéricos.")
             }
         }
+
         if(newNota > 10 || newNota < 1){
             setDatosCorrectos(false)
+           // console.log("nota incorrecta");
         }
-        calificaciones.nota.splice(key,1)
-        calificaciones.nota.splice(key,0,newNota)
+        const newArrayNotas = calificaciones.nota
+        //console.log("notas", newArrayNotas);
+        newArrayNotas.map((item,index) => {
+            if(index == key){
+                newArrayNotas.splice(key,1,newNota)
+            }
+        })
+        setCalificaciones({...calificaciones, nota: newArrayNotas})
+        //calificaciones.nota.splice(key,1)
+        //calificaciones.nota.splice(key,0,newNota)
+        //setDatosCorrectos(true)
+
         //store.dispatch(render(newNota))
     }
 
@@ -157,42 +178,74 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
         )     
     }
 
-    const handleSubmit = async () => {
+    const handleSubmit =  () => {
         
-        Alert.alert(
-            `Atencion`,
-            `Si continua guardará las calificaciones`,
-            [
-                {
-                    text: "Continuar",
-                    onPress: () => {
-                        try {
-                            calificaciones.alumnos.map(async (item,index)=>{
-                                //await saveNota({alumnoID: item.id, docenteID:calificaciones.docente, materiaID: calificaciones.materia, regimen: calificaciones.regimen, etapa: calificaciones.etapa, nota: calificaciones.nota[index], descripcion: calificaciones.descripcion})
-                                console.log("ALUMNO")
-                                console.log("alumno",item.id, item.nombre)
-                                console.log("docente id", calificaciones.docente)
-                                console.log("materia id", calificaciones.materia)
-                                console.log("regimen", calificaciones.regimen)
-                                console.log("etapa", calificaciones.etapa)
-                                console.log("nota", calificaciones.nota[index])
-                                console.log("descripcion", calificaciones.descripcion)
-                                console.log("-------------------------------")
-                            })
-                            //Alert.alert("Se guardaron las calificaciones.")
-                           // navigation.navigate("HomeScreenDocente")
+        const submitData = async () => {
+            Alert.alert(
+                `Atencion`,
+                `Si continua guardará las calificaciones`,
+                [
+                    {
+                        text: "Continuar",
+                        onPress: () => {
+                            try {
+                                calificaciones.alumnos.map(async (item,index)=>{
+                                    //await saveNota({alumnoID: item.id, docenteID:calificaciones.docente, materiaID: calificaciones.materia, regimen: calificaciones.regimen, etapa: calificaciones.etapa, nota: calificaciones.nota[index], descripcion: calificaciones.descripcion})
+                                    console.log("ALUMNO")
+                                    console.log("alumno",item.id, item.nombre)
+                                    console.log("docente id", calificaciones.docente)
+                                    console.log("materia id", calificaciones.materia)
+                                    console.log("regimen", calificaciones.regimen)
+                                    console.log("etapa", calificaciones.etapa)
+                                    console.log("nota", typeof(calificaciones.nota[index]))
+                                    console.log("descripcion", calificaciones.descripcion)
+                                    console.log("-------------------------------")
+                                })
+                                //Alert.alert("Se guardaron las calificaciones.")
+                            // navigation.navigate("HomeScreenDocente")
+                            }
+                            catch (error) {
+                                console.log("error en nota", error)
+                            }
                         }
-                        catch (error) {
-                            console.log("error en nota", error)
-                        }
+                    },
+                    {
+                        text: "Cancelar",
+                        style: "cancel"
                     }
-                },
-                {
-                    text: "Cancelar",
-                    style: "cancel"
+                ]
+            )  
+        } 
+
+        
+        
+
+        if (!calificaciones.etapa){
+            Alert.alert("Ingrese una etapa")
+        }
+        else if(!calificaciones.descripcion){
+            Alert.alert("Ingrese descripcion")
+        }
+        else{
+            let notasCorrectas = true
+            calificaciones.nota.map((item) => {
+                let myRe = /^[\d][.][\d][\d]{1}$|^[1][0]{1}$|^[1-9]{1}$/
+                if(myRe.exec(item) == null){
+                    notasCorrectas = false
+                    console.log("Algunas notas podrian ser incorrectas.");
                 }
-            ]
-        )   
+                else{
+                    console.log("todo correcto");
+                }
+            })
+            if(notasCorrectas){
+                submitData()
+            }
+            //submitData()
+        }
+        //else if()
+
+
     }
 
     const handleChange = (name, value) => setCalificaciones({ ...calificaciones, [name]: value})
@@ -227,38 +280,40 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
 
             <DataTable style={{backgroundColor:"#ffffff", borderWidth: 2, borderColor: 'grey', borderRadius: 5, marginTop:"5%"}}>
                 <DataTable.Header >
-                    <DataTable.Title>Alumno</DataTable.Title>
-                    <DataTable.Title>Nota</DataTable.Title>
-                    <DataTable.Title>Eliminar</DataTable.Title>
+                    <DataTable.Title style={styles.dataTableHeader}>
+                      Alumno
+                    </DataTable.Title>
+                    <DataTable.Title style={styles.dataTableHeader}>Nota</DataTable.Title>
+                    <DataTable.Title style={styles.dataTableHeader, {maxWidth:40} }>Eliminar </DataTable.Title>
                 </DataTable.Header>
                     {
                         calificaciones.alumnos.length > 0 ?
-                        (calificaciones.alumnos.map((row, key)=>(
-                            <DataTable.Row key={key}>
-                                <DataTable.Cell style={{width:850,height: 150, backgroundColor:"red"}} >
-                                        <Text style={{fontSize:15, backgroundColor:"blue"}}>{
-                                        ` ${row.apellido}`} 
+                        (calificaciones.alumnos.map((row, key)=>( 
+                            <DataTable.Row key={key} style={{height:80}}>
+                                <DataTable.Cell style={{ overflow:"scroll", maxWidth:190}} >
+                                        <View >
+                                        <Text style={{fontSize:20}}>
+                                            {
+                                            ` ${row.apellido}, \n ${row.nombre}`
+                                            } 
                                         </Text>
-                                        <Text>
-                                            asdsadasd
-                                        </Text>
+                                        </View>
                                 </DataTable.Cell>
-                                <DataTable.Cell numeric>
+                                <DataTable.Cell style={{alignContent:"center",  justifyContent:"center", maxWidth:150}} numeric>
                                     <View>
                                         <TextInput 
                                             placeholder="NOTA"
                                             placeholderTextColor= "black"
-                                            style= {{backgroundColor: "#fff", textAlign: 'right',fontSize:25}}
+                                            style= {{fontSize:20, padding: 30, flex:1, textAlign:"center"}}
                                             onChangeText = { (value) => handleSetNota(value, key)}
                                             keyboardType = "numeric"
-                                            maxLength = {2}
-                                            value = {"1"}
+                                            maxLength = {4}
+                                            value = {calificaciones.nota[key].toString()}
+                                           // onBlur={ (value) => handleSetNota(value,key)}
                                         />
                                     </View>
                                 </DataTable.Cell>
-                                <DataTable.Cell
-                                    style={{marginLeft:50}}
-                                >
+                                <DataTable.Cell style={{justifyContent:"center", maxWidth:40}}>
                                     <View>
                                         <TouchableOpacity
                                             style = {styles.btnEliminar}
@@ -270,8 +325,8 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                                 </DataTable.Cell>
                             </DataTable.Row>
                         )))
-                        :   (<DataTable.Row >
-                                <DataTable.Cell>Sin Alumnos</DataTable.Cell>
+                        :   (<DataTable.Row>
+                                <DataTable.Cell> {loading ? `Cargando...` : `Sin Alumnos`}</DataTable.Cell>
                             </DataTable.Row>
                             )
                             
@@ -280,23 +335,10 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
 
             {
                 calificaciones.alumnos.length > 0 ?
-
-                calificaciones.descripcion.length > 0
-                ?   (datosCorrectos
-                    ?  <TouchableOpacity style = {styles.buttonSave} onPress={handleSubmit}>
-                            <Text style= {styles.buttonText}>Guardar Nota</Text>
-                        </TouchableOpacity>             
-                    :   <TouchableOpacity style = {styles.buttonSave} onPress={ () => Alert.alert("Verifique que todas las notas sean correctas.")}>
-                            <Text style= {styles.buttonText}>Guardar Nota</Text>
-                        </TouchableOpacity>
-                )   
-                :   <TouchableOpacity style = {styles.buttonSave} onPress={() => Alert.alert("Debe ingresar todos los campos.")}>
+                      <TouchableOpacity style = {styles.buttonSave} onPress={handleSubmit}>
                         <Text style= {styles.buttonText}>Guardar Nota</Text>
-                    </TouchableOpacity>
-
-                :   <TouchableOpacity style = {styles.buttonSave} onPress={() => Alert.alert("El curso no posee alumnos.")}>
-                        <Text style= {styles.buttonText}>Guardar Nota</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity>            
+                : null    
             
             }
         </View>     
@@ -346,6 +388,10 @@ const styles = StyleSheet.create({
         borderRadius: 5, 
         alignItems: 'center', 
         flex: 1
+    },
+    dataTableHeader: {
+        alignItems:"center", 
+        justifyContent:"center" 
     }
 })
 
