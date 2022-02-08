@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import AsistenciasList from '../components/AsistenciasList'
+//import CalificacionesList from '../components/CalificacionesList'
 import Layout from '../components/Layout'
 import { ActivityIndicator,Text } from 'react-native'
 import { useIsFocused, useFocusEffect } from '@react-navigation/native'
@@ -7,7 +7,7 @@ import { useBackHandler } from '@react-native-community/hooks'
 
 import { useSelector } from 'react-redux'
 import MateriasList from '../components/MateriasList'
-import ClasePorMateriasList from '../components/ClasePorMateriaList'
+//import ClasePorMateriasList from '../components/ClasePorMateriaList'
 
 import {store} from '../redux/store'
 import { addIdMateria } from '../redux/actions/MateriaAction'
@@ -16,7 +16,7 @@ import { addIdCurso } from '../redux/actions/AlumnoCursoAction'
 
 
 
-const AsistenciasScreen = ({navigation}) => { 
+const CalificacionesScreen = ({navigation}) => { 
 
   const materia = useSelector(state => state.MateriasReducer.id)
   const clase = useSelector(state => state.ClasesReducer.id)
@@ -43,7 +43,7 @@ const AsistenciasScreen = ({navigation}) => {
       store.dispatch(addIdClase(0))
       store.dispatch(addIdCurso(0))
       controller = null
-      //navigation.navigate("TomarAsistenciaScreen")
+      //navigation.navigate("TomarCalificacionescreen")
       console.log("paso");
     }
     if (navigation.getState().index == 4) {
@@ -55,17 +55,18 @@ const AsistenciasScreen = ({navigation}) => {
 
   })
 
-  
+ // { clase ? <CalificacionesList /> : null }
+ //        { materia ? <ClasePorMateriasList /> : null }
+
   return ( 
       <Layout>
         { loading ? <ActivityIndicator color="#ffffff" size="large" style={{marginBottom: 10}}/> : <Text style={{height: 36, marginBottom: 10}}/> }
 
         <MateriasList /> 
-        { materia ? <ClasePorMateriasList /> : null }
-        { clase ? <AsistenciasList /> : null }
+       
       </Layout>
 
   )
 }
 
-export default AsistenciasScreen
+export default CalificacionesScreen

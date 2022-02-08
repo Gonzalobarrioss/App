@@ -21,7 +21,6 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
 
     const [loading, setLoading] = useState(false)
     const [etapa, setEtapa] = useState([]) 
-    const [datosCorrectos, setDatosCorrectos] = useState(true)
 
     useEffect(() => {
         
@@ -123,23 +122,21 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
      //   console.log("asd", typeof(calificaciones.nota))
         for (let i=0; i < nota.length; i++) {
             if(numbers.indexOf(nota[i]) > -1 ) {
-                newNota = newNota + nota[i];
+                //console.log("caracter", numbers.indexOf(nota[i]))4
+                numbers.indexOf(nota[i]) == 10 ? newNota += "." : newNota += nota[i]
+                //newNota = newNota + nota[i];
+                
+                //console.log(newNota);
                 //newNota = parseFloat(newNota.replace(",","."))
                 //console.log(typeof(newNota), newNota);
                 if(newNota > 10){
-                  //  Alert.alert("La nota no puede superar el valor de 10. Se establecerá por defecto nota 10(Diez).")
+                    Alert.alert("La nota no puede superar el valor de 10. Se establecerá por defecto nota 10(Diez).")
                     newNota = 10;
                 }
             }
             else {
-                setDatosCorrectos(false)
-                Alert.alert("Solo se aceptan valores numéricos.")
+                Alert.alert("Solo se aceptan valores numéricos y el punto para los valores flotantes.")
             }
-        }
-
-        if(newNota > 10 || newNota < 1){
-            setDatosCorrectos(false)
-           // console.log("nota incorrecta");
         }
         const newArrayNotas = calificaciones.nota
         //console.log("notas", newArrayNotas);
@@ -190,19 +187,19 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                         onPress: () => {
                             try {
                                 calificaciones.alumnos.map(async (item,index)=>{
-                                    //await saveNota({alumnoID: item.id, docenteID:calificaciones.docente, materiaID: calificaciones.materia, regimen: calificaciones.regimen, etapa: calificaciones.etapa, nota: calificaciones.nota[index], descripcion: calificaciones.descripcion})
+                                    await saveNota({alumnoID: item.id, docenteID:calificaciones.docente, materiaID: calificaciones.materia, regimen: calificaciones.regimen, etapa: calificaciones.etapa, nota: calificaciones.nota[index], descripcion: calificaciones.descripcion})
                                     console.log("ALUMNO")
                                     console.log("alumno",item.id, item.nombre)
                                     console.log("docente id", calificaciones.docente)
                                     console.log("materia id", calificaciones.materia)
                                     console.log("regimen", calificaciones.regimen)
                                     console.log("etapa", calificaciones.etapa)
-                                    console.log("nota", typeof(calificaciones.nota[index]))
+                                    console.log("nota", calificaciones.nota[index])
                                     console.log("descripcion", calificaciones.descripcion)
                                     console.log("-------------------------------")
                                 })
-                                //Alert.alert("Se guardaron las calificaciones.")
-                            // navigation.navigate("HomeScreenDocente")
+                                Alert.alert("Se guardaron las calificaciones.")
+                                navigation.navigate("HomeScreenDocente")
                             }
                             catch (error) {
                                 console.log("error en nota", error)
@@ -233,6 +230,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                 if(myRe.exec(item) == null){
                     notasCorrectas = false
                     console.log("Algunas notas podrian ser incorrectas.");
+                    Alert.alert("Algunas notas podrian ser incorrectas.")
                 }
                 else{
                     console.log("todo correcto");
