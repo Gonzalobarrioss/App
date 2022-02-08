@@ -89,3 +89,9 @@ Content-Type: application/json
     "estado": "Presente",
     "id": "21"
 }
+
+###
+GET {{API}}/notas/39819975/1
+
+###
+GET {{API}}/descripcion_notas/39819975/1

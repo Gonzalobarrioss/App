@@ -5,7 +5,7 @@ import { bajaMesaExamen, getAllMesaDeExamenes,getAllMesaDeExamenesInscriptas, in
 import { getAllCursos, getAllAlumnosPorCurso } from '../controllers/Cursos.js'
 import { getAllMateriasPorProfesor, getRegimenPorMateria } from '../controllers/Materias.js'
 import { addSancion } from '../controllers/Sanciones.js'
-import { addNota } from '../controllers/Calificaciones.js'
+import { addNota, getNotas, getDescripcionNota } from '../controllers/Calificaciones.js'
 import { addAsistencia, getAsistencias } from '../controllers/Asistencias.js'
 import { getClasesPorMateria } from '../controllers/Clases.js';
 import { editAsistencias } from '../controllers/Asistencias.js';
@@ -46,6 +46,10 @@ router.post('/guardar_asistencia', addAsistencia)
 router.get('/asistencias/:docente/:id/:fecha', getAsistencias)
 
 router.put('/edit_asistencia', editAsistencias)
+
+router.get('/notas/:id/:etapa', getNotas)
+
+router.get('/descripcion_notas/:docente/:materia/:etapa', getDescripcionNota)
 
 router.get('/', (req, res, next) => {
     res.status(404).json({error : "page not founds"});

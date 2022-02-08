@@ -17,3 +17,25 @@ export const addNota = async (req , res) => {
     })
     connection.destroy()
 }
+
+export const getDescripcionNota = async(req,res) => {
+    const connection = await connect();
+    const [rows] = await connection.query("SELECT DISTINCT descripcion FROM calificaciones WHERE docente_id = ? and materia_id = ? and etapa = ?", [
+        req.params.docente,
+        req.params.materia,
+        req.params.etapa
+    ]);
+    res.json(rows);
+    connection.destroy()
+}
+
+
+export const getNotas = async(req, res) => {
+    const connection = await connect();
+    const [rows] = await connection.query("SELECT da.nombre,da.apellido, c.nota, c.descripcion FROM calificaciones c INNER JOIN datos_personales da ON c.alumno_id = da.documento WHERE c.docente_id = ? and c.etapa = ?", [
+        req.params.id,
+        req.params.etapa,
+    ]);
+    res.json(rows);
+    connection.destroy()
+}

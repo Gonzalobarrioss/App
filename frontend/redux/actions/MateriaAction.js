@@ -20,23 +20,10 @@ export const addNombreMateria = nombre => dispatch => {
   });
 };
 
-export const addRegimenMateria = id => {
-  try {
-    return async dispatch => {
-      if (id){
-      const response = await axios.get(`${API}/regimen_materia/${id}`);
-      if (response.data) {
-        dispatch({
-          type: SET_REGIMEN_MATERIA,
-          payload: response.data[0].regimen
-        });
-      } else {
-        console.log('Unable to fetch data from the API BASE URL!');
-      }
-    }
-  };
-  } catch (error) {
-    console.log("error desde api al obtener regimen de materia",error);
-  }
+export const addRegimenMateria = regimen => dispatch => {
+  dispatch({
+    type: SET_REGIMEN_MATERIA,
+    payload: regimen
+  });
 };
 

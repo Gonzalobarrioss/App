@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { Text, ScrollView, StyleSheet, ActivityIndicator } from 'react-native'
+import { Text, ScrollView, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native'
 import Layout from '../components/Layout'
 import MateriasList from '../components/MateriasList'
 import CursosList from '../components/CursosList'
@@ -25,6 +25,30 @@ const CalificarScreen = ({navigation}) => {
         };
     }, [isLoading]);
 
+    React.useLayoutEffect(() => {
+        let controller = new AbortController()
+        const handleCalificaciones = () => {
+            //store.dispatch(addIdMateria(0))
+            //store.dispatch(addIdClase(0))
+            controller = null
+            navigation.navigate("Ver Calificaciones")
+        }
+
+        navigation.setOptions({
+            headerRight: () => (           
+                <TouchableOpacity
+                    onPress = { 
+                        () => {handleCalificaciones()}
+                    }
+                    style = { styles.btnVerCalificaciones}
+                >                        
+                    <Text style = { styles.txtVerCalificaciones }>Ver calificaciones</Text>                        
+                </TouchableOpacity>                         
+            )
+        })
+        return () => controller?.abort()
+    }, [])  
+
     return (
         <ScrollView style={styles.container}>
             <Layout>
@@ -43,6 +67,15 @@ const styles = StyleSheet.create({
     container:{
         width:"100%",
         backgroundColor: "#222f3e"
+    },
+    btnVerCalificaciones: {
+        backgroundColor: "#64b32b",
+        padding: 7,
+        borderRadius: 5
+    },
+    txtVerCalificaciones: {
+        color: "#ffffff",
+        fontSize: 16,
     }
 })
 

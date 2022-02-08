@@ -123,3 +123,8 @@ export const editAsistencias = async (datos) => {
     })
     return res
 }
+
+export const getDescripcionNotas = async (datos) => {
+    const res = await fetch(`${API}/descripcion_notas/${datos.docente}/${datos.materia}/${datos.etapa}`);
+    return res.json();
+}

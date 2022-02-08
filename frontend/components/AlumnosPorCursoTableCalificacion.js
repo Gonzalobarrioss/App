@@ -23,7 +23,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
     const [etapa, setEtapa] = useState([]) 
 
     useEffect(() => {
-        
+        let controller = new AbortController()
         switch (regimen) {
             case "Anual":
                 setEtapa([{nombre: "Anual", etapa: "1"}])
@@ -42,6 +42,9 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                 break;
         }
         setCalificaciones({...calificaciones, regimen: regimen})
+        controller = null
+
+        return () => controller?.abort()
     }, [regimen])
     
     const [calificaciones, setCalificaciones] = useState({

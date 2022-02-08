@@ -9,6 +9,7 @@ import MateriasReducer from './reducers/MateriaReducer';
 import ClasesReducer from './reducers/ClaseReducer';
 import LoadingReducer from './reducers/LoadingReducer';
 import AsistenciasReducer from './reducers/AsistenciasReducer'
+import EtapaReducer from './reducers/EtapaReducer'
 
 const persistConfig = {
     key: 'root',
@@ -21,7 +22,8 @@ const rootReducer = combineReducers({
     MateriasReducer,
     ClasesReducer,
     LoadingReducer,
-    AsistenciasReducer
+    AsistenciasReducer,
+    EtapaReducer
 });
 
 export const store = createStore(rootReducer, applyMiddleware(thunk));

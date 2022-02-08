@@ -49,12 +49,13 @@ const MateriasList = () => {
         try {
             store.dispatch(addIdCurso(0))
             store.dispatch(addIdClase(0))
+            store.dispatch(addRegimenMateria(""))
             await store.dispatch(addIdMateria(0),{
                 signal: controller.signal
             })
-            setSelectedValue(value)
-            store.dispatch(addIdMateria(value))
-            store.dispatch(addRegimenMateria(value))
+            setSelectedValue(value.id)
+            store.dispatch(addIdMateria(value.id))
+            store.dispatch(addRegimenMateria(value.regimen))
             controller = null
                 //store.dispatch(addNombreMateria(value.nombre))
         } catch (error) {
@@ -78,7 +79,7 @@ const MateriasList = () => {
                     //console.log(materia.length)
                     materia.map((item, key)=> {
                         return(
-                            <Picker.Item label={item.descripcion} value={item.id} key={key}/>
+                            <Picker.Item label={item.descripcion} value={{id:item.id,regimen:item.regimen}} key={key}/>
                         )
                     })
                     :null
