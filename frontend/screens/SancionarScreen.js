@@ -14,57 +14,68 @@ import moment from 'moment'
 
 const SancionarScreen = ({navigation}) => {
 
-    const idDocente = useSelector(state => state.PersonaReducer.DocenteReducer.id)
-    const idAlumno = useSelector(state => state.PersonaReducer.AlumnoReducer.id)
+    const id_docente = useSelector(state => state.PersonaReducer.DocenteReducer.id)
+    const id_alumno = useSelector(state => state.PersonaReducer.AlumnoReducer.id)
 
     const [ sancion, setSancion ] =  useState ({
         descripcion: '',
-        alumnoID: idAlumno,
-        docenteID: idDocente,
+        alumnoID: id_alumno,
+        docenteID: id_docente,
         tipoSancion: 'Leve',
         fecha: moment().utcOffset('-03:00').format('YYYY-MM-DD')
     })
 
-    const focus = useIsFocused()
 
     useEffect(() => {
-    }, [focus])
-
-    useEffect(() => {
-        handleChange("alumnoID", idAlumno)
-    }, [idAlumno])
+        let controller = new AbortController()
+        handleChange("alumnoID", id_alumno)
+        controller = null
+        return () => controller?.abort()
+    }, [id_alumno])
 
     const handleChange = (name, value) => setSancion({ ...sancion, [name]: value})
 
     const handleSancionar = () => {
-        Alert.alert(
-            `Atencion`,
-            `Si continua sancionara un alumno. Por favor asegúresee de que los datos sean correctos.`,
-            [
-                {
-                    text: "Sancionar",
-                    onPress: async () => {
-                        try {
-                            await sancionarAlumno(sancion)
-                            Alert.alert("Sancion exitosa.")
+        const submitSancion = () =>{
+            Alert.alert(
+                `Atencion`,
+                `Si continua sancionara un alumno. Por favor asegúresee de que los datos sean correctos.`,
+                [
+                    {
+                        text: "Sancionar",
+                        onPress: async () => {
                             try {
-                                navigation.navigate("HomeScreenDocente")
+                                await sancionarAlumno(sancion)
+                                Alert.alert("Sancion exitosa.")
+                                try {
+                                    navigation.navigate("HomeScreenDocente")
+                                } catch (error) {
+                                    console.log(error)
+                                }
                             } catch (error) {
                                 console.log(error)
+                                Alert.alert("No se pudo realizar la sancion")
                             }
-                        } catch (error) {
-                            console.log(error)
-                            Alert.alert("No se pudo realizar la sancion")
+                            
                         }
-                        
+                    },
+                    {
+                        text: "Cancelar",
+                        style: "cancel"
                     }
-                },
-                {
-                    text: "Cancelar",
-                    style: "cancel"
-                }
-            ]
-        )
+                ]
+            )
+        }
+
+        if(!sancion.alumnoID){
+            Alert.alert("Seleccione un alumno")
+        }
+        else if(!sancion.descripcion){
+            Alert.alert("Debe ingresar una descripcion")
+        }
+        else{
+            submitSancion()
+        }
     }
 
     return (
@@ -95,39 +106,15 @@ const SancionarScreen = ({navigation}) => {
             <CursosList />
             <AlumnosPorCursoList/>
             
-            {
-                sancion.alumnoID ?
-                sancion.descripcion.length > 0 
-                ?   <TouchableOpacity
-                        style={styles.buttonSave}
-                        onPress = { handleSancionar }
-                    >
-                        <Text style={styles.buttonText}>
-                            SANCIONAR
-                        </Text>
-                    </TouchableOpacity>
-                :   <TouchableOpacity
-                        style={styles.buttonSave}
-                        onPress = { () =>  Alert.alert("Ingrese una descripción.") }
-                    >
-                        <Text style={styles.buttonText}>
-                            SANCIONAR
-                        </Text>
-                    </TouchableOpacity>
-
-
-                :
-                
-                    <TouchableOpacity
-                        style={styles.buttonSave}
-                        onPress = { () => Alert.alert("El curso no posee alumnos.") }
-                    >
-                        <Text style={styles.buttonText}>
-                            SANCIONAR
-                        </Text>
-                    </TouchableOpacity> 
-            }
-            
+            <TouchableOpacity
+                style={styles.buttonSave}
+                onPress = { handleSancionar }
+            >
+                <Text style={styles.buttonText}>
+                    SANCIONAR
+                </Text>
+            </TouchableOpacity>
+     
         </Layout>
     )
 }

@@ -21,11 +21,10 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
     const id_docente = useSelector(state => state.PersonaReducer.DocenteReducer.id)
 
     const curso = useSelector(state => state.alumnosCursoReducer.cursoId)
-    //const [alumno, setAlumno] = useState([{apellido:"CARGANDO..."}])
 
     const [asistencia, setAsistencia] = useState({
         clase: id_clase,
-        alumnos: [{apellido: "CARGANDO..."}],
+        alumnos: [{apellido: "CARGANDO...",nombre:""}],
         estado: [],
         docente: id_docente,
     })
@@ -173,11 +172,7 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
                         try {
                             asistencia.alumnos.map(async (item,index)=>{
                                 await saveAsistencia({alumnoID:item.id, claseID: asistencia.clase,fecha:fecha, estado:asistencia.estado[index], docente: asistencia.docente})
-                                console.log("ASISTENCIA")
-                                console.log("Clase id: ", asistencia.clase)
-                                console.log("Alumno id: ", item)
-                                console.log("Estado: ", asistencia.estado[index])
-                                console.log("--------------------------")
+                                
                             })
                             Alert.alert("Se guardaron las asistencias.")
                             navigation.navigate("HomeScreenDocente")
@@ -196,7 +191,7 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
     }
 
     return (
-        <View style={{ width: "90%", marginTop: "10%"}}>
+        <View style={{ width: "100%", marginTop: "10%"}}>
 
 
 
@@ -211,18 +206,28 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
 
             <DataTable style={{backgroundColor:"#ffffff", borderWidth: 2, borderColor: 'grey', borderRadius: 5}}>
                 <DataTable.Header >
-                    <DataTable.Title>Apellido</DataTable.Title>
-                    <DataTable.Title>Nombre</DataTable.Title>
-                    <DataTable.Title>Estado</DataTable.Title>
+                    <DataTable.Title style={styles.dataTableHeader}>Alumno</DataTable.Title>
+                    <DataTable.Title style={styles.dataTableHeader}>Estado</DataTable.Title>
                 </DataTable.Header>
                     {
                         asistencia.alumnos.length > 0 ? 
                         (asistencia.alumnos.map((row, key)=>(
-                            <DataTable.Row key={key} onPress={ () => handleAsistencia({nombre:row.nombre,id:row.id, key:key}) } >
-                                <DataTable.Cell>{row.apellido} </DataTable.Cell>
-                                <DataTable.Cell> {row.nombre}</DataTable.Cell>
-                                <DataTable.Cell>
-                                    {asistencia.estado[key]}
+                            <DataTable.Row key={key} style={{height:80}} onPress={ () => handleAsistencia({nombre:row.nombre,id:row.id, key:key}) } >
+                                <DataTable.Cell style={{ overflow:"scroll", maxWidth:190}}>
+                                    <View >
+                                        <Text style={{fontSize:20}}>
+                                            {
+                                                ` ${row.apellido} \n ${row.nombre}`
+                                            } 
+                                        </Text>
+                                    </View>
+                                </DataTable.Cell>
+                                <DataTable.Cell style={{justifyContent:"center"}}>
+                                    <View>
+                                        <Text style={{fontSize:20}}>
+                                            {asistencia.estado[key]}
+                                        </Text>
+                                    </View>
                                 </DataTable.Cell>
                             </DataTable.Row>
                         )))    
@@ -263,6 +268,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize:16,
         color: "#fff"
+    },
+    dataTableHeader: {
+        alignItems:"center", 
+        justifyContent:"center" 
     }
 })
 export default AlumnosPorCursoTableAsistencia

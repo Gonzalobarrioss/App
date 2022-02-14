@@ -9,7 +9,7 @@ import MateriasReducer from './reducers/MateriaReducer';
 import ClasesReducer from './reducers/ClaseReducer';
 import LoadingReducer from './reducers/LoadingReducer';
 import AsistenciasReducer from './reducers/AsistenciasReducer'
-import EtapaReducer from './reducers/EtapaReducer'
+import CalificacionesReducer from './reducers/CalificacionesReducer'
 
 const persistConfig = {
     key: 'root',
@@ -23,7 +23,7 @@ const rootReducer = combineReducers({
     ClasesReducer,
     LoadingReducer,
     AsistenciasReducer,
-    EtapaReducer
+    CalificacionesReducer
 });
 
 export const store = createStore(rootReducer, applyMiddleware(thunk));

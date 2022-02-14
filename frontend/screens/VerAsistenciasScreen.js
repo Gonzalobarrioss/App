@@ -33,9 +33,6 @@ const AsistenciasScreen = ({navigation}) => {
     };
 }, [isLoading]);
 
-  //console.log(navigation.getState().index)
-  //console.log(nombre_materia);
-  //<Text style={{color: "#fff", fontSize:18}}>{nombre_materia ? nombre_materia : null}</Text>
   useBackHandler(() => {
     let controller = new AbortController()
     const handleEvent = () => {
@@ -43,19 +40,14 @@ const AsistenciasScreen = ({navigation}) => {
       store.dispatch(addIdClase(0))
       store.dispatch(addIdCurso(0))
       controller = null
-      //navigation.navigate("TomarAsistenciaScreen")
-      console.log("paso");
     }
     if (navigation.getState().index == 4) {
-      console.log("handleEvent");
       handleEvent()
     }
     controller?.abort()
     return  false
-
   })
 
-  
   return ( 
       <Layout>
         { loading ? <ActivityIndicator color="#ffffff" size="large" style={{marginBottom: 10}}/> : <Text style={{height: 36, marginBottom: 10}}/> }

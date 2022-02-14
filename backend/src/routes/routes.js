@@ -47,9 +47,11 @@ router.get('/asistencias/:docente/:id/:fecha', getAsistencias)
 
 router.put('/edit_asistencia', editAsistencias)
 
-router.get('/notas/:id/:etapa', getNotas)
+router.get('/calificaciones/:examen', getNotas)
 
 router.get('/descripcion_notas/:docente/:materia/:etapa', getDescripcionNota)
+
+
 
 router.get('/', (req, res, next) => {
     res.status(404).json({error : "page not founds"});

@@ -128,3 +128,8 @@ export const getDescripcionNotas = async (datos) => {
     const res = await fetch(`${API}/descripcion_notas/${datos.docente}/${datos.materia}/${datos.etapa}`);
     return res.json();
 }
+
+export const getCalificaciones = async (examen) => {
+    const res = await fetch(`${API}/calificaciones/${examen}`)
+    return res.json()
+}

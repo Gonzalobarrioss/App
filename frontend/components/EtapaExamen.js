@@ -3,7 +3,8 @@ import React, {useState, useEffect} from 'react';
 import {Picker} from '@react-native-picker/picker';
 import { useSelector } from 'react-redux';
 import { store } from '../redux/store';
-import { setEtapa } from '../redux/actions/EtapaAction';
+import { setEtapa } from '../redux/actions/CalificacionesAction';
+import { addDescripcion } from '../redux/actions/CalificacionesAction';
 
 const EtapaExamen = () => {
 
@@ -11,6 +12,8 @@ const EtapaExamen = () => {
     const [etapaSeleccionada, setEtapaSeleccionada] = useState([])
     const [etapas, setEtapas] = useState([])
     const regimen = useSelector(state => state.MateriasReducer.regimen)
+
+
 
     useEffect(() => {
         let controller = new AbortController()
@@ -36,6 +39,7 @@ const EtapaExamen = () => {
     }, [regimen])
 
     const handleEtapa = (value) => {
+        store.dispatch(addDescripcion("sin examen"))
         store.dispatch(setEtapa(value))
         setEtapaSeleccionada(value)
     }

@@ -91,7 +91,7 @@ Content-Type: application/json
 }
 
 ###
-GET {{API}}/notas/39819975/1
+GET {{API}}/calificaciones/Examen de derivadas
 
 ###
 GET {{API}}/descripcion_notas/39819975/1

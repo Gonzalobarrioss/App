@@ -94,44 +94,15 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
   
     }, [curso])
 
-    /*
-    const alumnosPorCurso = useSelector(state => state.alumnosCursoReducer.alumnos)
-    useEffect(() => {
-        const loadAlumnos = (alu) => {
-            setCalificaciones({...calificaciones, alumnos:alu })
-        }
-        if (alumnosPorCurso){
-            calificaciones.nota.splice(0,calificaciones.nota.length)
-            alumnosPorCurso.map((item,index)=>{
-                calificaciones.nota.splice(index,1,1)
-            })
-            loadAlumnos(alumnosPorCurso)
-        }
-        else{
-            calificaciones.nota.splice(0,calificaciones.nota.length)
-            loadAlumnos([])
-        }
-    }, [alumnosPorCurso])
-    */
+ 
     const handleSetNota = (nota, key ) => {
         let newNota = '';
         let numbers = '0123456789,.';
-      //  let myRe = /\d(\.\d\d?)?    |   10/
-        // \d(\.\d?)\d? | [1][0]? | [1-9]?
-        
-        //console.log("asd",nota);
-        //console.log("validarrr", myArray);
-        //console.log("key",key);
-     //   console.log("asd", typeof(calificaciones.nota))
+     
         for (let i=0; i < nota.length; i++) {
             if(numbers.indexOf(nota[i]) > -1 ) {
-                //console.log("caracter", numbers.indexOf(nota[i]))4
                 numbers.indexOf(nota[i]) == 10 ? newNota += "." : newNota += nota[i]
-                //newNota = newNota + nota[i];
-                
-                //console.log(newNota);
-                //newNota = parseFloat(newNota.replace(",","."))
-                //console.log(typeof(newNota), newNota);
+        
                 if(newNota > 10){
                     Alert.alert("La nota no puede superar el valor de 10. Se establecerá por defecto nota 10(Diez).")
                     newNota = 10;
@@ -149,11 +120,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
             }
         })
         setCalificaciones({...calificaciones, nota: newArrayNotas})
-        //calificaciones.nota.splice(key,1)
-        //calificaciones.nota.splice(key,0,newNota)
-        //setDatosCorrectos(true)
 
-        //store.dispatch(render(newNota))
     }
 
 
@@ -191,15 +158,6 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                             try {
                                 calificaciones.alumnos.map(async (item,index)=>{
                                     await saveNota({alumnoID: item.id, docenteID:calificaciones.docente, materiaID: calificaciones.materia, regimen: calificaciones.regimen, etapa: calificaciones.etapa, nota: calificaciones.nota[index], descripcion: calificaciones.descripcion})
-                                    console.log("ALUMNO")
-                                    console.log("alumno",item.id, item.nombre)
-                                    console.log("docente id", calificaciones.docente)
-                                    console.log("materia id", calificaciones.materia)
-                                    console.log("regimen", calificaciones.regimen)
-                                    console.log("etapa", calificaciones.etapa)
-                                    console.log("nota", calificaciones.nota[index])
-                                    console.log("descripcion", calificaciones.descripcion)
-                                    console.log("-------------------------------")
                                 })
                                 Alert.alert("Se guardaron las calificaciones.")
                                 navigation.navigate("HomeScreenDocente")
@@ -217,9 +175,6 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
             )  
         } 
 
-        
-        
-
         if (!calificaciones.etapa){
             Alert.alert("Ingrese una etapa")
         }
@@ -232,7 +187,6 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                 let myRe = /^[\d][.][\d][\d]{1}$|^[1][0]{1}$|^[1-9]{1}$/
                 if(myRe.exec(item) == null){
                     notasCorrectas = false
-                    console.log("Algunas notas podrian ser incorrectas.");
                     Alert.alert("Algunas notas podrian ser incorrectas.")
                 }
                 else{
@@ -242,11 +196,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
             if(notasCorrectas){
                 submitData()
             }
-            //submitData()
         }
-        //else if()
-
-
     }
 
     const handleChange = (name, value) => setCalificaciones({ ...calificaciones, [name]: value})
@@ -293,11 +243,11 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                             <DataTable.Row key={key} style={{height:80}}>
                                 <DataTable.Cell style={{ overflow:"scroll", maxWidth:190}} >
                                         <View >
-                                        <Text style={{fontSize:20}}>
-                                            {
-                                            ` ${row.apellido}, \n ${row.nombre}`
-                                            } 
-                                        </Text>
+                                            <Text style={{fontSize:20}}>
+                                                {
+                                                ` ${row.apellido}, \n ${row.nombre}`
+                                                } 
+                                            </Text>
                                         </View>
                                 </DataTable.Cell>
                                 <DataTable.Cell style={{alignContent:"center",  justifyContent:"center", maxWidth:150}} numeric>
@@ -310,7 +260,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                                             keyboardType = "numeric"
                                             maxLength = {4}
                                             value = {calificaciones.nota[key].toString()}
-                                           // onBlur={ (value) => handleSetNota(value,key)}
+                                            selectTextOnFocus = {true}
                                         />
                                     </View>
                                 </DataTable.Cell>
@@ -327,7 +277,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                             </DataTable.Row>
                         )))
                         :   (<DataTable.Row>
-                                <DataTable.Cell> {loading ? `Cargando...` : `Sin Alumnos`}</DataTable.Cell>
+                                <DataTable.Cell> SIN ALUMNOS</DataTable.Cell>
                             </DataTable.Row>
                             )
                             

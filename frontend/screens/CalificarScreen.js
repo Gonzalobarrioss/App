@@ -4,7 +4,10 @@ import Layout from '../components/Layout'
 import MateriasList from '../components/MateriasList'
 import CursosList from '../components/CursosList'
 import AlumnosPorCursoTableCalificacion from '../components/AlumnosPorCursoTableCalificacion'
+import { addIdMateria } from '../redux/actions/MateriaAction'
+import { setEtapa } from '../redux/actions/CalificacionesAction'
 import { useSelector } from 'react-redux';
+import { store } from '../redux/store'
 
 const CalificarScreen = ({navigation}) => {
     
@@ -28,8 +31,8 @@ const CalificarScreen = ({navigation}) => {
     React.useLayoutEffect(() => {
         let controller = new AbortController()
         const handleCalificaciones = () => {
-            //store.dispatch(addIdMateria(0))
-            //store.dispatch(addIdClase(0))
+            store.dispatch(addIdMateria(0))
+            store.dispatch(setEtapa(0))
             controller = null
             navigation.navigate("Ver Calificaciones")
         }

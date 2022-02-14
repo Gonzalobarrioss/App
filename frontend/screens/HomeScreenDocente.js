@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import { Text, TouchableOpacity, StyleSheet, Alert, BackHandler } from 'react-native'
+import { Text, TouchableOpacity, StyleSheet, Alert } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 
 import { useIsFocused } from '@react-navigation/native'
@@ -7,6 +7,7 @@ import {store} from '../redux/store'
 import { addIdMateria } from '../redux/actions/MateriaAction'
 import { addIdClase } from '../redux/actions/ClaseAction'
 import { addIdCurso } from '../redux/actions/AlumnoCursoAction'
+import { addIdAlumno } from '../redux/actions/PersonaAction'
 
 import Layout from '../components/Layout'
 
@@ -18,13 +19,12 @@ const HomeScreenDocente = ({ navigation }) => {
         store.dispatch(addIdMateria(0))
         store.dispatch(addIdClase(0))
         store.dispatch(addIdCurso(0))
+        store.dispatch(addIdAlumno(0))
         controller = null
       return () => {
         controller?.abort()
       };
     }, [focus]);
-    
-    
 
     useBackHandler(() => {
 
@@ -53,7 +53,7 @@ const HomeScreenDocente = ({ navigation }) => {
                     () => {navigation.navigate("TomarAsistenciaScreen")}
                 }
             >
-                <Text style = { styles.txt }>Tomar Asistencia</Text>
+                <Text style = { styles.txt }>Asistencias</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style = { styles.btn }
@@ -61,7 +61,7 @@ const HomeScreenDocente = ({ navigation }) => {
                     () => {navigation.navigate("CalificarScreen")}
                 }
             >
-                <Text style = { styles.txt }>Calificar</Text>
+                <Text style = { styles.txt }>Calificaciones</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style = { styles.btn }
@@ -69,7 +69,7 @@ const HomeScreenDocente = ({ navigation }) => {
                     () => {navigation.navigate("SancionarScreen")}
                 }
             >
-                <Text style = { styles.txt }>Sancionar</Text>
+                <Text style = { styles.txt }>Sanciones</Text>
             </TouchableOpacity>
         </Layout>
     )  

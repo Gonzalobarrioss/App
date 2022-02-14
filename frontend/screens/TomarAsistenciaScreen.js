@@ -7,20 +7,14 @@ import ClasePorMateriaList from '../components/ClasePorMateriaList'
 import AlumnosPorCursoTableAsistencia from '../components/AlumnosPorCursoTableAsistencia'
 
 import { useSelector } from 'react-redux'
-import { useFocusEffect } from '@react-navigation/native'
 import { store } from '../redux/store'
 import { addIdMateria } from '../redux/actions/MateriaAction'
 import { addIdClase } from '../redux/actions/ClaseAction'
 
-
-
 const TomarAsistenciaScreen = ({navigation}) => {
-
 
     const materia = useSelector(state => state.MateriasReducer.id)
     const curso = useSelector(state => state.alumnosCursoReducer.cursoId)
-    const clases = useSelector(state => state.ClasesReducer.id)
-
     const isLoading = useSelector(state => state.LoadingReducer.loading)
 
     const [loading, setLoading] = useState(false)
