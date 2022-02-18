@@ -1,6 +1,16 @@
 import { connect } from "../database-mysql.js"
 
-export const getAllCursos = async (req , res) => {
+export const getCursosDocenteMateria = async (req , res) => {
+    const connection = await connect();
+    const [rows] = await connection.query("SELECT c.id,a.descripcion,c.nivel,c.turno,c.grado_ano,c.division FROM cursos c INNER JOIN aulas a ON c.aula_id = a.id INNER JOIN docente_materia dm ON c.id = dm.curso_id WHERE dm.docente_id = ? AND dm.materia_id = ? AND c.estado = 1",[
+        req.params.docente,
+        req.params.materia
+    ]);
+    res.json(rows);
+    connection.destroy()
+}
+
+export const getCursos = async (req , res) => {
     const connection = await connect();
     const [rows] = await connection.query("SELECT c.id,a.descripcion,c.nivel,c.turno,c.grado_ano,c.division FROM cursos c INNER JOIN aulas a ON c.aula_id = a.id WHERE c.estado = 1");
     res.json(rows);
@@ -15,3 +25,4 @@ export const getAllAlumnosPorCurso = async (req , res) => {
     res.json(rows);
     connection.destroy()
 }
+

@@ -5,7 +5,9 @@ import { bajaMesaExamen } from '../api'
 import { useSelector } from 'react-redux'
 
 import { store } from '../redux/store'
-//import { render } from '../redux/actions/RenderAction'
+import { addIdAlumno } from '../redux/actions/PersonaAction'
+import { renderIt } from '../redux/actions/RenderAction'
+import { isLoading } from '../redux/actions/LoadingAction'
 
 
 const MesaExamen = ({ mesa }) => {
@@ -35,8 +37,11 @@ const MesaExamen = ({ mesa }) => {
                     text: "Baja",
                     onPress: async () => {
                         try {
-                            await bajaMesaExamen(inscripcion)
-                            //store.dispatch(render(true))
+                            store.dispatch(isLoading(true))
+                            await bajaMesaExamen(inscripcion).finally(()=>store.dispatch(isLoading(false)))
+                            //store.dispatch(renderIt(true))
+                            //store.dispatch(addIdAlumno(0))
+                            //store.dispatch(addIdAlumno(idAlumno))
                             Alert.alert("Baja exitosa.")
                         } catch (error) {
                             console.log(error)

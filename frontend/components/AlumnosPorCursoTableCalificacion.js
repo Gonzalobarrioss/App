@@ -11,6 +11,7 @@ import { DataTable } from 'react-native-paper';
 import { isLoading } from '../redux/actions/LoadingAction';
 
 import { saveNota, getAlumnosXCurso } from '../api'
+import moment from 'moment'
 
 const AlumnosPorCursoTableCalificacion = ({navigation}) => {
 
@@ -56,8 +57,19 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
         materia: materia,
         regimen: regimen,
         descripcion: null,
-        etapa: etapa
+        etapa: etapa,
+        curso:curso,
+        fecha: moment().utcOffset('-03:00').format('YYYY-MM-DD')
     })
+
+    useEffect(() => {
+        let controller = new AbortController()
+        setCalificaciones({...calificaciones, etapa: etapa})
+        controller = null
+        return () => controller?.abort()
+        
+    }, [etapa])
+    
 
     useEffect( () => {
         store.dispatch(isLoading(true))
@@ -105,7 +117,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                 numbers.indexOf(nota[i]) == 10 ? newNota += "." : newNota += nota[i]
         
                 if(newNota > 10){
-                    Alert.alert("La nota no puede superar el valor de 10. Se establecerá por defecto nota 10(Diez).")
+                    Alert.alert("La nota no puede superar el valor de 10. Se establecerá por defecto nota 10(DIEZ).")
                     newNota = 10;
                 }
             }
@@ -158,7 +170,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                         onPress: () => {
                             try {
                                 calificaciones.alumnos.map(async (item,index)=>{
-                                    await saveNota({alumnoID: item.id, docenteID:calificaciones.docente, materiaID: calificaciones.materia, regimen: calificaciones.regimen, etapa: calificaciones.etapa, nota: calificaciones.nota[index], descripcion: calificaciones.descripcion})
+                                    await saveNota({alumnoID: item.id, docenteID:calificaciones.docente, materiaID: calificaciones.materia, regimen: calificaciones.regimen, etapa: calificaciones.etapa, nota: calificaciones.nota[index], descripcion: calificaciones.descripcion,curso:calificaciones.curso,fecha:calificaciones.fecha})
                                 })
                                 Alert.alert("Se guardaron las calificaciones.")
                                 navigation.navigate("HomeScreenDocente")
@@ -177,6 +189,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
         } 
 
         if (!calificaciones.etapa){
+            console.log("etapa", calificaciones.etapa)
             Alert.alert("Ingrese una etapa")
         }
         else if(!calificaciones.descripcion){
@@ -188,7 +201,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                 let myRe = /^[\d][.][\d][\d]{1}$|^[1][0]{1}$|^[1-9]{1}$/
                 if(myRe.exec(item) == null){
                     notasCorrectas = false
-                    Alert.alert("Algunas notas podrian ser incorrectas.")
+                    Alert.alert("Algunas notas podrian ser incorrectas. Asegúrese de ingresar correctamente\n todos los valores flotantes.")
                 }
                 else{
                     console.log("todo correcto");
@@ -315,16 +328,18 @@ const styles = StyleSheet.create({
         marginTop: "10%", 
     },
     buttonSave: {
-        paddingTop: 10,
-        paddingBottom: 10,
+        padding: 10,
         borderRadius: 5,
         marginTop: "10%",
         backgroundColor: "#10ac84",
         width: "100%",
+        height: 50,
+        justifyContent: "center"
     },
     buttonText: {
         color: "#ffffff",
-        textAlign: "center"
+        textAlign: "center",
+        fontSize: 20
     },
     container:{
         width: "100%", 

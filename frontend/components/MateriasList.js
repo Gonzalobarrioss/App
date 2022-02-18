@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux'
 import { addIdClase } from '../redux/actions/ClaseAction';
 import { addIdCurso } from '../redux/actions/AlumnoCursoAction';
 import { isLoading } from '../redux/actions/LoadingAction';
-import { setEtapa } from '../redux/actions/CalificacionesAction';
+import { addDescripcion, setEtapa } from '../redux/actions/CalificacionesAction';
 
 const MateriasList = () => {
 
@@ -42,7 +42,7 @@ const MateriasList = () => {
         
         loadMaterias(id_docente);
         return () => controller?.abort();
-    }, [focus,id_docente]);
+    }, [id_docente]);
  
 
     const handleMateria = async (value) => {
@@ -53,6 +53,7 @@ const MateriasList = () => {
             await store.dispatch(addRegimenMateria(""))
             await store.dispatch(addIdMateria(0))
             await store.dispatch(setEtapa(0))
+            store.dispatch(addDescripcion(""))
             setSelectedValue(value.id)
             store.dispatch(addIdMateria(value.id))
             store.dispatch(addRegimenMateria(value.regimen))

@@ -1,7 +1,8 @@
 import React, {useEffect} from 'react'
 import MesaExamenesList from '../components/MesaExamenesList'
-import { BackHandler, Alert } from 'react-native'
+import { BackHandler, Alert, ActivityIndicator } from 'react-native'
 import Layout from '../components/Layout'
+import { useSelector } from 'react-redux'
 
 const HomeScreenAlumno = ({navigation}) => { 
    
@@ -24,8 +25,10 @@ const HomeScreenAlumno = ({navigation}) => {
     return () => backHandler.remove();
   }, []);
 
+  const loading = useSelector(state => state.LoadingReducer.loading)
   return ( 
     <Layout>
+      { loading ? <ActivityIndicator  color="#ffffff" size="large"  /> : null }
       <MesaExamenesList />
     </Layout>
   )

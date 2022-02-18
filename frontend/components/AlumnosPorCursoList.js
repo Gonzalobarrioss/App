@@ -6,6 +6,7 @@ import { addIdAlumno } from '../redux/actions/PersonaAction'
 import { useSelector } from 'react-redux';
 import { store } from '../redux/store'
 import { getAlumnosXCurso } from '../api'
+import { isLoading } from '../redux/actions/LoadingAction';
 
 const AlumnosPorCursoList = () => {
 
@@ -16,14 +17,16 @@ const AlumnosPorCursoList = () => {
 
     useEffect( () => {
         let controller = new AbortController()
+        store.dispatch(isLoading(true))
         const getAlumnos = async (curso) =>{
             const data = await getAlumnosXCurso(curso)
             store.dispatch(addIdAlumno(0))
+            store.dispatch(isLoading(false))
             setAlumno(data)
             controller = null
         }
         try{
-            curso ? getAlumnos(curso) : console.log("curso", curso)
+            curso ? getAlumnos(curso) : store.dispatch(isLoading(false))
         } catch (error) {
             console.log("error en GetAlumnosPorCurso",error)
         }

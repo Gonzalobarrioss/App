@@ -100,13 +100,13 @@ const AsistenciaItem = ({ asistencias }) => {
 
 const styles = StyleSheet.create({
     itemContainer: {
-        backgroundColor:"#333333",
+        backgroundColor:"#ffffff",
         padding: 20,
         marginVertical: 8,
         borderRadius: 5
     },
     itemDescripcion: {
-        color: "#ffffff",
+        color: "#333333",
         fontSize:20
     }
 })

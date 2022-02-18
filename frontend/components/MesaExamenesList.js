@@ -7,29 +7,36 @@ import MesaExamenItem from './MesaExamenItem'
 import MesaExamenInscriptasItem from './MesaExamenInscriptasItem'
 
 import { useSelector } from 'react-redux'
+import { store } from '../redux/store'
+import { isLoading } from '../redux/actions/LoadingAction'
 
 const MesaExamenes = () => {
 
-    const idAlumno = useSelector(state => state.PersonaReducer.AlumnoReducer.id)
+    const id_alumno = useSelector(state => state.PersonaReducer.AlumnoReducer.id)
 
     const [mesasExamenes, setMesasExamenes] = useState([])
     const [mesasExamenesInscriptas, setMesasExamenesInscriptas] = useState([])
 
-    const render = useSelector(state => state.RenderReducer)
+    const loading = useSelector(state => state.LoadingReducer.loading)
+    //const render = useSelector(state => state.RenderReducer)
     useEffect(() => {
+        let controller = new AbortController()
 
         const loadMesasExamenes = async () => {
-            const data = await getMesaExamen(idAlumno);
+            const data = await getMesaExamen(id_alumno);
             setMesasExamenes(data)
+            controller = null 
         }
         const loadMesasExamenesInscriptas = async () => {
-            const data = await getMesaExamenInscriptas(idAlumno);
+            const data = await getMesaExamenInscriptas(id_alumno);
             setMesasExamenesInscriptas(data)
+            controller = null 
         }
+        
         loadMesasExamenes()
         loadMesasExamenesInscriptas()
-        
-    }, [render])
+        return () => controller?.abort()
+    }, [loading])
 
    
 

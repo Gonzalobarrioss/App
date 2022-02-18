@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { Text, TextInput,  StyleSheet, TouchableOpacity, Alert, View } from 'react-native'
+import { Text, TextInput,  StyleSheet, TouchableOpacity, Alert, View, ActivityIndicator } from 'react-native'
 import {Picker} from '@react-native-picker/picker';
 import CursosList from '../components/CursosList'
 import AlumnosPorCursoList from '../components/AlumnosPorCursoList'
@@ -17,6 +17,7 @@ const SancionarScreen = ({navigation}) => {
 
     const id_docente = useSelector(state => state.PersonaReducer.DocenteReducer.id)
     const id_alumno = useSelector(state => state.PersonaReducer.AlumnoReducer.id)
+    const loading = useSelector( state => state.LoadingReducer.loading)
 
     const [ sancion, setSancion ] =  useState ({
         descripcion: '',
@@ -81,6 +82,8 @@ const SancionarScreen = ({navigation}) => {
 
     return (
         <Layout>
+            { loading ? <ActivityIndicator color="#ffffff" size="large" /> : null }
+
             <Text style={styles.headerText}>FORMULARIO SANCION</Text>
             
             <View style={styles.container}>
@@ -126,7 +129,7 @@ const styles = StyleSheet.create({
     headerText: {
         color:"#ffffff", 
         fontSize:22,
-        textDecorationLine: "underline"
+        textDecorationLine: "underline",
     },
     inputDescripcion: {
         width: "100%",

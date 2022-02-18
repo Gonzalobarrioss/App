@@ -262,11 +262,13 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         fontSize: 18,
         width: "100%",
-        marginTop: 10
+        marginTop: 10,
+        height: 50,
+        justifyContent: "center"
     },
     txtGuardarAsistencia:{
         textAlign: 'center',
-        fontSize:16,
+        fontSize:20,
         color: "#fff"
     },
     dataTableHeader: {

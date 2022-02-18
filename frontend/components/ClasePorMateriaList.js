@@ -34,22 +34,15 @@ const ClasePorMateriasList = () => {
             .finally(()=> {
                 store.dispatch(isLoading(false))
             })
-            if(!data.length){
-               // console.log("paso");
-                store.dispatch(addIdCurso(0))
-            }
-            else{
-                store.dispatch(addIdCurso(selectedValue))
-                //selectedValue ? store.dispatch(addIdCurso(data[0].curso_id)) : store.dispatch(addIdCurso(selectedValue))
-            }
+
+            data.length ? store.dispatch(addIdCurso(selectedValue)) : store.dispatch(addIdCurso(0))
+            
             setClases(data)
             controller =  null 
         }
-
-        if(materia){
-            console.log("loadclases")
-            loadClases();
-        }
+    
+        materia ? loadClases() : store.dispatch(isLoading(false)) 
+        
         return () => controller?.abort()
     }, [materia]);
 

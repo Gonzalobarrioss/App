@@ -1,8 +1,9 @@
-import { SET_ETAPA, SET_DESCRIPCION } from "../actions/CalificacionesAction";
+import { SET_ETAPA, SET_DESCRIPCION, SET_FECHA } from "../actions/CalificacionesAction";
 
 const initialState = {
     etapa: "",
-    descripcion: ""
+    descripcion: "",
+    fecha: ""
 }
 
 
@@ -12,6 +13,8 @@ function CalificacionesReducer (state = initialState, action){
             return { ...state, etapa: action.payload }
         case SET_DESCRIPCION:
             return { ...state, descripcion: action.payload }
+        case SET_FECHA:
+            return { ...state, fecha: action.payload }
         default:
             return state
     }

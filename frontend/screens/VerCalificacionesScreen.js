@@ -8,14 +8,17 @@ import {Picker} from '@react-native-picker/picker';
 
 import { useSelector } from 'react-redux'
 import MateriasList from '../components/MateriasList'
+import CursosDocenteMateriaList from '../components/CursosDocenteMateriaList'
 
 import { addIdMateria } from '../redux/actions/MateriaAction'
-import { addDescripcion } from '../redux/actions/CalificacionesAction'
+import { addDescripcion, setEtapa, setFecha } from '../redux/actions/CalificacionesAction'
 import { store } from '../redux/store'
 
 
 import { getDescripcionNotas } from '../api'
 import EtapaExamen from '../components/EtapaExamen'
+import { isLoading } from '../redux/actions/LoadingAction'
+import { addIdCurso } from '../redux/actions/AlumnoCursoAction'
 
 
 
@@ -25,13 +28,14 @@ const CalificacionesScreen = ({navigation}) => {
   const regimen = useSelector(state => state.MateriasReducer.regimen)
   const id_docente = useSelector(state => state.PersonaReducer.DocenteReducer.id)
   const etapa = useSelector(state => state.CalificacionesReducer.etapa)
+  const id_curso = useSelector(state => state.alumnosCursoReducer.cursoId)
 
   const [descripcion, setDescripcion] = useState([])
   const [descripcionSeleccionada, setDescripcionSeleccionada] = useState("")
 
-  const [loading, setLoading] = useState(false)
-  const isLoading = useSelector(state => state.LoadingReducer.loading)
-
+  //const [loading, setLoading] = useState(false)
+  const loading = useSelector(state => state.LoadingReducer.loading)
+/*
   useEffect(() => {
     let controller = new AbortController()
     setLoading(isLoading)
@@ -39,52 +43,55 @@ const CalificacionesScreen = ({navigation}) => {
     return () => {
       controller?.abort()    
     };
-  }, [isLoading]);
+  }, [isLoading]);*/
 
   useEffect(() => {
+    store.dispatch(isLoading(true))
     let controller = new AbortController()
     const getDescripcion = async () => {
       const datos = {
         docente: id_docente,
         materia: materia,
-        etapa: etapa
+        etapa: etapa,
+        curso: id_curso
       }
-      const data = await getDescripcionNotas(datos)
+      const data = await getDescripcionNotas(datos).finally(()=>store.dispatch(isLoading(false)))
 
       data.length ? setDescripcion(data) : setDescripcion([])
       controller = null
     }
 
-    console.log("obtiene")
-    materia && etapa ? getDescripcion() : null
+    //console.log("obtiene")
+    materia && etapa ? getDescripcion() : store.dispatch(isLoading(false))
 
     return () => {
       controller?.abort()    
     };
-  }, [materia,id_docente,etapa]);
+  }, [materia,id_docente,etapa,id_curso]);
 
 
   useBackHandler(() => {
     let controller = new AbortController()
     const handleEvent = async () => {
-      
       await store.dispatch(addIdMateria(0))
+      await store.dispatch(setEtapa(0))
+      await store.dispatch(addIdCurso(0))
       controller = null
-      //navigation.navigate("TomarCalificacionescreen")
+      navigation.navigate("CalificarScreen")
       console.log("paso");
     }
     if (navigation.getState().index == 4) {
-      console.log("handleEvent");
       handleEvent()
     }
     controller?.abort()
-    return  false
+    return  true
 
   })
 
   const handleDescripcion = (value) => {
-    setDescripcionSeleccionada(value)
-    store.dispatch(addDescripcion(value))
+    setDescripcionSeleccionada(value.descripcion)
+    store.dispatch(addDescripcion(value.descripcion))
+    store.dispatch(setFecha(value.fecha))
   }
 
   return ( 
@@ -94,26 +101,29 @@ const CalificacionesScreen = ({navigation}) => {
         <MateriasList /> 
         <View style={{width:"100%", justifyContent:'center', alignItems:'center'}}>
           <View>
-            { materia ? <Text style={{color:"#fff", fontSize: 18, marginVertical: 10}}> Regimen: {regimen ? regimen : null} </Text> : null }
+            { materia ? <Text style={{color:"#fff", fontSize: 20, marginVertical: 10}}> Regimen: {regimen ? regimen : null} </Text> : null }
           </View>
           { materia ? <EtapaExamen /> : null }
 
-          { etapa ? 
+          { etapa ? <CursosDocenteMateriaList /> : null }
+
+          { materia && id_curso ? 
             <View style={styles.container}> 
             
                 <Picker
                   style={styles.picker}
+                  dropdownIconColor="#ffffff"
                   selectedValue={descripcionSeleccionada}
-                  onValueChange={(itemValue) => handleDescripcion(itemValue)}    
+                  onValueChange={(item) => handleDescripcion(item)}    
                 >
-                  <Picker.Item label ={"Seleccione examen"} enabled={false} />
+                  <Picker.Item label ={"Seleccione examen"} enabled={false} style={styles.pickerItem} />
                 {
                   descripcion.length 
                   ?
                     descripcion.map((item,key)=>{
-                      return ( <Picker.Item label={item.descripcion} value={item.descripcion} key={key} />)
+                      return ( <Picker.Item label={item.descripcion+' - '+item.fecha.slice(0,10)} value={{descripcion:item.descripcion,fecha:item.fecha.slice(0,10)}} key={key} style={styles.pickerItem} />)
                     })
-                  : <Picker.Item label={"NO HAY EXÁMENES"} enabled={false} />
+                  : <Picker.Item label={"NO HAY EXÁMENES"} enabled={false} style={styles.pickerItem}  />
                 }      
               </Picker>
             </View>
@@ -132,15 +142,17 @@ const CalificacionesScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   picker:{
       color:"#fff",
-      height: 50,
+      height: 70,
+  },
+  pickerItem:{
+    fontSize:20
   },
   container:{
-    width: "90%", 
+    width: "100%", 
     marginTop: "10%",
     borderWidth: 2, 
     borderColor: '#10ac84', 
     borderRadius: 5,
-    
   },
 })
 

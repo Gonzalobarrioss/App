@@ -11,6 +11,8 @@ import { store } from '../redux/store'
 import { addIdMateria } from '../redux/actions/MateriaAction'
 import { addIdClase } from '../redux/actions/ClaseAction'
 
+import { useIsFocused } from '@react-navigation/native'
+
 const TomarAsistenciaScreen = ({navigation}) => {
 
     const materia = useSelector(state => state.MateriasReducer.id)
@@ -18,6 +20,8 @@ const TomarAsistenciaScreen = ({navigation}) => {
     const isLoading = useSelector(state => state.LoadingReducer.loading)
 
     const [loading, setLoading] = useState(false)
+
+    const isFocused = useIsFocused();
 
     useEffect(() => {
         let controller = new AbortController()
@@ -60,7 +64,7 @@ const TomarAsistenciaScreen = ({navigation}) => {
             <Layout>
                 { loading ? <ActivityIndicator color="#ffffff" size="large" style={{marginBottom: 10}}/> : <Text style={{height: 36, marginBottom: 10}}/> }
 
-                <MateriasList />
+                { isFocused ? <MateriasList /> : null }
                 { materia  ? <ClasePorMateriaList/> : null}
                 { curso ? <AlumnosPorCursoTableAsistencia navigation={navigation}/> : null}
             </Layout>

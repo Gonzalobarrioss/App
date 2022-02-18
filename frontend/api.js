@@ -55,7 +55,12 @@ export const bajaMesaExamen = async (Alumno) => {
     return res
 }
 
-export const getAllCursos = async () => {
+export const getCursosDocenteMateria = async (datos) => {
+    const res = await fetch(`${API}/cursos/${datos.docente}/${datos.materia}`);
+    return res.json();
+}
+
+export const getCursos = async () => {
     const res = await fetch(`${API}/cursos`);
     return res.json();
 }
@@ -125,11 +130,11 @@ export const editAsistencias = async (datos) => {
 }
 
 export const getDescripcionNotas = async (datos) => {
-    const res = await fetch(`${API}/descripcion_notas/${datos.docente}/${datos.materia}/${datos.etapa}`);
+    const res = await fetch(`${API}/descripcion_notas/${datos.docente}/${datos.materia}/${datos.etapa}/${datos.curso}`);
     return res.json();
 }
 
-export const getCalificaciones = async (examen) => {
-    const res = await fetch(`${API}/calificaciones/${examen}`)
+export const getCalificaciones = async (datos) => {
+    const res = await fetch(`${API}/calificaciones/${datos.descripcion}/${datos.fecha}/${datos.curso}`)
     return res.json()
 }

@@ -17,7 +17,7 @@ const StartScreen = ({navigation}) => {
     return (
             <Layout>
             <View style={styles.card}>
-                <Text style={styles.heading}>Bienvenido: </Text>
+                <Text style={styles.heading}>Bienvenido</Text>
                 <View style={styles.form}>
                     <View style={styles.inputs}>
                         <TouchableOpacity
@@ -39,28 +39,23 @@ const StartScreen = ({navigation}) => {
     );
 };
 
-const styles = StyleSheet.create({
-    image: {
-        flex: 1,
-        width: '100%',
-        alignItems: 'center',
-    },  
+const styles = StyleSheet.create({ 
     card: {
         flex: 1,
         backgroundColor: '#ffffff',
         width: '80%',
-        marginTop: '40%',
+        marginTop: '20%',
         borderRadius: 20,
         maxHeight: 380,
-        paddingBottom: '30%',
+        paddingBottom: '10%',
     },
     heading: {
-        fontSize: 30,
+        fontSize: 28,
         fontWeight: 'bold',
-        marginLeft: '10%',
-        marginTop: '5%',
-        marginBottom: '30%',
+        margin: 15,
         color: 'black',
+        justifyContent: "center",
+        textAlign:"center",
     },
     form: {
         flex: 1,

@@ -28,7 +28,11 @@ const AuthScreen = ({ navigation}) => {
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
+        let controller = new AbortController()
         setMessage('')
+        controller = null
+
+        return () => controller?.abort()
         //console.log(rol)
     }, [rol])
 
@@ -40,11 +44,6 @@ const AuthScreen = ({ navigation}) => {
     };
 
     const onLoggedIn = token => {
-
-        const datos = {
-            username: username,
-            rol: rol
-        }
 
         fetch(`${API}/private`, {
             method: 'GET',
@@ -86,45 +85,50 @@ const AuthScreen = ({ navigation}) => {
 
     const onSubmitHandler = () => {
         
-        setLoading(true)
+        const submitData = () => {
+            setLoading(true)
 
-        const datos = {
-            id,
-            username,
-            password,
-            rol,
-        };
-
-        fetch(`${API}/${isLogin ? 'login' : 'register'}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(datos),
-        }) 
-        .then(async res => { 
-            try {
-                const jsonRes = await res.json();
-                if (res.status !== 200) {
-                    setIsError(true);
-                    setMessage(jsonRes.message);
-                } else {
-                    onLoggedIn(jsonRes.token);
-                    setIsError(false);
-                    setMessage(jsonRes.message);
-                    setIsLogin(true)
-                    
-                }
-            } catch (err) {
-                console.log(err);
+            const datos = {
+                id,
+                username,
+                password,
+                rol,
             };
-        })
-        .catch(err => {
-            console.log(err);
-        })
-        .finally(() =>{
-            setLoading(false)
-        });
+    
+            fetch(`${API}/${isLogin ? 'login' : 'register'}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(datos),
+            }) 
+            .then(async res => { 
+                try {
+                    const jsonRes = await res.json();
+                    if (res.status !== 200) {
+                        setIsError(true);
+                        setMessage(jsonRes.message);
+                    } else {
+                        onLoggedIn(jsonRes.token);
+                        setIsError(false);
+                        setMessage(jsonRes.message);
+                        setIsLogin(true)
+                        
+                    }
+                } catch (err) {
+                    console.log(err);
+                };
+            })
+            .catch(err => {
+                console.log(err);
+            })
+            .finally(() =>{
+                setLoading(false)
+            });
+        }
+
+        !isLogin && !datosCorrectos ? setMessage('Ingrese correctamente todos los datos') : submitData()
+        
     };
 
     const getMessage = () => {
@@ -153,7 +157,25 @@ const AuthScreen = ({ navigation}) => {
         }
         setId(newText)
     }
-
+    /*
+     {
+                            !isLogin 
+                            ? (!datosCorrectos 
+                                ? 
+                                    <TouchableOpacity style={styles.button} onPress={() => setMessage('Ingrese correctamente todos los datos')}>
+                                        <Text style={styles.buttonText}>Aceptar</Text>
+                                    </TouchableOpacity>
+                                :   
+                                    <TouchableOpacity style={styles.button} onPress={onSubmitHandler}>
+                                        <Text style={styles.buttonText}>Aceptar</Text>
+                                    </TouchableOpacity>
+                            )
+                            :
+                                <TouchableOpacity style={styles.button} onPress={onSubmitHandler}>
+                                    <Text style={styles.buttonText}>Aceptar</Text>
+                                </TouchableOpacity>      
+                        }
+    */
     return (
         <Layout>
             { loading ? <ActivityIndicator color="#ffffff" size="large" /> : null }
@@ -179,23 +201,9 @@ const AuthScreen = ({ navigation}) => {
                         <TextInput secureTextEntry={true} style={styles.input} placeholder="Contraseña" onChangeText={setPassword}></TextInput>
                         <Text style={[styles.message, {color: isError ? 'red' : 'green'}]}>{message ? getMessage() : null}</Text>
                         
-                        {
-                            !isLogin 
-                            ? (!datosCorrectos 
-                                ? 
-                                    <TouchableOpacity style={styles.button} onPress={() => setMessage('Ingrese correctamente todos los datos')}>
-                                        <Text style={styles.buttonText}>Aceptar</Text>
-                                    </TouchableOpacity>
-                                :   
-                                    <TouchableOpacity style={styles.button} onPress={onSubmitHandler}>
-                                        <Text style={styles.buttonText}>Aceptar</Text>
-                                    </TouchableOpacity>
-                            )
-                            :
-                                <TouchableOpacity style={styles.button} onPress={onSubmitHandler}>
-                                    <Text style={styles.buttonText}>Aceptar</Text>
-                                </TouchableOpacity>      
-                        }
+                        <TouchableOpacity style={styles.button} onPress={onSubmitHandler}>
+                            <Text style={styles.buttonText}>Aceptar</Text>
+                        </TouchableOpacity>
                         
                         <TouchableOpacity style={styles.buttonAlt} onPress={onChangeHandler}>
                             <Text style={styles.buttonAltText}>{isLogin ? 'Registrarse' : 'Iniciar Sesión'}</Text>
@@ -208,12 +216,7 @@ const AuthScreen = ({ navigation}) => {
     );
 };
 
-const styles = StyleSheet.create({
-    image: {
-        flex: 1,
-        width: '100%',
-        alignItems: 'center',
-    },  
+const styles = StyleSheet.create({  
     card: {
         flex: 1,
         backgroundColor: '#ffffff',
@@ -221,15 +224,15 @@ const styles = StyleSheet.create({
         marginTop: '20%',
         borderRadius: 20,
         maxHeight: 380,
-        paddingBottom: '30%',
+        paddingBottom: '10%',
     },
     heading: {
-        fontSize: 30,
+        fontSize: 28,
         fontWeight: 'bold',
-        marginLeft: '10%',
-        marginTop: '5%',
-        marginBottom: '30%',
+        margin: 15,
         color: 'black',
+        justifyContent: "center",
+        textAlign:"center"
     },
     form: {
         flex: 1,

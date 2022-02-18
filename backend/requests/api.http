@@ -17,9 +17,9 @@ Content-Type: application/json
     "mesaID": "1"
 }
 
-//GET ALL CURSOS
+//GET ALL CURSOS DOCENTE MATERIA
 ###
-GET {{API}}/cursos
+GET {{API}}/cursos/39819975/4
 
 //GET ALUMNOS X CURSO
 ###
@@ -94,4 +94,4 @@ Content-Type: application/json
 GET {{API}}/calificaciones/Examen de derivadas
 
 ###
-GET {{API}}/descripcion_notas/39819975/1
+GET {{API}}/descripcion_notas/39819977/2/1/2

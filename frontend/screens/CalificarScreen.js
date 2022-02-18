@@ -3,12 +3,13 @@ import { Text, ScrollView, StyleSheet, ActivityIndicator, TouchableOpacity } fro
 import Layout from '../components/Layout'
 import MateriasList from '../components/MateriasList'
 import EtapaExamen from '../components/EtapaExamen'
-import CursosList from '../components/CursosList'
+import CursosDocenteMateriaList from '../components/CursosDocenteMateriaList'
 import AlumnosPorCursoTableCalificacion from '../components/AlumnosPorCursoTableCalificacion'
 import { addIdMateria } from '../redux/actions/MateriaAction'
 import { setEtapa } from '../redux/actions/CalificacionesAction'
 import { useSelector } from 'react-redux';
 import { store } from '../redux/store'
+import { useIsFocused } from '@react-navigation/native'
 
 const CalificarScreen = ({navigation}) => {
     
@@ -20,6 +21,8 @@ const CalificarScreen = ({navigation}) => {
     const isLoading = useSelector(state => state.LoadingReducer.loading)
 
     const [loading, setLoading] = useState(false)
+
+    const isFocused = useIsFocused();
 
     useEffect(() => {
         let controller = new AbortController()
@@ -59,10 +62,10 @@ const CalificarScreen = ({navigation}) => {
             <Layout>
                 { loading ? <ActivityIndicator color="#ffffff" size="large" style={{marginBottom: 10}}/> : <Text style={{height: 36, marginBottom: 10}}/> }
 
-                <MateriasList /> 
+                { isFocused ? <MateriasList /> : null }
                 { materia ? <Text style={styles.txtRegimen}> Regimen: {regimen ? regimen : null} </Text> : null }
                 { materia ? <EtapaExamen /> : null }
-                { etapa ? <CursosList /> : null }
+                { etapa ? <CursosDocenteMateriaList /> : null }
                 
                 { curso ? <AlumnosPorCursoTableCalificacion navigation={navigation}/> : null }
             </Layout>

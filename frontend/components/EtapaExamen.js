@@ -39,6 +39,7 @@ const EtapaExamen = () => {
     }, [regimen])
 
     const handleEtapa = (value) => {
+        console.log("cambio etapa")
         store.dispatch(addDescripcion("sin examen"))
         store.dispatch(setEtapa(value))
         setEtapaSeleccionada(value)

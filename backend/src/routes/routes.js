@@ -2,7 +2,7 @@ import express from 'express';
 
 import { register, login, isAuth } from '../controllers/Autenticacion.js'
 import { bajaMesaExamen, getAllMesaDeExamenes,getAllMesaDeExamenesInscriptas, inscripcionMesaExamen } from '../controllers/MesaDeExamenes.js'
-import { getAllCursos, getAllAlumnosPorCurso } from '../controllers/Cursos.js'
+import { getCursosDocenteMateria, getAllAlumnosPorCurso, getCursos } from '../controllers/Cursos.js'
 import { getAllMateriasPorProfesor, getRegimenPorMateria } from '../controllers/Materias.js'
 import { addSancion } from '../controllers/Sanciones.js'
 import { addNota, getNotas, getDescripcionNota } from '../controllers/Calificaciones.js'
@@ -27,7 +27,9 @@ router.post('/inscripcion_mesa', inscripcionMesaExamen)
 
 router.delete('/baja_mesa', bajaMesaExamen)
 
-router.get('/cursos', getAllCursos)
+router.get('/cursos/:docente/:materia', getCursosDocenteMateria)
+
+router.get('/cursos', getCursos)
 
 router.get('/alu_cursos/:id', getAllAlumnosPorCurso)
 
@@ -47,11 +49,9 @@ router.get('/asistencias/:docente/:id/:fecha', getAsistencias)
 
 router.put('/edit_asistencia', editAsistencias)
 
-router.get('/calificaciones/:examen', getNotas)
+router.get('/calificaciones/:descripcion/:fecha/:curso', getNotas)
 
-router.get('/descripcion_notas/:docente/:materia/:etapa', getDescripcionNota)
-
-
+router.get('/descripcion_notas/:docente/:materia/:etapa/:curso', getDescripcionNota)
 
 router.get('/', (req, res, next) => {
     res.status(404).json({error : "page not founds"});
