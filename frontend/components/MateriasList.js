@@ -12,6 +12,7 @@ import { useSelector } from 'react-redux'
 import { addIdClase } from '../redux/actions/ClaseAction';
 import { addIdCurso } from '../redux/actions/AlumnoCursoAction';
 import { isLoading } from '../redux/actions/LoadingAction';
+import { setEtapa } from '../redux/actions/CalificacionesAction';
 
 const MateriasList = () => {
 
@@ -47,12 +48,11 @@ const MateriasList = () => {
     const handleMateria = async (value) => {
         let controller = new AbortController()
         try {
-            store.dispatch(addIdCurso(0))
-            store.dispatch(addIdClase(0))
-            store.dispatch(addRegimenMateria(""))
-            await store.dispatch(addIdMateria(0),{
-                signal: controller.signal
-            })
+            await store.dispatch(addIdCurso(0))
+            await store.dispatch(addIdClase(0))
+            await store.dispatch(addRegimenMateria(""))
+            await store.dispatch(addIdMateria(0))
+            await store.dispatch(setEtapa(0))
             setSelectedValue(value.id)
             store.dispatch(addIdMateria(value.id))
             store.dispatch(addRegimenMateria(value.regimen))
@@ -65,21 +65,21 @@ const MateriasList = () => {
     }
    
     return (
-        <View style={{ width: "90%",borderWidth: 2, borderColor: '#10ac84', borderRadius: 5}}>
+        <View style={{ width: "100%",borderWidth: 2, borderColor: '#10ac84', borderRadius: 5}}>
             <Picker
                 style={styles.picker}
                 dropdownIconColor='#ffffff'
                 selectedValue={selectedValue}
                 onValueChange={(itemValue) => handleMateria(itemValue)}
             >
-                <Picker.Item label={"Seleccione una materia"} enabled={false}/>
+                <Picker.Item label={"Seleccione una materia"} enabled={false} style={styles.pickerItem}/>
                 {
                     
-                    materia.length > 0 ?    
+                    materia.length ?    
                     //console.log(materia.length)
                     materia.map((item, key)=> {
                         return(
-                            <Picker.Item label={item.descripcion} value={{id:item.id,regimen:item.regimen}} key={key}/>
+                            <Picker.Item label={item.descripcion} value={{id:item.id,regimen:item.regimen}} key={key} style={styles.pickerItem}/>
                         )
                     })
                     :null
@@ -93,7 +93,10 @@ const MateriasList = () => {
 const styles = StyleSheet.create({
     picker:{
         color:"#fff",
-        height: 50,
+        height: 70,
+    },
+    pickerItem:{
+        fontSize:20
     }
 })
 

@@ -8,6 +8,7 @@ import { addIdMateria } from '../redux/actions/MateriaAction'
 import { addIdClase } from '../redux/actions/ClaseAction'
 import { addIdCurso } from '../redux/actions/AlumnoCursoAction'
 import { addIdAlumno } from '../redux/actions/PersonaAction'
+import { setEtapa } from '../redux/actions/CalificacionesAction'
 
 import Layout from '../components/Layout'
 
@@ -16,6 +17,7 @@ const HomeScreenDocente = ({ navigation }) => {
     const focus = useIsFocused()
     useEffect(() => {
         let controller = new AbortController()
+        store.dispatch(setEtapa(0))
         store.dispatch(addIdMateria(0))
         store.dispatch(addIdClase(0))
         store.dispatch(addIdCurso(0))

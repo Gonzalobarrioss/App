@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react'
 import { Text, ScrollView, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native'
 import Layout from '../components/Layout'
 import MateriasList from '../components/MateriasList'
+import EtapaExamen from '../components/EtapaExamen'
 import CursosList from '../components/CursosList'
 import AlumnosPorCursoTableCalificacion from '../components/AlumnosPorCursoTableCalificacion'
 import { addIdMateria } from '../redux/actions/MateriaAction'
@@ -14,6 +15,7 @@ const CalificarScreen = ({navigation}) => {
     const regimen = useSelector(state => state.MateriasReducer.regimen)
     const materia = useSelector(state => state.MateriasReducer.id)
     const curso = useSelector(state => state.alumnosCursoReducer.cursoId)
+    const etapa = useSelector(state => state.CalificacionesReducer.etapa)
 
     const isLoading = useSelector(state => state.LoadingReducer.loading)
 
@@ -58,8 +60,10 @@ const CalificarScreen = ({navigation}) => {
                 { loading ? <ActivityIndicator color="#ffffff" size="large" style={{marginBottom: 10}}/> : <Text style={{height: 36, marginBottom: 10}}/> }
 
                 <MateriasList /> 
-                { materia ? <Text style={{color:"#fff", fontSize: 18, marginVertical: 10}}> Regimen: {regimen ? regimen : null} </Text> : null }
-                { materia ? <CursosList /> : null }
+                { materia ? <Text style={styles.txtRegimen}> Regimen: {regimen ? regimen : null} </Text> : null }
+                { materia ? <EtapaExamen /> : null }
+                { etapa ? <CursosList /> : null }
+                
                 { curso ? <AlumnosPorCursoTableCalificacion navigation={navigation}/> : null }
             </Layout>
         </ScrollView>
@@ -79,7 +83,13 @@ const styles = StyleSheet.create({
     txtVerCalificaciones: {
         color: "#ffffff",
         fontSize: 16,
+    },
+    txtRegimen: {
+        color: "#ffffff",
+        fontSize:20,
+        marginTop: 10
     }
+
 })
 
 export default CalificarScreen

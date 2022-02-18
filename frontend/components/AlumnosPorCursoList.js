@@ -18,7 +18,7 @@ const AlumnosPorCursoList = () => {
         let controller = new AbortController()
         const getAlumnos = async (curso) =>{
             const data = await getAlumnosXCurso(curso)
-            console.log("data", data)
+            store.dispatch(addIdAlumno(0))
             setAlumno(data)
             controller = null
         }
@@ -36,19 +36,20 @@ const AlumnosPorCursoList = () => {
     }
 
     return (
-        <View style={{ width: "90%",borderWidth: 2, borderColor: '#10ac84', borderRadius: 5, marginTop:"10%"}}>
+        <View style={{ width: "100%",borderWidth: 2, borderColor: '#10ac84', borderRadius: 5, marginTop:"10%"}}>
             <Picker
                 style={styles.picker}
+                dropdownIconColor='#ffffff'
                 selectedValue={selectedValue}
                 onValueChange={(itemValue) => handleAlumno(itemValue)}
             >
-                <Picker.Item label={"Seleccione un alumno"} enabled={false} />
+                <Picker.Item label={"Seleccione un alumno"} enabled={false} style={styles.pickerItem} />
                 {
-                     alumno.length  
-                     ?  alumno.map((item,key)=>{
-                            return  <Picker.Item label={item.nombre} value={item.id} key={key} />
+                    alumno.length  
+                    ?  alumno.map((item,key)=>{
+                            return  <Picker.Item label={item.nombre} value={item.id} key={key} style={styles.pickerItem} />
                         })
-                    :  <Picker.Item label={"SIN ALUMNOS"} enabled={false} />              
+                    :  <Picker.Item label={"SIN ALUMNOS"} enabled={false} style={styles.pickerItem} />              
                 }
             </Picker>
         </View>     
@@ -58,7 +59,10 @@ const AlumnosPorCursoList = () => {
 const styles = StyleSheet.create({
     picker:{
         color:"#fff",
-        height: 50,
+        height: 70,
+    },
+    pickerItem: {
+        fontSize: 20
     }
 })
 

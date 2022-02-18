@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
-import { Text, TextInput, Picker, StyleSheet, TouchableOpacity, Alert, View } from 'react-native'
+import { Text, TextInput,  StyleSheet, TouchableOpacity, Alert, View } from 'react-native'
+import {Picker} from '@react-native-picker/picker';
 import CursosList from '../components/CursosList'
 import AlumnosPorCursoList from '../components/AlumnosPorCursoList'
 import Layout from '../components/Layout'
@@ -80,18 +81,20 @@ const SancionarScreen = ({navigation}) => {
 
     return (
         <Layout>
-            <Text style={{color:"#ffffff", fontSize:18}}>FORMULARIO SANCION</Text>
-            <View style={{ width: "90%",borderWidth: 2, borderColor: '#10ac84', borderRadius: 5, marginTop:"10%"}}>
+            <Text style={styles.headerText}>FORMULARIO SANCION</Text>
+            
+            <View style={styles.container}>
                 <Picker
                     style={styles.picker}
+                    dropdownIconColor='#ffffff'
                     selectedValue={ sancion.tipoSancion }
                     onValueChange={(itemValue) => handleChange("tipoSancion",itemValue)}
                             
                 >
                     
-                    <Picker.Item label="Leve" value="Leve"/>
-                    <Picker.Item label="Moderada" value="Moderada"/>
-                    <Picker.Item label="Grave" value="Grave"/>
+                    <Picker.Item label="Leve" value="Leve" style={styles.pickerItem} />
+                    <Picker.Item label="Moderada" value="Moderada" style={styles.pickerItem} />
+                    <Picker.Item label="Grave" value="Grave" style={styles.pickerItem} />
                         
                     
                 </Picker>
@@ -99,7 +102,7 @@ const SancionarScreen = ({navigation}) => {
             <TextInput 
                 placeholder="Descripcion"
                 placeholderTextColor= "#546574"
-                style = {styles.input} 
+                style = {styles.inputDescripcion} 
                 onChangeText = { (text) => handleChange('descripcion', text)}
             />
 
@@ -120,41 +123,51 @@ const SancionarScreen = ({navigation}) => {
 }
 
 const styles = StyleSheet.create({
-    input: {
-        width: "90%",
-        fontSize: 14,
+    headerText: {
+        color:"#ffffff", 
+        fontSize:22,
+        textDecorationLine: "underline"
+    },
+    inputDescripcion: {
+        width: "100%",
+        fontSize: 20,
         marginTop: "10%",
         borderWidth: 1,
         borderColor: "#10ac84",
-        height: 50,
+        height: 70,
         color: "#ffffff",
         textAlign: "center",
         borderRadius: 5,
         padding: 4
     },
     buttonSave: {
-        paddingTop: 10,
-        paddingBottom: 10,
+        padding: 10,
         borderRadius: 5,
         marginTop: "10%",
         backgroundColor: "#10ac84",
-        width: "90%",
+        width: "100%",
+        height: 50,
+        justifyContent: "center"
     },
     buttonText: {
         color: "#ffffff",
-        textAlign: "center"
-    },
-    buttonUpdate: {
-        paddingTop: 10,
-        paddingBottom: 10,
-        borderRadius: 5,
-        marginBottom: 3,
-        backgroundColor: "#e58e26",
-        width: "90%"
+        textAlign: "center",
+        fontSize: 20,
+
     },
     picker:{
         color:"#fff",
-        height: 50,
+        height: 70,
+    },
+    pickerItem: {
+        fontSize: 20
+    },
+    container:{
+        width: "100%",
+        borderWidth: 2, 
+        borderColor: '#10ac84', 
+        borderRadius: 5, 
+        marginTop:"10%"
     }
 })
 export default SancionarScreen

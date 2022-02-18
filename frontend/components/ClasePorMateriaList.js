@@ -78,11 +78,11 @@ const ClasePorMateriasList = () => {
                     }
                 }
             >
-                <Picker.Item label={"Seleccione una clase"} enabled={false} value={{curso: 0, clase: 0}}  />
+                <Picker.Item label={"Seleccione una clase"} enabled={false} style={styles.pickerItem}  />
 
                 {
                     !clases.length > 0
-                        ? (<Picker.Item label="SIN CLASES PARA LA MATERIA SELECCIONADA" enabled={false} value={{curso:0,clase: 0}}/>)
+                        ? (<Picker.Item label="SIN CLASES PARA LA MATERIA SELECCIONADA" enabled={false} style={styles.pickerItem}/>)
                         : (clases.map((item, key)=> {
                             return(
                                 <Picker.Item 
@@ -96,6 +96,7 @@ const ClasePorMateriasList = () => {
                                     item.descripcion
                                 } 
                                     value={{curso:item.curso_id, clase: item.id}} key={key}
+                                    style={styles.pickerItem}
                                 />
                             )
                         }))
@@ -107,7 +108,7 @@ const ClasePorMateriasList = () => {
 
 const styles = StyleSheet.create({
     container:{
-        width: "90%", 
+        width: "100%", 
         marginTop: "10%",
         borderWidth: 2, 
         borderColor: '#10ac84', 
@@ -115,7 +116,10 @@ const styles = StyleSheet.create({
     },
     picker:{
         color:"#fff",
-        height: 50,
+        height: 70,
+    },
+    pickerItem:{
+        fontSize:20
     }
 })
 

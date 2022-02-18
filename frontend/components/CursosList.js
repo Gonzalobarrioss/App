@@ -46,18 +46,23 @@ const CursosList = () => {
 
             <Picker
                 style={styles.picker}
+                dropdownIconColor='#ffffff'
                 selectedValue={selectedValue}
                 onValueChange={(value) => handleSelectedCurso(value)}
             >
-                <Picker.Item label={"Seleccione un curso"} enabled={false}/>
+                <Picker.Item label={"Seleccione un curso"} enabled={false} style={styles.pickerItem} />
                 {
                     curso.map((item, key)=> {
                         return(
-                            <Picker.Item label={
-                                item.grado_ano + " '"+item.division+"' "+
-                                item.descripcion + " - "+item.turno
-                            } 
-                            value={item.id} key={key}/>
+                            <Picker.Item 
+                                label={
+                                    item.grado_ano + " '"+item.division+"' "+
+                                    item.descripcion + " - "+item.turno
+                                } 
+                                value={item.id} key={key}
+                                style={styles.pickerItem} 
+                            />
+
                         )
                     })
                 }
@@ -68,7 +73,7 @@ const CursosList = () => {
 
 const styles = StyleSheet.create({
     container:{
-        width: "90%", 
+        width: "100%", 
         marginTop: "10%",
         borderWidth: 2, 
         borderColor: '#10ac84', 
@@ -76,7 +81,10 @@ const styles = StyleSheet.create({
     },
     picker:{
         color:"#fff",
-        height: 50,
+        height: 70,
+    },
+    pickerItem: {
+        fontSize:20
     }
 })
 

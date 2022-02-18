@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     },
     txtVerAsistencias: {
         color: "#ffffff",
-        fontSize: 16,
+        fontSize: 20,
 
     }
 })

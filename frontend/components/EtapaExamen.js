@@ -50,12 +50,13 @@ const EtapaExamen = () => {
             <Picker
                 style={styles.picker}
                 selectedValue={etapaSeleccionada}
+                dropdownIconColor="#ffffff"
                 onValueChange={(itemValue) => handleEtapa(itemValue)}    
             >
-                <Picker.Item label ={"Seleccione una etapa"} enabled={false} />
+                <Picker.Item label ={"Seleccione una etapa"} enabled={false} style={styles.pickerItem}/>
             {
                 etapas.map((item,key)=>{
-                    return ( <Picker.Item label={item.nombre} value={item.etapa} key={key} />)
+                    return ( <Picker.Item label={item.nombre} value={item.etapa} key={key}  style={styles.pickerItem}/>)
                 })
             }      
             </Picker>
@@ -67,10 +68,13 @@ const EtapaExamen = () => {
 const styles = StyleSheet.create({
     picker:{
         color:"#fff",
-        height: 50,
+        height: 70,
+    },
+    pickerItem:{
+        fontSize:20
     },
     container:{
-      width: "90%", 
+      width: "100%", 
       marginTop: "10%",
       borderWidth: 2, 
       borderColor: '#10ac84', 

@@ -18,11 +18,12 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
     const regimen = useSelector(state => state.MateriasReducer.regimen)
     const materia = useSelector(state => state.MateriasReducer.id)
     const curso = useSelector(state => state.alumnosCursoReducer.cursoId)
+    const etapa = useSelector(state => state.CalificacionesReducer.etapa)
 
     const [loading, setLoading] = useState(false)
-    const [etapa, setEtapa] = useState([]) 
+    //const [etapa, setEtapa] = useState([]) 
 
-    useEffect(() => {
+    /*useEffect(() => {
         let controller = new AbortController()
         switch (regimen) {
             case "Anual":
@@ -46,7 +47,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
 
         return () => controller?.abort()
     }, [regimen])
-    
+    */
     const [calificaciones, setCalificaciones] = useState({
         alumnos:[],
         nota:[],
@@ -55,7 +56,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
         materia: materia,
         regimen: regimen,
         descripcion: null,
-        etapa: null
+        etapa: etapa
     })
 
     useEffect( () => {
@@ -201,10 +202,8 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
 
     const handleChange = (name, value) => setCalificaciones({ ...calificaciones, [name]: value})
 
-    return (
-        <View style={{width: "100%"}}>
-
-            <View style={styles.container}>
+    /*
+    <View style={styles.container}>
                 <Picker
                     style={styles.picker}
                     selectedValue={calificaciones.etapa}
@@ -221,11 +220,16 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                 }      
                 </Picker>
             </View>
+    */
+    return (
+        <View style={{width: "100%"}}>
+
+            
 
             <TextInput 
                 placeholder="Descripcion de la calificación"
                 placeholderTextColor= "#546574"
-                style = {styles.input} 
+                style = {styles.inputDescripcion} 
                 onChangeText = { (text) => handleChange('descripcion', text)}
             />
 
@@ -297,13 +301,13 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
 }
 
 const styles = StyleSheet.create({
-    input: {
+    inputDescripcion: {
         width: "100%",
-        fontSize: 14,
+        fontSize: 20,
         marginBottom: 7,
         borderWidth: 2,
         borderColor: "#10ac84",
-        height: 50,
+        height: 70,
         color: "#ffffff",
         textAlign: "center",
         borderRadius: 5,
