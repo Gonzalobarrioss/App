@@ -55,8 +55,9 @@ const CalificacionesScreen = ({navigation}) => {
         etapa: etapa,
         curso: id_curso
       }
+      console.log("datos",datos)
       const data = await getDescripcionNotas(datos).finally(()=>store.dispatch(isLoading(false)))
-
+      console.log("data",data)
       data.length ? setDescripcion(data) : setDescripcion([])
       controller = null
     }
@@ -107,7 +108,7 @@ const CalificacionesScreen = ({navigation}) => {
 
           { etapa ? <CursosDocenteMateriaList /> : null }
 
-          { materia && id_curso ? 
+          { materia && id_curso && etapa ? 
             <View style={styles.container}> 
             
                 <Picker

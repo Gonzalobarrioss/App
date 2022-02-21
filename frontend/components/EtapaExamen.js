@@ -38,8 +38,9 @@ const EtapaExamen = () => {
         return () => controller?.abort()
     }, [regimen])
 
-    const handleEtapa = (value) => {
-        console.log("cambio etapa")
+    const handleEtapa = async  (value) => {
+        //console.log("cambio etapa")
+        await store.dispatch(setEtapa(0))
         store.dispatch(addDescripcion("sin examen"))
         store.dispatch(setEtapa(value))
         setEtapaSeleccionada(value)

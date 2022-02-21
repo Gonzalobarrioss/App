@@ -19,6 +19,7 @@ const CalificacionesList = () => {
     const examen = useSelector(state => state.CalificacionesReducer.descripcion)
     const fecha = useSelector(state => state.CalificacionesReducer.fecha)
     const id_curso = useSelector(state => state.alumnosCursoReducer.cursoId)
+    const etapa = useSelector(state => state.CalificacionesReducer.etapa)
     const [calificaciones, setCalificaciones] = useState([])
     const [message, setMessage] = useState(null)
 
@@ -36,6 +37,7 @@ const CalificacionesList = () => {
                     fecha:fecha,
                     curso: id_curso
                 }
+                console.log(datos)
                 const data = await getCalificaciones(datos,{
                     signal: controller.signal
                 })
@@ -50,7 +52,7 @@ const CalificacionesList = () => {
         }
         loadCalificaciones()
         return () => controller?.abort()
-    }, [examen,fecha,id_curso]);
+    }, [examen,fecha,id_curso,etapa]);
 
     const renderItem = ({item}) => {
         return (

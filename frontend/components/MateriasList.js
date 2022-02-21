@@ -34,6 +34,7 @@ const MateriasList = () => {
             })
             .finally(()=> {
                 store.dispatch(isLoading(false))
+                controller = null
             });
             setMateria(data)
             controller = null
