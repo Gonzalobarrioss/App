@@ -55,11 +55,11 @@ const AsistenciasList = () => {
                     store.dispatch(isLoading(false))
                 });
                 if (data){
-                    console.log("edita");
+                    //console.log("edita");
                     //store.dispatch(editAsistencias(data))
                     setAsistencias(data) 
                 }
-                data.length ? setMessage('') : setMessage("No se registró asistencias el dia de hoy.")
+                data.length ? setMessage('Listado de Asistencias de la fecha:') : setMessage("No se registró asistencias el dia de hoy")
             
                 controller = null
             }
@@ -80,7 +80,7 @@ const AsistenciasList = () => {
 
     return (
         <View style={{width: "100%", height: "100%"}}>
-            <Text style={styles.textInfo}> {message ? message : null} </Text>
+            <Text style={styles.textInfo}>{message ? message : null}</Text>
             <FlatList
                 data={asistencias}
                 keyExtractor = {(item) => item.id + ''}
@@ -95,7 +95,8 @@ const styles = StyleSheet.create({
         marginVertical: 3,
         color:"#fff",
         textAlign: 'center',
-        fontSize: 18
+        fontSize: 18,
+        textDecorationLine: "underline"
     }
 })
 
