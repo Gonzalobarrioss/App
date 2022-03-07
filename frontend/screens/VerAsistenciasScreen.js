@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react'
 import AsistenciasList from '../components/AsistenciasList'
 import Layout from '../components/Layout'
 import { ActivityIndicator,Text } from 'react-native'
-import { useIsFocused, useFocusEffect } from '@react-navigation/native'
 import { useBackHandler } from '@react-native-community/hooks'
 
 import { useSelector } from 'react-redux'

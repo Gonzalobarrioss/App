@@ -5,8 +5,7 @@ import { bajaMesaExamen } from '../api'
 import { useSelector } from 'react-redux'
 
 import { store } from '../redux/store'
-import { addIdAlumno } from '../redux/actions/PersonaAction'
-import { renderIt } from '../redux/actions/RenderAction'
+
 import { isLoading } from '../redux/actions/LoadingAction'
 
 
@@ -17,7 +16,6 @@ const MesaExamen = ({ mesa }) => {
 
     const bajaInscripcion = (mesaID) => {
         const inscripcion = {mesaID: mesaID, alumnoID: idAlumno}
-        //console.log(mesa)
         Alert.alert(
             `Atencion ${nombreAlumno}`,
             `Esta a punto de darse de baja en la siguiente mesa:
@@ -39,9 +37,7 @@ const MesaExamen = ({ mesa }) => {
                         try {
                             store.dispatch(isLoading(true))
                             await bajaMesaExamen(inscripcion).finally(()=>store.dispatch(isLoading(false)))
-                            //store.dispatch(renderIt(true))
-                            //store.dispatch(addIdAlumno(0))
-                            //store.dispatch(addIdAlumno(idAlumno))
+
                             Alert.alert("Baja exitosa.")
                         } catch (error) {
                             console.log(error)

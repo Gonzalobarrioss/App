@@ -39,7 +39,6 @@ const EtapaExamen = () => {
     }, [regimen])
 
     const handleEtapa = async  (value) => {
-        //console.log("cambio etapa")
         await store.dispatch(setEtapa(0))
         store.dispatch(addDescripcion("sin examen"))
         store.dispatch(setEtapa(value))

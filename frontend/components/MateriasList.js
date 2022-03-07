@@ -1,12 +1,11 @@
 import React, {useState, useEffect} from 'react'
 import { View, StyleSheet } from 'react-native'
-import { useIsFocused, useFocusEffect } from '@react-navigation/native'
 import {Picker} from '@react-native-picker/picker';
 
 import { getAllMateriasPorProfesor } from '../api'
 
 import { store } from '../redux/store'
-import { addIdMateria, addNombreMateria, addRegimenMateria } from '../redux/actions/MateriaAction'
+import { addIdMateria, addRegimenMateria } from '../redux/actions/MateriaAction'
 
 import { useSelector } from 'react-redux'
 import { addIdClase } from '../redux/actions/ClaseAction';
@@ -21,23 +20,26 @@ const MateriasList = () => {
 
     const id_docente = useSelector(state => state.PersonaReducer.DocenteReducer.id)
 
-    const focus = useIsFocused()
 
     useEffect(() => {
-        store.dispatch(isLoading(true))
         let controller = new AbortController()
         const loadMaterias = async (id_docente) => {
-            //console.log(id_docente);
-            
-            const data = await getAllMateriasPorProfesor(id_docente,{
+            store.dispatch(isLoading(true))
+
+            await getAllMateriasPorProfesor(id_docente,{
                 signal: controller.signal
+            })
+            .then((data)=>{
+                setMateria(data)
+                controller = null
+            })
+            .catch((error) => {
+                console.log("error: ", error)
             })
             .finally(()=> {
                 store.dispatch(isLoading(false))
-                controller = null
             });
-            setMateria(data)
-            controller = null
+
         }
         console.log("loadMaterias")
         
@@ -59,7 +61,6 @@ const MateriasList = () => {
             store.dispatch(addIdMateria(value.id))
             store.dispatch(addRegimenMateria(value.regimen))
             controller = null
-                //store.dispatch(addNombreMateria(value.nombre))
         } catch (error) {
             console.log("handleMateria",error)
         }
@@ -78,7 +79,6 @@ const MateriasList = () => {
                 {
                     
                     materia.length ?    
-                    //console.log(materia.length)
                     materia.map((item, key)=> {
                         return(
                             <Picker.Item label={item.descripcion} value={{id:item.id,regimen:item.regimen}} key={key} style={styles.pickerItem}/>

@@ -33,17 +33,7 @@ const CalificacionesScreen = ({navigation}) => {
   const [descripcion, setDescripcion] = useState([])
   const [descripcionSeleccionada, setDescripcionSeleccionada] = useState("")
 
-  //const [loading, setLoading] = useState(false)
   const loading = useSelector(state => state.LoadingReducer.loading)
-/*
-  useEffect(() => {
-    let controller = new AbortController()
-    setLoading(isLoading)
-    controller = null
-    return () => {
-      controller?.abort()    
-    };
-  }, [isLoading]);*/
 
   useEffect(() => {
     store.dispatch(isLoading(true))
@@ -62,7 +52,6 @@ const CalificacionesScreen = ({navigation}) => {
       controller = null
     }
 
-    //console.log("obtiene")
     materia && etapa ? getDescripcion() : store.dispatch(isLoading(false))
 
     return () => {
@@ -79,7 +68,6 @@ const CalificacionesScreen = ({navigation}) => {
       await store.dispatch(addIdCurso(0))
       controller = null
       navigation.navigate("CalificarScreen")
-      console.log("paso");
     }
     if (navigation.getState().index == 4) {
       handleEvent()

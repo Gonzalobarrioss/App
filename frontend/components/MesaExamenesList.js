@@ -7,8 +7,7 @@ import MesaExamenItem from './MesaExamenItem'
 import MesaExamenInscriptasItem from './MesaExamenInscriptasItem'
 
 import { useSelector } from 'react-redux'
-import { store } from '../redux/store'
-import { isLoading } from '../redux/actions/LoadingAction'
+
 
 const MesaExamenes = () => {
 
@@ -18,7 +17,6 @@ const MesaExamenes = () => {
     const [mesasExamenesInscriptas, setMesasExamenesInscriptas] = useState([])
 
     const loading = useSelector(state => state.LoadingReducer.loading)
-    //const render = useSelector(state => state.RenderReducer)
     useEffect(() => {
         let controller = new AbortController()
 

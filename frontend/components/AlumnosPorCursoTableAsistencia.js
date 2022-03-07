@@ -1,17 +1,14 @@
 import React, {useState, useEffect} from 'react'
 import { View, Alert, StyleSheet, TouchableOpacity, Text} from 'react-native'
 
-import { getAlumnosPorCurso } from '../redux/actions/AlumnoCursoAction'
 import { useSelector } from 'react-redux';
 import { store } from '../redux/store'
 
-import { DataTable, RadioButton } from 'react-native-paper';
+import { DataTable } from 'react-native-paper';
 import { saveAsistencia, getAlumnosXCurso } from '../api';
 
-import { useFocusEffect } from '@react-navigation/native';
 
 import RadioGroup from 'react-native-radio-buttons-group';
-import alumnosCursoReducer from '../redux/reducers/AlumnoCursoReducer';
 import { isLoading } from '../redux/actions/LoadingAction';
 
 

@@ -6,7 +6,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src"
+    "start": "node src"
+  },
+  "android": {
+  "package": "com.normal10.webalumnos",
+  "versionCode": 1
   },
   "keywords": [],
   "author": "",

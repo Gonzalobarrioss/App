@@ -22,33 +22,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
     const etapa = useSelector(state => state.CalificacionesReducer.etapa)
 
     const [loading, setLoading] = useState(false)
-    //const [etapa, setEtapa] = useState([]) 
-
-    /*useEffect(() => {
-        let controller = new AbortController()
-        switch (regimen) {
-            case "Anual":
-                setEtapa([{nombre: "Anual", etapa: "1"}])
-                break;
-            case "Bimestral":
-                setEtapa([{nombre: "Primer Bimestre", etapa: "1"},{nombre: "Segundo Bimestre", etapa: "2"},{nombre: "Tercer Bimestre", etapa: "3"},{nombre: "Cuarto Bimestre", etapa: "4"}])
-                break;
-            case "Trimestral":
-                setEtapa([{nombre: "Primer Trimestre", etapa: "1"},{nombre: "Segundo Trimestre", etapa: "2"},{nombre: "Tercer Trimestre", etapa: "3"}])
-                break;
-            case "Cuatrimestral":
-                setEtapa([{nombre: "Primer Cuatrimestre", etapa: "1"},{nombre: "Segundo Cuatrimestre", etapa: "2"}])
-                break;
-            default:
-                setEtapa([{nombre: "No esta definido una etapa", etapa: "1"}])
-                break;
-        }
-        setCalificaciones({...calificaciones, regimen: regimen})
-        controller = null
-
-        return () => controller?.abort()
-    }, [regimen])
-    */
+    
     const [calificaciones, setCalificaciones] = useState({
         alumnos:[],
         nota:[],
@@ -95,7 +69,6 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                 console.log("error",error)
             }
         }
-        //console.log("curso", curso);
         if (curso){
             console.log("load Table");
             getAlumnos(curso)
@@ -126,7 +99,6 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
             }
         }
         const newArrayNotas = calificaciones.nota
-        //console.log("notas", newArrayNotas);
         newArrayNotas.map((item,index) => {
             if(index == key){
                 newArrayNotas.splice(key,1,newNota)
@@ -189,7 +161,6 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
         } 
 
         if (!calificaciones.etapa){
-            console.log("etapa", calificaciones.etapa)
             Alert.alert("Ingrese una etapa")
         }
         else if(!calificaciones.descripcion){
@@ -215,25 +186,6 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
 
     const handleChange = (name, value) => setCalificaciones({ ...calificaciones, [name]: value})
 
-    /*
-    <View style={styles.container}>
-                <Picker
-                    style={styles.picker}
-                    selectedValue={calificaciones.etapa}
-                    onValueChange={(itemValue) => handleChange('etapa', itemValue)}    
-                >
-                    <Picker.Item label ={"Seleccione una etapa"} enabled={false} />
-                {
-                    etapa.length > 0 
-                        ?
-                            etapa.map((item,key)=>{
-                                return ( <Picker.Item label={item.nombre} value={item.etapa} key={key} />)
-                            })
-                        : null
-                }      
-                </Picker>
-            </View>
-    */
     return (
         <View style={{width: "100%"}}>
 

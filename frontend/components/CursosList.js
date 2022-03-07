@@ -17,24 +17,26 @@ const CursosList = () => {
     const [selectedValue, setSelectedValue] = useState("");
 
     const handleSelectedCurso = (value) => {
-       // console.log("curso", value);
         store.dispatch(addIdCurso(value))
         setSelectedValue(value)
     }
 
     useEffect(() => {
-        store.dispatch(isLoading(true))
         let controller = new AbortController()
         const loadCursos = async () => {
+            store.dispatch(isLoading(true))
 
-            const data = await getCursos("",{
+            await getCursos("",{
                 signal: controller.signal
+            })
+            .then((datos) => {
+                setCurso(datos)
+                controller = null
             })
             .finally(()=> {
                 store.dispatch(isLoading(false))
             });
-            setCurso(data)
-            controller = null
+            
         }
         loadCursos()
         return () => {
@@ -53,6 +55,7 @@ const CursosList = () => {
             >
                 <Picker.Item label={"Seleccione un curso"} enabled={false} style={styles.pickerItem} />
                 {
+                    curso.length ? 
                     curso.map((item, key)=> {
                         return(
                             <Picker.Item 
@@ -66,6 +69,7 @@ const CursosList = () => {
 
                         )
                     })
+                    : null
                 }
             </Picker>
         </View>     

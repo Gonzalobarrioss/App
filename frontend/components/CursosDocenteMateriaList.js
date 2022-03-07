@@ -20,28 +20,31 @@ const CursosDocenteMateriaList = () => {
     const id_docente = useSelector(state => state.PersonaReducer.DocenteReducer.id)
 
     const handleSelectedCurso = (value) => {
-       // console.log("curso", value);
         store.dispatch(addIdCurso(value))
         setSelectedValue(value)
     }
 
     useEffect(() => {
-        store.dispatch(isLoading(true))
         let controller = new AbortController()
         const loadCursos = async () => {
+            store.dispatch(isLoading(true))
+
             const datos = {
                 docente: id_docente,
                 materia: id_materia
             }
 
-            const data = await getCursosDocenteMateria(datos,{
+            await getCursosDocenteMateria(datos,{
                 signal: controller.signal
+            })
+            .then((data) => {
+                setCurso(data)
+                controller = null
             })
             .finally(()=> {
                 store.dispatch(isLoading(false))
             });
-            setCurso(data)
-            controller = null
+            
         }
         id_materia ? loadCursos() : store.dispatch(isLoading(false))
         return () => {

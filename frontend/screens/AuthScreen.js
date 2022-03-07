@@ -2,20 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { ActivityIndicator, View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
 import  Layout  from '../components/Layout'
 
-import { useIsFocused } from '@react-navigation/core';
-
 import { store } from '../redux/store';
 import { addIdAlumno, addIdDocente, addNombreAlumno, addNombreDocente } from '../redux/actions/PersonaAction';
 
 import {API} from '../constants'
 
 import { useSelector } from 'react-redux';
-import { login, register } from '../api';
 
 const AuthScreen = ({ navigation}) => {
     
-    //const focus = useIsFocused()
-
     const rol = useSelector(state => state.PersonaReducer.RolReducer.rol)
 
     const [id, setId] = useState('');
@@ -33,7 +28,6 @@ const AuthScreen = ({ navigation}) => {
         controller = null
 
         return () => controller?.abort()
-        //console.log(rol)
     }, [rol])
 
     
@@ -56,9 +50,7 @@ const AuthScreen = ({ navigation}) => {
         })
         .then(async res => { 
             try {
-                //console.log("paso por /private")
                 const jsonRes = await res.json();
-                //console.log(jsonRes)
                 if (res.status === 200) {
                     setMessage(jsonRes.message);
                     const id = jsonRes.id
@@ -157,25 +149,7 @@ const AuthScreen = ({ navigation}) => {
         }
         setId(newText)
     }
-    /*
-     {
-                            !isLogin 
-                            ? (!datosCorrectos 
-                                ? 
-                                    <TouchableOpacity style={styles.button} onPress={() => setMessage('Ingrese correctamente todos los datos')}>
-                                        <Text style={styles.buttonText}>Aceptar</Text>
-                                    </TouchableOpacity>
-                                :   
-                                    <TouchableOpacity style={styles.button} onPress={onSubmitHandler}>
-                                        <Text style={styles.buttonText}>Aceptar</Text>
-                                    </TouchableOpacity>
-                            )
-                            :
-                                <TouchableOpacity style={styles.button} onPress={onSubmitHandler}>
-                                    <Text style={styles.buttonText}>Aceptar</Text>
-                                </TouchableOpacity>      
-                        }
-    */
+   
     return (
         <Layout>
             { loading ? <ActivityIndicator color="#ffffff" size="large" /> : null }

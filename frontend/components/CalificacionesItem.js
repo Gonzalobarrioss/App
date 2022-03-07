@@ -5,7 +5,6 @@ import { editCalificaciones, inscripcionMesaExamen } from '../api'
 import { useSelector } from 'react-redux'
 
 import { store } from '../redux/store'
-//import { render } from '../redux/actions/RenderAction'
 import { addIdClase } from '../redux/actions/ClaseAction'
 import { isLoading } from '../redux/actions/LoadingAction'
 

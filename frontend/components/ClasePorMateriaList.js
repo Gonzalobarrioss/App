@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { View, StyleSheet, Text } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 
 import {Picker} from '@react-native-picker/picker';
 
@@ -7,11 +7,9 @@ import { getClaseXMateria } from '../api'
 
 import { store } from '../redux/store'
 import { useSelector } from 'react-redux'
-import { addIdCurso, getAlumnosPorCurso } from '../redux/actions/AlumnoCursoAction'
-import { addClases, addIdClase } from '../redux/actions/ClaseAction';
+import { addIdCurso} from '../redux/actions/AlumnoCursoAction'
+import { addIdClase } from '../redux/actions/ClaseAction';
 
-import { useFocusEffect, useIsFocused } from '@react-navigation/native';
-import { addIdMateria } from '../redux/actions/MateriaAction';
 import { isLoading } from '../redux/actions/LoadingAction';
 
 
@@ -27,7 +25,6 @@ const ClasePorMateriasList = () => {
         store.dispatch(isLoading(true))
         let controller = new AbortController()
         const loadClases = async () => {
-            //console.log(selectedValue);
             const data = await getClaseXMateria(materia, {
                 signal: controller.signal
             })

@@ -9,7 +9,6 @@ import { useIsFocused, useFocusEffect } from '@react-navigation/native'
 import { useSelector } from 'react-redux'
 
 import { store } from '../redux/store'
-//import { editCalificaciones } from '../redux/actions/CalificacionesAction'
 import { isLoading } from '../redux/actions/LoadingAction';
 
 
@@ -45,7 +44,6 @@ const CalificacionesList = () => {
                     store.dispatch(isLoading(false))
                 });
                 if (data){
-                    console.log("data", data)
                     setCalificaciones(data) 
                 }            
                 controller = null
