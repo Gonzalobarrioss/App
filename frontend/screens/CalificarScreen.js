@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#222f3e"
     },
     btnVerCalificaciones: {
-        backgroundColor: "#64b32b",
+        backgroundColor: "#10ac84",
         padding: 7,
         borderRadius: 5
     },

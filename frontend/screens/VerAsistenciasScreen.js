@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import AsistenciasList from '../components/AsistenciasList'
 import Layout from '../components/Layout'
-import { ActivityIndicator,Text } from 'react-native'
+import { ActivityIndicator,Text, ScrollView } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 
 import { useSelector } from 'react-redux'
@@ -48,6 +48,7 @@ const AsistenciasScreen = ({navigation}) => {
   })
 
   return ( 
+    <ScrollView style={{backgroundColor:"#222f3e"}}>
       <Layout>
         { loading ? <ActivityIndicator color="#ffffff" size="large" style={{marginBottom: 10}}/> : <Text style={{height: 36, marginBottom: 10}}/> }
 
@@ -55,7 +56,7 @@ const AsistenciasScreen = ({navigation}) => {
         { materia ? <ClasePorMateriasList /> : null }
         { clase ? <AsistenciasList /> : null }
       </Layout>
-
+      </ScrollView>
   )
 }
 

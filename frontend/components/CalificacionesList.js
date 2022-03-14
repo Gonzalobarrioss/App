@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { FlatList,View,Text, StyleSheet, Alert } from 'react-native'
+import { FlatList,View,Text, StyleSheet } from 'react-native'
 
 import { getCalificaciones } from '../api'
 
 import CalificacionesItem from './CalificacionesItem'
-import { useIsFocused, useFocusEffect } from '@react-navigation/native'
 
 import { useSelector } from 'react-redux'
 
@@ -20,16 +19,13 @@ const CalificacionesList = () => {
     const id_curso = useSelector(state => state.alumnosCursoReducer.cursoId)
     const etapa = useSelector(state => state.CalificacionesReducer.etapa)
     const [calificaciones, setCalificaciones] = useState([])
-    const [message, setMessage] = useState(null)
-
-   
     
 
     useEffect(() => {
-        store.dispatch(isLoading(true))
         let controller = new AbortController()
-
+        let isMounted = true
         const loadCalificaciones = async () => {
+            store.dispatch(isLoading(true))
 
                 const datos={
                     descripcion: examen,
@@ -37,19 +33,27 @@ const CalificacionesList = () => {
                     curso: id_curso
                 }
                 console.log(datos)
-                const data = await getCalificaciones(datos,{
+                await getCalificaciones(datos,{
                     signal: controller.signal
+                })
+                .then((data)=> {
+                    if (isMounted){
+                        setCalificaciones(data) 
+                        controller = null
+                    }
+                    
+                })
+                .catch((error) => {
+                    console.log("error: ", error)
                 })
                 .finally(() => {
                     store.dispatch(isLoading(false))
                 });
-                if (data){
-                    setCalificaciones(data) 
-                }            
-                controller = null
+                   
         }
         loadCalificaciones()
-        return () => controller?.abort()
+        return () => { isMounted = false }
+        //return () => controller?.abort()
     }, [examen,fecha,id_curso,etapa]);
 
     const renderItem = ({item}) => {
@@ -61,7 +65,7 @@ const CalificacionesList = () => {
 
     return (
         <View style={{width: "100%"}}>
-            <Text style={styles.textInfo}> {message ? message : null} </Text>
+            { calificaciones.length ? <Text style={{marginVertical:3,textAlign:"center",fontSize:18,color:"#fff", marginTop: 10, textDecorationLine: "underline"}}>Calificaciones</Text> : null }
             <FlatList
                 data={calificaciones}
                 keyExtractor = {(item) => item.id + ''}

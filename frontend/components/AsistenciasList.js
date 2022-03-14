@@ -23,10 +23,10 @@ const AsistenciasList = () => {
     
 
     useEffect(() => {
-        store.dispatch(isLoading(true))
         let controller = new AbortController()
-
+        let isMounted = true
         const loadAsistencias = async () => {
+            store.dispatch(isLoading(true))
 
             const date = new Date()
 
@@ -36,32 +36,34 @@ const AsistenciasList = () => {
             
             const fecha = year + "-" + month + "-" + day
             
-            
-            if (claseId){
-                const datos = {
-                    claseId : claseId,
-                    fecha: fecha,
-                    docente: id_docente
-                }
-                const data = await getAsistencias(datos,{
-                    signal: controller.signal
-                })
-                .finally(() => {
-                    store.dispatch(isLoading(false))
-                });
-                if (data){
+            const datos = {
+                claseId : claseId,
+                fecha: fecha,
+                docente: id_docente
+            }
+
+            await getAsistencias(datos,{
+                signal: controller.signal
+            })
+            .then((data)=>{
+                if(isMounted){
                     setAsistencias(data) 
+                    data.length ? setMessage('Listado de Asistencias de la fecha:') : setMessage("No se registró asistencias el dia de hoy")
+                    controller = null
                 }
-                data.length ? setMessage('Listado de Asistencias de la fecha:') : setMessage("No se registró asistencias el dia de hoy")
-            
-                controller = null
-            }
-            else{
-                setMessage('')
-            }
+            })
+            .catch((error) => {
+                console.log("error: ", error)
+            })
+            .finally(() => {
+                store.dispatch(isLoading(false))
+            });
         }
-        loadAsistencias()
-        return () => controller?.abort()
+        claseId ? loadAsistencias() : setMessage('')
+
+        return () => { isMounted = false }
+        //return () => controller?.abort()
+
     }, [claseId]);
 
     const renderItem = ({item}) => {

@@ -22,6 +22,7 @@ const CursosList = () => {
     }
 
     useEffect(() => {
+        let isMounted = true
         let controller = new AbortController()
         const loadCursos = async () => {
             store.dispatch(isLoading(true))
@@ -30,7 +31,9 @@ const CursosList = () => {
                 signal: controller.signal
             })
             .then((datos) => {
-                setCurso(datos)
+                if ( isMounted ){
+                    setCurso(datos)
+                }
                 controller = null
             })
             .finally(()=> {
@@ -39,9 +42,8 @@ const CursosList = () => {
             
         }
         loadCursos()
-        return () => {
-            controller?.abort()
-        }
+        return () => { isMounted = false }
+        //return () => {controller?.abort()}
     }, [])
    
     return (

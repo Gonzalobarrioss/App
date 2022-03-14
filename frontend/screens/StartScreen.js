@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import  Layout  from '../components/Layout'
 import { addRol } from '../redux/actions/PersonaAction';
@@ -6,8 +6,6 @@ import { store } from '../redux/store';
 
 
 const StartScreen = ({navigation}) => {
-
-    //const [rol, setRol] = useState('')
 
     const handleChoice = (rol) => {
         store.dispatch(addRol(rol))
@@ -30,8 +28,6 @@ const StartScreen = ({navigation}) => {
                             onPress={  () => { handleChoice('Docente') }}>
                             <Text style={styles.buttonAltText}>Docente</Text>
                         </TouchableOpacity>
-                        
-                             
                     </View>    
                 </View>
             </View>

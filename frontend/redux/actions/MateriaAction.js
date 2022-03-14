@@ -2,10 +2,6 @@ export const SET_ID_MATERIA = 'SET_ID_MATERIA'
 export const SET_REGIMEN_MATERIA = 'SET_REGIMEN_MATERIA'
 export const SET_NOMBRE_MATERIA = 'SET_NOMBRE_MATERIA'
 
-import {API} from '../../constants'
-
-import  axios  from 'axios'
-
 export const addIdMateria = id => dispatch => {
   dispatch({
     type: SET_ID_MATERIA,

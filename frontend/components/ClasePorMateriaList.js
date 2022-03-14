@@ -22,25 +22,35 @@ const ClasePorMateriasList = () => {
     const materia = useSelector(state => state.MateriasReducer.id)
 
     useEffect(() => {
-        store.dispatch(isLoading(true))
         let controller = new AbortController()
+        let isMounted = true
+
         const loadClases = async () => {
-            const data = await getClaseXMateria(materia, {
+            store.dispatch(isLoading(true))
+
+            await getClaseXMateria(materia, {
                 signal: controller.signal
+            })
+            .then((data)=> {
+                if(isMounted){
+                    setClases(data)
+                    data.length ? store.dispatch(addIdCurso(selectedValue)) : store.dispatch(addIdCurso(0))
+                }
+            })
+            .catch((error)=>{
+                console.log("error: ", error)
             })
             .finally(()=> {
                 store.dispatch(isLoading(false))
             })
 
-            data.length ? store.dispatch(addIdCurso(selectedValue)) : store.dispatch(addIdCurso(0))
             
-            setClases(data)
             controller =  null 
         }
-    
+        console.log("loadClases", materia)
         materia ? loadClases() : store.dispatch(isLoading(false)) 
         
-        return () => controller?.abort()
+        return () => { isMounted = false }
     }, [materia]);
 
     const handleCurso = (value) => {
@@ -71,9 +81,8 @@ const ClasePorMateriasList = () => {
                 <Picker.Item label={"Seleccione una clase"} enabled={false} style={styles.pickerItem}  />
 
                 {
-                    !clases.length > 0
-                        ? (<Picker.Item label="SIN CLASES PARA LA MATERIA SELECCIONADA" enabled={false} style={styles.pickerItem}/>)
-                        : (clases.map((item, key)=> {
+                    clases.length
+                        ? (clases.map((item, key)=> {
                             return(
                                 <Picker.Item 
                                     label={ item.grado_ano+" '"+item.division+"' - "+
@@ -90,6 +99,7 @@ const ClasePorMateriasList = () => {
                                 />
                             )
                         }))
+                        : (<Picker.Item label="SIN CLASES PARA LA MATERIA SELECCIONADA" enabled={false} style={styles.pickerItem}/>)
                 }
             </Picker>
         </View>     

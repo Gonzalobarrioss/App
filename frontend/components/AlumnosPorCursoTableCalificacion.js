@@ -20,8 +20,6 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
     const materia = useSelector(state => state.MateriasReducer.id)
     const curso = useSelector(state => state.alumnosCursoReducer.cursoId)
     const etapa = useSelector(state => state.CalificacionesReducer.etapa)
-
-    const [loading, setLoading] = useState(false)
     
     const [calificaciones, setCalificaciones] = useState({
         alumnos:[],
@@ -46,25 +44,33 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
     
 
     useEffect( () => {
-        store.dispatch(isLoading(true))
-        setLoading(true)
         let controller = new AbortController()
+        let isMounted = true
         const getAlumnos = async (curso) => {
+            store.dispatch(isLoading(true))
             try {
-                const data = await getAlumnosXCurso(curso,{
+                await getAlumnosXCurso(curso,{
                     signal: controller.signal
+                })
+                .then((data) => {
+                    if (isMounted){
+                        const array_nota = []
+                        if(data.length){
+                            for (let i = 0; i < data.length; i++) {
+                                array_nota.push(1)    
+                            }
+                        }
+                        setCalificaciones({...calificaciones, alumnos:data, nota: array_nota })
+                        controller = null
+                    }
+                })
+                .catch((error)=>{
+                    console.log("error: ", error)
                 })
                 .finally(()=> {
                     store.dispatch(isLoading(false))
                 });
-                const array_nota = []
-                if(data.length){
-                    for (let i = 0; i < data.length; i++) {
-                        array_nota.push(1)    
-                    }
-                }
-                setCalificaciones({...calificaciones, alumnos:data, nota: array_nota })
-                controller = null
+                
             } catch (error) {
                 console.log("error",error)
             }
@@ -74,9 +80,8 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
             getAlumnos(curso)
         }
 
-        return () => {
-            controller?.abort()
-        }
+        return () => { isMounted = false }
+        //return () => {controller?.abort()}
   
     }, [curso])
 

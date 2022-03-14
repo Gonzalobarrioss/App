@@ -16,22 +16,26 @@ import { addDescripcion, setEtapa } from '../redux/actions/CalificacionesAction'
 const MateriasList = () => {
 
     const [materia, setMateria] = useState([])
-    const [selectedValue, setSelectedValue] = useState();
+    const [selectedValue, setSelectedValue] = useState(0);
 
     const id_docente = useSelector(state => state.PersonaReducer.DocenteReducer.id)
 
 
     useEffect(() => {
         let controller = new AbortController()
+        let isMounted = true
         const loadMaterias = async (id_docente) => {
+
             store.dispatch(isLoading(true))
 
             await getAllMateriasPorProfesor(id_docente,{
                 signal: controller.signal
             })
             .then((data)=>{
-                setMateria(data)
                 controller = null
+                if (isMounted){
+                    setMateria(data)
+                }  
             })
             .catch((error) => {
                 console.log("error: ", error)
@@ -43,28 +47,35 @@ const MateriasList = () => {
         }
         console.log("loadMaterias")
         
-        loadMaterias(id_docente);
-        return () => controller?.abort();
+        id_docente ? loadMaterias(id_docente) : null ;
+        return () => { isMounted = false } 
+        //return () => controller?.abort();
     }, [id_docente]);
  
 
     const handleMateria = async (value) => {
+
         let controller = new AbortController()
+
         try {
             await store.dispatch(addIdCurso(0))
             await store.dispatch(addIdClase(0))
             await store.dispatch(addRegimenMateria(""))
             await store.dispatch(addIdMateria(0))
             await store.dispatch(setEtapa(0))
-            store.dispatch(addDescripcion(""))
+            await store.dispatch(addDescripcion(""))
             setSelectedValue(value.id)
             store.dispatch(addIdMateria(value.id))
             store.dispatch(addRegimenMateria(value.regimen))
             controller = null
         } catch (error) {
             console.log("handleMateria",error)
+            controller = null
         }
+
+
         return () => controller?.abort()
+
     }
    
     return (

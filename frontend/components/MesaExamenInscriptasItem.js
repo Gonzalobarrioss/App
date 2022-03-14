@@ -71,7 +71,7 @@ const MesaExamen = ({ mesa }) => {
 
 const styles = StyleSheet.create({
     itemContainer: {
-        backgroundColor:"#534887",
+        backgroundColor:"#10ac84",
         padding: 20,
         marginVertical: 5,
         borderRadius: 5

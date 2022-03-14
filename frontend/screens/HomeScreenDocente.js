@@ -86,17 +86,28 @@ const styles = StyleSheet.create({
         padding: 7,
         borderRadius: 5,
         backgroundColor: "#ffffff",
-        width: "95%",
+        width: "100%",
         height: "30%",
         marginVertical: 8,
-        justifyContent: "center"
+        justifyContent: "center",
+        elevation: 9,
+        borderWidth: 3,
+        borderStyle: "solid",
+        borderColor: "#cccccc",
+        borderBottomWidth: 1,
+        borderTopWidth: 1
     },
     txt: {
         
         textAlign: 'center',
         fontSize:30,
         display: "flex",
-    }
+    },
+
+  
+
+
+
 })
 
 export default HomeScreenDocente

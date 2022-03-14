@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import CalificacionesList from '../components/CalificacionesList'
 import Layout from '../components/Layout'
-import { ActivityIndicator,Text, StyleSheet, View } from 'react-native'
+import { ActivityIndicator,Text, StyleSheet, View, ScrollView } from 'react-native'
 import { useIsFocused, useFocusEffect } from '@react-navigation/native'
 import { useBackHandler } from '@react-native-community/hooks'
 import {Picker} from '@react-native-picker/picker';
@@ -36,27 +36,38 @@ const CalificacionesScreen = ({navigation}) => {
   const loading = useSelector(state => state.LoadingReducer.loading)
 
   useEffect(() => {
-    store.dispatch(isLoading(true))
     let controller = new AbortController()
+    let isMounted = true
     const getDescripcion = async () => {
+      store.dispatch(isLoading(true))
+
       const datos = {
         docente: id_docente,
         materia: materia,
         etapa: etapa,
         curso: id_curso
       }
-      console.log("datos",datos)
-      const data = await getDescripcionNotas(datos).finally(()=>store.dispatch(isLoading(false)))
-      console.log("data",data)
-      data.length ? setDescripcion(data) : setDescripcion([])
-      controller = null
+      //console.log("datos",datos)
+      await getDescripcionNotas(datos)
+      .then((data) => {
+        if ( isMounted ){
+          data.length ? setDescripcion(data) : setDescripcion([])
+          controller = null
+        }
+        
+      })
+      .catch((error) => {
+        console.log("error: ", error)
+      })
+      .finally(()=>store.dispatch(isLoading(false)))
+      //console.log("data",data)
+      
     }
 
     materia && etapa ? getDescripcion() : store.dispatch(isLoading(false))
 
-    return () => {
-      controller?.abort()    
-    };
+    return () => { isMounted = false }
+    //return () => {controller?.abort()    };
   }, [materia,id_docente,etapa,id_curso]);
 
 
@@ -84,14 +95,12 @@ const CalificacionesScreen = ({navigation}) => {
   }
 
   return ( 
+    <ScrollView style={{backgroundColor:"#222f3e"}}>
       <Layout>
         { loading ? <ActivityIndicator color="#ffffff" size="large" style={{marginBottom: 10}}/> : <Text style={{height: 36, marginBottom: 10}}/> }
 
         <MateriasList /> 
-        <View style={{width:"100%", justifyContent:'center', alignItems:'center'}}>
-          <View>
-            { materia ? <Text style={{color:"#fff", fontSize: 20, marginVertical: 10}}> Regimen: {regimen ? regimen : null} </Text> : null }
-          </View>
+          { materia ? <Text style={{color:"#fff", fontSize: 20, marginVertical: 10}}> Regimen: {regimen ? regimen : null} </Text> : null }
           { materia ? <EtapaExamen /> : null }
 
           { etapa ? <CursosDocenteMateriaList /> : null }
@@ -122,9 +131,8 @@ const CalificacionesScreen = ({navigation}) => {
           { descripcionSeleccionada ? <CalificacionesList /> : null }
 
           
-        </View>
       </Layout>
-
+  </ScrollView>
   )
 }
 
@@ -132,6 +140,7 @@ const styles = StyleSheet.create({
   picker:{
       color:"#fff",
       height: 70,
+      width: "100%"
   },
   pickerItem:{
     fontSize:20

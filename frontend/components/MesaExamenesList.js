@@ -19,21 +19,37 @@ const MesaExamenes = () => {
     const loading = useSelector(state => state.LoadingReducer.loading)
     useEffect(() => {
         let controller = new AbortController()
-
+        let isMounted = true
         const loadMesasExamenes = async () => {
-            const data = await getMesaExamen(id_alumno);
-            setMesasExamenes(data)
-            controller = null 
+            await getMesaExamen(id_alumno)
+            .then((data) => {
+                if (isMounted){
+                    setMesasExamenes(data)
+                    controller = null 
+                }
+            })
+            .catch((error) => {
+                console.log("error: ", error)
+            })
+            
         }
         const loadMesasExamenesInscriptas = async () => {
-            const data = await getMesaExamenInscriptas(id_alumno);
-            setMesasExamenesInscriptas(data)
-            controller = null 
+            await getMesaExamenInscriptas(id_alumno)
+            .then((data) => {
+                if(isMounted) {
+                    setMesasExamenesInscriptas(data)
+                    controller = null
+                }
+            })
+             
         }
         
         loadMesasExamenes()
         loadMesasExamenesInscriptas()
-        return () => controller?.abort()
+
+        return () => { isMounted = false }
+
+        //return () => controller?.abort()
     }, [loading])
 
    

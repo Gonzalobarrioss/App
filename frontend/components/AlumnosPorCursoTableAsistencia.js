@@ -64,24 +64,31 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
 
     }
     useEffect(() => {
-        store.dispatch(isLoading(true))
         let controller = new AbortController()
+        let isMounted = true
         const getAlumnos = async (curso) => {
+            store.dispatch(isLoading(true))
             try {
-                const data = await getAlumnosXCurso(curso,{
+                await getAlumnosXCurso(curso,{
                     signal: controller.signal
+                })
+                .then((data) => {
+                    if ( isMounted ){
+                        const array_estado = []
+                        if(data.length){
+                            for (let i = 0; i < data.length; i++) {
+                                array_estado.push("Ausente")    
+                            }
+                        }
+                        setAsistencia({...asistencia, alumnos: data, estado: array_estado })
+                        controller = null
+                    }
+                    
                 })
                 .finally(()=> {
                     store.dispatch(isLoading(false))
                 });
-                const array_estado = []
-                if(data.length){
-                    for (let i = 0; i < data.length; i++) {
-                        array_estado.push("Ausente")    
-                    }
-                }
-                setAsistencia({...asistencia, alumnos: data, estado: array_estado })
-                controller = null
+                
             } catch (error) {
                 console.log("error",error)
             }
@@ -90,8 +97,8 @@ const AlumnosPorCursoTableAsistencia = ({navigation}) => {
             console.log("load Table");
             getAlumnos(curso)
         }
-    
-        return () => controller?.abort()
+        return () => { isMounted = false }
+        //return () => controller?.abort()
     }, [curso]);
 
     const handleAsistencia = (value) => {

@@ -14,9 +14,6 @@ const CalificacionesItem = ({ calificaciones }) => {
     return (
         <View style={styles.itemContainer}>
             <TouchableOpacity
-                onPress = { 
-                    () => console.log(console.log(calificaciones))
-                }
             >
                 <Text style={styles.itemDescripcion}>{calificaciones.apellido}, {calificaciones.nombre}</Text>
                 <Text style={styles.itemDescripcion}>Nota: {calificaciones.nota}</Text>
@@ -27,13 +24,13 @@ const CalificacionesItem = ({ calificaciones }) => {
 
 const styles = StyleSheet.create({
     itemContainer: {
-        backgroundColor:"#333333",
+        backgroundColor:"#ffffff",
         padding: 20,
         marginVertical: 8,
         borderRadius: 5
     },
     itemDescripcion: {
-        color: "#ffffff",
+        color: "#333333",
         fontSize:20
     }
 })
