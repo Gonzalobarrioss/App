@@ -7,8 +7,6 @@ import Layout from '../components/Layout'
 
 import { useSelector } from 'react-redux';
 
-import { useIsFocused } from '@react-navigation/core'
-
 import { sancionarAlumno } from '../api'
 
 import moment from 'moment'
@@ -17,6 +15,7 @@ const SancionarScreen = ({navigation}) => {
 
     const id_docente = useSelector(state => state.PersonaReducer.DocenteReducer.id)
     const id_alumno = useSelector(state => state.PersonaReducer.AlumnoReducer.id)
+    const id_curso = useSelector(state => state.alumnosCursoReducer.cursoId)
     const loading = useSelector( state => state.LoadingReducer.loading)
 
     const [ sancion, setSancion ] =  useState ({
@@ -85,41 +84,52 @@ const SancionarScreen = ({navigation}) => {
             { loading ? <ActivityIndicator color="#ffffff" size="large" /> : null }
 
             <Text style={styles.headerText}>FORMULARIO SANCION</Text>
-            
-            <View style={styles.container}>
-                <Picker
-                    style={styles.picker}
-                    dropdownIconColor='#ffffff'
-                    selectedValue={ sancion.tipoSancion }
-                    onValueChange={(itemValue) => handleChange("tipoSancion",itemValue)}
-                            
-                >
-                    
-                    <Picker.Item label="Leve" value="Leve" style={styles.pickerItem} />
-                    <Picker.Item label="Moderada" value="Moderada" style={styles.pickerItem} />
-                    <Picker.Item label="Grave" value="Grave" style={styles.pickerItem} />
-                        
-                    
-                </Picker>
-            </View>
-            <TextInput 
-                placeholder="Descripcion"
-                placeholderTextColor= "#546574"
-                style = {styles.inputDescripcion} 
-                onChangeText = { (text) => handleChange('descripcion', text)}
-            />
 
             <CursosList />
-            <AlumnosPorCursoList/>
+
+            { id_curso ? <AlumnosPorCursoList/> : null }
+              
+            {
+                id_alumno ? 
+                <View style={{width:"100%"}}>
+                <View style={styles.container}>
+                    <Picker
+                        style={styles.picker}
+                        dropdownIconColor='#ffffff'
+                        selectedValue={ sancion.tipoSancion }
+                        onValueChange={(itemValue) => handleChange("tipoSancion",itemValue)}
+                                
+                    >
+                        
+                        <Picker.Item label="Leve" value="Leve" style={styles.pickerItem} />
+                        <Picker.Item label="Moderada" value="Moderada" style={styles.pickerItem} />
+                        <Picker.Item label="Grave" value="Grave" style={styles.pickerItem} />
+                            
+                        
+                    </Picker>
+                </View>
+                <TextInput 
+                    placeholder="Descripcion"
+                    placeholderTextColor= "#546574"
+                    style = {styles.inputDescripcion} 
+                    onChangeText = { (text) => handleChange('descripcion', text)}
+                />
+
+                
+                
+                <TouchableOpacity
+                    style={styles.buttonSave}
+                    onPress = { handleSancionar }
+                >
+                    <Text style={styles.buttonText}>
+                        SANCIONAR
+                    </Text>
+                </TouchableOpacity> 
+                </View>
+                : null
+            }
+
             
-            <TouchableOpacity
-                style={styles.buttonSave}
-                onPress = { handleSancionar }
-            >
-                <Text style={styles.buttonText}>
-                    SANCIONAR
-                </Text>
-            </TouchableOpacity>
      
         </Layout>
     )

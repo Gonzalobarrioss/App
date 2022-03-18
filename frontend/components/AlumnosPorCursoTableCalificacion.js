@@ -57,7 +57,7 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
                         const array_nota = []
                         if(data.length){
                             for (let i = 0; i < data.length; i++) {
-                                array_nota.push(1)    
+                                array_nota.push("NOTA")    
                             }
                         }
                         setCalificaciones({...calificaciones, alumnos:data, nota: array_nota })
@@ -173,11 +173,12 @@ const AlumnosPorCursoTableCalificacion = ({navigation}) => {
         }
         else{
             let notasCorrectas = true
-            calificaciones.nota.map((item) => {
+            calificaciones.nota.some((item) => {
                 let myRe = /^[\d][.][\d][\d]{1}$|^[1][0]{1}$|^[1-9]{1}$/
                 if(myRe.exec(item) == null){
                     notasCorrectas = false
-                    Alert.alert("Algunas notas podrian ser incorrectas. Asegúrese de ingresar correctamente\n todos los valores flotantes.")
+                    Alert.alert(`Algunas notas podrian ser incorrectas`, `Asegúrese de ingresar correctamente todos los valores flotantes.`)
+                    return true
                 }
                 else{
                     console.log("todo correcto");
