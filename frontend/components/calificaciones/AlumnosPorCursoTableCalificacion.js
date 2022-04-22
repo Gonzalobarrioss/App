@@ -3,14 +3,14 @@ import { View, Alert, TouchableOpacity, Text, TextInput, StyleSheet } from 'reac
 import { used } from '@react-navigation/native'
 import {Picker} from '@react-native-picker/picker';
 
-import { getAlumnosPorCurso } from '../redux/actions/AlumnoCursoAction'
+import { getAlumnosPorCurso } from '../../redux/actions/AlumnoCursoAction'
 import { useSelector } from 'react-redux';
-import { store } from '../redux/store'
+import { store } from '../../redux/store'
 
 import { DataTable } from 'react-native-paper';
-import { isLoading } from '../redux/actions/LoadingAction';
+import { isLoading } from '../../redux/actions/LoadingAction';
 
-import { saveNota, getAlumnosXCurso } from '../api'
+import { saveNota, getAlumnosXCurso } from '../../api'
 import moment from 'moment'
 
 const AlumnosPorCursoTableCalificacion = ({navigation}) => {

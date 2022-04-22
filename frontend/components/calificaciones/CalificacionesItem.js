@@ -1,12 +1,12 @@
 import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
-import { editCalificaciones, inscripcionMesaExamen } from '../api'
+import { editCalificaciones, inscripcionMesaExamen } from '../../api'
 
 import { useSelector } from 'react-redux'
 
-import { store } from '../redux/store'
-import { addIdClase } from '../redux/actions/ClaseAction'
-import { isLoading } from '../redux/actions/LoadingAction'
+import { store } from '../../redux/store'
+import { addIdClase } from '../../redux/actions/ClaseAction'
+import { isLoading } from '../../redux/actions/LoadingAction'
 
 
 const CalificacionesItem = ({ calificaciones }) => {

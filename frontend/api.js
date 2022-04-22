@@ -1,26 +1,4 @@
 import {API} from "./constants";
-/*
-export const login = async (data) => {
-    const res = await fetch(`${API}/login`, { 
-        method: 'POST', 
-        headers: {
-            Accept: 'application/json', 'Content-Type':'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-    return res.json();
-}
-
-export const register = async (data) => {
-    const res = await fetch(`${API}/register`, { 
-        method: 'POST', 
-        headers: {
-            Accept: 'application/json', 'Content-Type':'application/json'
-        },
-        body: JSON.stringify(data)
-    })
-    return res.json();
-}*/
 
 export const getMesaExamen = async (id) => {
     const res = await fetch(`${API}/mesa_examenes/${id}`);

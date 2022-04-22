@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import CalificacionesList from '../components/CalificacionesList'
+import CalificacionesList from '../components/calificaciones/CalificacionesList'
 import Layout from '../components/Layout'
 import { ActivityIndicator,Text, StyleSheet, View, ScrollView } from 'react-native'
 import { useIsFocused, useFocusEffect } from '@react-navigation/native'
@@ -7,8 +7,8 @@ import { useBackHandler } from '@react-native-community/hooks'
 import {Picker} from '@react-native-picker/picker';
 
 import { useSelector } from 'react-redux'
-import MateriasList from '../components/MateriasList'
-import CursosDocenteMateriaList from '../components/CursosDocenteMateriaList'
+import MateriasList from '../components/materias/MateriasList'
+import CursosDocenteMateriaList from '../components/materias/CursosDocenteMateriaList'
 
 import { addIdMateria } from '../redux/actions/MateriaAction'
 import { addDescripcion, setEtapa, setFecha } from '../redux/actions/CalificacionesAction'
@@ -16,7 +16,7 @@ import { store } from '../redux/store'
 
 
 import { getDescripcionNotas } from '../api'
-import EtapaExamen from '../components/EtapaExamen'
+import EtapaExamen from '../components/examenes/EtapaExamen'
 import { isLoading } from '../redux/actions/LoadingAction'
 import { addIdCurso } from '../redux/actions/AlumnoCursoAction'
 

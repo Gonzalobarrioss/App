@@ -2,22 +2,19 @@ import React, {useState, useEffect} from 'react'
 import { View, StyleSheet } from 'react-native'
 import {Picker} from '@react-native-picker/picker';
 
-import { getCursosDocenteMateria } from '../api'
+import { getCursos } from '../../api'
 
-import { addIdCurso } from '../redux/actions/AlumnoCursoAction'
+import { addIdCurso } from '../../redux/actions/AlumnoCursoAction'
 
-import { store } from '../redux/store'
+import { store } from '../../redux/store'
 
-import { isLoading } from '../redux/actions/LoadingAction';
+import { isLoading } from '../../redux/actions/LoadingAction';
 
-import { useSelector } from 'react-redux'
 
-const CursosDocenteMateriaList = () => {
+const CursosList = () => {
 
     const [curso, setCurso] = useState([])
     const [selectedValue, setSelectedValue] = useState("");
-    const id_materia = useSelector(state => state.MateriasReducer.id)
-    const id_docente = useSelector(state => state.PersonaReducer.DocenteReducer.id)
 
     const handleSelectedCurso = (value) => {
         store.dispatch(addIdCurso(value))
@@ -25,20 +22,18 @@ const CursosDocenteMateriaList = () => {
     }
 
     useEffect(() => {
+        let isMounted = true
         let controller = new AbortController()
         const loadCursos = async () => {
             store.dispatch(isLoading(true))
 
-            const datos = {
-                docente: id_docente,
-                materia: id_materia
-            }
-
-            await getCursosDocenteMateria(datos,{
+            await getCursos("",{
                 signal: controller.signal
             })
-            .then((data) => {
-                setCurso(data)
+            .then((datos) => {
+                if ( isMounted ){
+                    setCurso(datos)
+                }
                 controller = null
             })
             .finally(()=> {
@@ -46,11 +41,10 @@ const CursosDocenteMateriaList = () => {
             });
             
         }
-        id_materia ? loadCursos() : store.dispatch(isLoading(false))
-        return () => {
-            controller?.abort()
-        }
-    }, [id_materia])
+        loadCursos()
+        return () => { isMounted = false }
+        //return () => {controller?.abort()}
+    }, [])
    
     return (
         <View style={styles.container}>     
@@ -63,7 +57,7 @@ const CursosDocenteMateriaList = () => {
             >
                 <Picker.Item label={"Seleccione un curso"} enabled={false} style={styles.pickerItem} />
                 {
-                    curso.length ?
+                    curso.length ? 
                     curso.map((item, key)=> {
                         return(
                             <Picker.Item 
@@ -77,7 +71,7 @@ const CursosDocenteMateriaList = () => {
 
                         )
                     })
-                    : <Picker.Item label={"No hay cursos para la materia"} enabled={false} style={styles.pickerItem} />
+                    : null
                 }
             </Picker>
         </View>     
@@ -101,4 +95,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default CursosDocenteMateriaList
+export default CursosList

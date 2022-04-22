@@ -2,14 +2,14 @@ import React, {useState, useEffect} from 'react'
 import { View, Alert, StyleSheet, TouchableOpacity, Text} from 'react-native'
 
 import { useSelector } from 'react-redux';
-import { store } from '../redux/store'
+import { store } from '../../redux/store'
 
 import { DataTable } from 'react-native-paper';
-import { saveAsistencia, getAlumnosXCurso } from '../api';
+import { saveAsistencia, getAlumnosXCurso } from '../../api';
 
 
 import RadioGroup from 'react-native-radio-buttons-group';
-import { isLoading } from '../redux/actions/LoadingAction';
+import { isLoading } from '../../redux/actions/LoadingAction';
 
 
 const AlumnosPorCursoTableAsistencia = ({navigation}) => {

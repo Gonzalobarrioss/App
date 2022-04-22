@@ -2,11 +2,11 @@ import React, {useState, useEffect} from 'react'
 import { StyleSheet, View } from 'react-native'
 import {Picker} from '@react-native-picker/picker';
 
-import { addIdAlumno } from '../redux/actions/PersonaAction'
+import { addIdAlumno } from '../../redux/actions/PersonaAction'
 import { useSelector } from 'react-redux';
-import { store } from '../redux/store'
-import { getAlumnosXCurso } from '../api'
-import { isLoading } from '../redux/actions/LoadingAction';
+import { store } from '../../redux/store'
+import { getAlumnosXCurso } from '../../api'
+import { isLoading } from '../../redux/actions/LoadingAction';
 
 const AlumnosPorCursoList = () => {
 

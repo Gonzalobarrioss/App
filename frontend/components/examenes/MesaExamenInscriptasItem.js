@@ -1,12 +1,12 @@
 import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native'
-import { bajaMesaExamen } from '../api'
+import { bajaMesaExamen } from '../../api'
 
 import { useSelector } from 'react-redux'
 
-import { store } from '../redux/store'
+import { store } from '../../redux/store'
 
-import { isLoading } from '../redux/actions/LoadingAction'
+import { isLoading } from '../../redux/actions/LoadingAction'
 import moment from 'moment'
 
 
@@ -102,9 +102,8 @@ const MesaExamen = ({ mesa }) => {
 const styles = StyleSheet.create({
     itemContainer: {
         backgroundColor:"#10ac84",
-        padding: 20,
+        padding: 15,
         marginVertical: 5,
-        borderRadius: 5
     },
     itemDescripcion: {
         color: "#ffffff",

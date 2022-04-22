@@ -3,14 +3,14 @@ import { View, StyleSheet } from 'react-native'
 
 import {Picker} from '@react-native-picker/picker';
 
-import { getClaseXMateria } from '../api'
+import { getClaseXMateria } from '../../api'
 
-import { store } from '../redux/store'
+import { store } from '../../redux/store'
 import { useSelector } from 'react-redux'
-import { addIdCurso} from '../redux/actions/AlumnoCursoAction'
-import { addIdClase } from '../redux/actions/ClaseAction';
+import { addIdCurso} from '../../redux/actions/AlumnoCursoAction'
+import { addIdClase } from '../../redux/actions/ClaseAction';
 
-import { isLoading } from '../redux/actions/LoadingAction';
+import { isLoading } from '../../redux/actions/LoadingAction';
 
 
 const ClasePorMateriasList = () => {

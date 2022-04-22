@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react'
-import AsistenciasList from '../components/AsistenciasList'
+import AsistenciasList from '../components/asistencias/AsistenciasList'
 import Layout from '../components/Layout'
 import { ActivityIndicator,Text, ScrollView } from 'react-native'
 import { useBackHandler } from '@react-native-community/hooks'
 
 import { useSelector } from 'react-redux'
-import MateriasList from '../components/MateriasList'
-import ClasePorMateriasList from '../components/ClasePorMateriaList'
+import MateriasList from '../components/materias/MateriasList'
+import ClasePorMateriasList from '../components/clases/ClasePorMateriaList'
 
 import {store} from '../redux/store'
 import { addIdMateria } from '../redux/actions/MateriaAction'

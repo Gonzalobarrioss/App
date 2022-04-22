@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { FlatList,View,Text, StyleSheet } from 'react-native'
 
-import { getCalificaciones } from '../api'
+import { getCalificaciones } from '../../api'
 
 import CalificacionesItem from './CalificacionesItem'
 
 import { useSelector } from 'react-redux'
 
-import { store } from '../redux/store'
-import { isLoading } from '../redux/actions/LoadingAction';
+import { store } from '../../redux/store'
+import { isLoading } from '../../redux/actions/LoadingAction';
 
 
 const CalificacionesList = () => {

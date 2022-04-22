@@ -2,9 +2,9 @@ import { View, Text, StyleSheet } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {Picker} from '@react-native-picker/picker';
 import { useSelector } from 'react-redux';
-import { store } from '../redux/store';
-import { setEtapa } from '../redux/actions/CalificacionesAction';
-import { addDescripcion } from '../redux/actions/CalificacionesAction';
+import { store } from '../../redux/store';
+import { setEtapa } from '../../redux/actions/CalificacionesAction';
+import { addDescripcion } from '../../redux/actions/CalificacionesAction';
 
 const EtapaExamen = () => {
 

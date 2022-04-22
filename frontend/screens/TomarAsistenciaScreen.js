@@ -2,9 +2,9 @@ import React, {useEffect, useState} from 'react'
 import Layout from '../components/Layout'
 import { ScrollView, StyleSheet, TouchableOpacity, Text, ActivityIndicator } from 'react-native'
 
-import MateriasList from '../components/MateriasList'
-import ClasePorMateriaList from '../components/ClasePorMateriaList'
-import AlumnosPorCursoTableAsistencia from '../components/AlumnosPorCursoTableAsistencia'
+import MateriasList from '../components/materias/MateriasList'
+import ClasePorMateriaList from '../components/clases/ClasePorMateriaList'
+import AlumnosPorCursoTableAsistencia from '../components/asistencias/AlumnosPorCursoTableAsistencia'
 
 import { useSelector } from 'react-redux'
 import { store } from '../redux/store'

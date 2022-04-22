@@ -12,9 +12,12 @@ import SancionarScreen from '../screens/SancionarScreen';
 import AsistenciasScreen from '../screens/VerAsistenciasScreen';
 import CalificacionesScreen from '../screens/VerCalificacionesScreen';
 
+import { MesasExamenesTab } from './NavigationTab';
+
 const Stack = createNativeStackNavigator()
 
 export default function NavigationStack() {
+
     return (
         <NavigationContainer>
           
@@ -45,9 +48,10 @@ export default function NavigationStack() {
 
             <Stack.Screen 
               name="HomeScreenAlumno" 
-              component ={HomeScreenAlumno}
+              //component ={HomeScreenAlumno}
+              component = {MesasExamenesTab}
               options = {()=>({
-                title: "INICIO ALUMNO",
+                title: "ALUMNO",
                 headerStyle: { backgroundColor: "#222f3e" },
                 headerTitleStyle: { color: "#ffffff" },
                 headerBackVisible: false

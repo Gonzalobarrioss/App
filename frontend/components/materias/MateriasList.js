@@ -2,16 +2,16 @@ import React, {useState, useEffect} from 'react'
 import { View, StyleSheet } from 'react-native'
 import {Picker} from '@react-native-picker/picker';
 
-import { getAllMateriasPorProfesor } from '../api'
+import { getAllMateriasPorProfesor } from '../../api'
 
-import { store } from '../redux/store'
-import { addIdMateria, addRegimenMateria } from '../redux/actions/MateriaAction'
+import { store } from '../../redux/store'
+import { addIdMateria, addRegimenMateria } from '../../redux/actions/MateriaAction'
 
 import { useSelector } from 'react-redux'
-import { addIdClase } from '../redux/actions/ClaseAction';
-import { addIdCurso } from '../redux/actions/AlumnoCursoAction';
-import { isLoading } from '../redux/actions/LoadingAction';
-import { addDescripcion, setEtapa } from '../redux/actions/CalificacionesAction';
+import { addIdClase } from '../../redux/actions/ClaseAction';
+import { addIdCurso } from '../../redux/actions/AlumnoCursoAction';
+import { isLoading } from '../../redux/actions/LoadingAction';
+import { addDescripcion, setEtapa } from '../../redux/actions/CalificacionesAction';
 
 const MateriasList = () => {
 

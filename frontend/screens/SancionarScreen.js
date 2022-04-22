@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import { Text, TextInput,  StyleSheet, TouchableOpacity, Alert, View, ActivityIndicator } from 'react-native'
 import {Picker} from '@react-native-picker/picker';
-import CursosList from '../components/CursosList'
-import AlumnosPorCursoList from '../components/AlumnosPorCursoList'
+import CursosList from '../components/cursos/CursosList'
+import AlumnosPorCursoList from '../components/alumnos/AlumnosPorCursoList'
 import Layout from '../components/Layout'
 
 import { useSelector } from 'react-redux';

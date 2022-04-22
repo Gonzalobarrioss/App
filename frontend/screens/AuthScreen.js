@@ -74,6 +74,7 @@ const AuthScreen = ({ navigation}) => {
             console.log(err);
         });
     }
+    console.log(";)")
 
     const onSubmitHandler = () => {
         
