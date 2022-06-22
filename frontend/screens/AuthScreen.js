@@ -156,7 +156,7 @@ const AuthScreen = ({ navigation}) => {
             { loading ? <ActivityIndicator color="#ffffff" size="large" /> : null }
 
             <View style={styles.card}>
-                <Text style={styles.heading}>{isLogin ? 'Iniciar Sesión' : 'Registrarse'} {rol ? rol : null}</Text>
+                <Text style={styles.heading}>{isLogin ? 'Iniciar Sesión' : 'Registrarse'}</Text>
                 <View style={styles.form}>
                     <View style={styles.inputs}>
                         <TextInput style={styles.input} placeholder="Usuario" onChangeText={setUsername}></TextInput>

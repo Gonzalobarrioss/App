@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native'
 
 import { StartScreen } from '../screens';
 import AuthScreen  from '../screens/AuthScreen'
-import HomeScreenAlumno from '../screens/HomeScreenAlumno'
+//import HomeScreenAlumno from '../screens/deprecated/HomeScreenAlumno'
 import HomeScreenDocente from '../screens/HomeScreenDocente';
 import TomarAsistenciaScreen from '../screens/TomarAsistenciaScreen';
 import CalificarScreen from '../screens/CalificarScreen';

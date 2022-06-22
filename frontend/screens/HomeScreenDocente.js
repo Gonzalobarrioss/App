@@ -86,16 +86,16 @@ const styles = StyleSheet.create({
         padding: 7,
         borderRadius: 5,
         backgroundColor: "#ffffff",
-        width: "100%",
-        height: "30%",
+        width: "80%",
+        height: "20%",
         marginVertical: 8,
         justifyContent: "center",
-        elevation: 9,
         borderWidth: 3,
         borderStyle: "solid",
         borderColor: "#cccccc",
         borderBottomWidth: 1,
-        borderTopWidth: 1
+        borderTopWidth: 1,
+        
     },
     txt: {
         

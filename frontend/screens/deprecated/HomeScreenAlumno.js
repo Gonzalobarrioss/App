@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react'
-import MesaExamenesList from '../components/examenes/MesaExamenesList'
+import MesaExamenesList from '../../components/examenes/MesaExamenesList'
 import { BackHandler, Alert, ActivityIndicator } from 'react-native'
-import Layout from '../components/Layout'
+import Layout from '../../components/Layout'
 import { useSelector } from 'react-redux'
 
 const HomeScreenAlumno = ({navigation}) => { 
